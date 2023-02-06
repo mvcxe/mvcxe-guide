@@ -284,6 +284,60 @@ window.ydoc_plugin_search_json = {
       ]
     },
     {
+      "title": "数据库上下文",
+      "content": "",
+      "url": "\\docs\\dbcontext.html",
+      "children": [
+        {
+          "title": "什么是数据库上下文",
+          "url": "\\docs\\dbcontext.html#什么是数据库上下文",
+          "content": "什么是数据库上下文简单来说，数据库上下文是负责和数据库交互的对象，提供程序对数据库存取提供了大量的方法。"
+        },
+        {
+          "title": "创建默认数据库上下文",
+          "url": "\\docs\\dbcontext.html#创建默认数据库上下文",
+          "content": "创建默认数据库上下文注入IORM\ntype  TMyService = class\n  private\n\t[IOC('MVCXE.ORM.TORMXE')]\n\torm: IORM;\n  end;\n使用全局方法创建IORM对象\nfunction BuildORM: IORM; overload;var    orm: IORM;\nbegin\n    orm := BuildORM;\nend;\n"
+        },
+        {
+          "title": "创建其他数据库上下文",
+          "url": "\\docs\\dbcontext.html#创建其他数据库上下文",
+          "content": "创建其他数据库上下文function BuildORM(const AConnectionName, AConnectionString: string): IORM; overload;var    orm: IORM;\nbegin\n    orm := BuildORM('myconnection','DriverID=MySQL;Server=127.0.0.1;Database=fly;User_Name=root;Password=root;CharacterSet=utf8;Pooled=True;');\nend;\n"
+        },
+        {
+          "title": "各类数据库连接字符串配置示例",
+          "url": "\\docs\\dbcontext.html#各类数据库连接字符串配置示例",
+          "content": "各类数据库连接字符串配置示例SQLite: DriverID=SQLite;Database=;\nMySQL: DriverID=MySQL;Server=127.0.0.1;Database=fly;User_Name=root;Password=root;CharacterSet=utf8;Pooled=True;\nOracle: DriverID=Ora;Database=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=127.0.0.1)(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME=orcl)));User_Name=orcl;Password=orcl;CharacterSet=utf8;Pooled=True;\nSQLServer: DriverID=MSSQL;Server=127.0.0.1;Database=ferry;User_Name=sa;Password=sa;CharacterSet=utf8;Pooled=True;\n"
+        }
+      ]
+    },
+    {
+      "title": "数据库实体",
+      "content": "",
+      "url": "\\docs\\entity.html",
+      "children": [
+        {
+          "title": "什么是数据库实体",
+          "url": "\\docs\\entity.html#什么是数据库实体",
+          "content": "什么是数据库实体在面向对象开发思想中，最重要尤为对象二字，在Delphi开发过去，操作数据库往往采用DataTable和DataSet来接收数据库返回结果集，而操作数据库也离不开手写sql语句。在过去面向过程和应用不发达的时代，这些操作确实好使。然后随着中国互联网网民的激增，电子化时代的到来，各行各业对应用需求也达到了前所未有的量级。所以，在过去手写sql的时代各种问题显露无疑：程序员能力参差不齐，写出的sql性能自然也天差地别\nsql属于字符串硬编程，后期维护难上加难\n许多单表甚至多表结构一致，出现大量重复sql代码\nsql本身在不同的数据库提供器中写法有差，后续迁移头痛不已\n当然，sql是时代的产物，我们也离不开sql，但对于大多数程序员和项目来说，sql未必能够带给他们多大的效益。\n所以，ORM就诞生了，所谓的ORM就是对象关系映射，英文：Object Relational Mapping，简单点说，ORM根据特有的POCO 贫血模型 规则生成sql语句。大大避免了重复sql和sql能力参差不齐等问题。（当然ORM作者sql能力也会影响最终性能）上面所说的POCO 贫血模型正是我们本章节的 数据库实体。简单来说，数据库实体就是数据库表的类表现，通过一定的规则使这个类能够一一对应表结构。通常这样的类也称为：POCO 贫血模型，也就是只有定义，没有行为。"
+        },
+        {
+          "title": "如何定义实体",
+          "url": "\\docs\\entity.html#如何定义实体",
+          "content": "如何定义实体MVCXE框架建议实体类放在专用的bpl中，Controller和WebAPI的bpl引用数据库实体类bpl。实体类可以是Pascal一个普通类，也可以将公用的字段写成父类，子类可以继承这些字段。"
+        },
+        {
+          "title": "实体类示范",
+          "url": "\\docs\\entity.html#实体类示范",
+          "content": "实体类示范usesSystem.SysUtils, System.Classes, MVCXE.ORM;\n\ntype\n[Table('users')]\nTUsers = class\nprivate\n    FIntegral: Integer;\n    FEmail: string;\n    FSign: string;\n    FNickname: string;\n    FGender: Integer;\n    FTitle: string;\n    FId: Integer;\n    FEmailConfirmToken: string;\n    FIsVip: Boolean;\n    FIsDisabled: Boolean;\n    FCreateTime: TDateTime;\n    FVipLevel: Integer;\n    FHeadPortrait: string;\n    FPassword: string;\n    FEmailIsUpdate: Boolean;\n    FCity: string;\n    FEmailConfirmed: Boolean;\n    FIsAdmin: Boolean;\n    procedure SetCity(const Value: string);\n    procedure SetCreateTime(const Value: TDateTime);\n    procedure SetEmail(const Value: string);\n    procedure SetEmailConfirmed(const Value: Boolean);\n    procedure SetEmailConfirmToken(const Value: string);\n    procedure SetEmailIsUpdate(const Value: Boolean);\n    procedure SetGender(const Value: Integer);\n    procedure SetHeadPortrait(const Value: string);\n    procedure SetId(const Value: Integer);\n    procedure SetIntegral(const Value: Integer);\n    procedure SetIsAdmin(const Value: Boolean);\n    procedure SetIsDisabled(const Value: Boolean);\n    procedure SetIsVip(const Value: Boolean);\n    procedure SetNickname(const Value: string);\n    procedure SetPassword(const Value: string);\n    procedure SetSign(const Value: string);\n    procedure SetTitle(const Value: string);\n    procedure SetVipLevel(const Value: Integer);\npublished\n    [Key(True)]\n    [DatabaseGenerated(TDatabaseGeneratedOption.Identity)]\n    property Id: Integer read FId write SetId;\n    property Email: string read FEmail write SetEmail;\n    property EmailConfirmed: Boolean read FEmailConfirmed write SetEmailConfirmed;\n    property Password: string read FPassword write SetPassword;\n    property Nickname: string read FNickname write SetNickname;\n    property Title: string read FTitle write SetTitle;\n    property Gender: Integer read FGender write SetGender;\n    property City: string read FCity write SetCity;\n    property Sign: string read FSign write SetSign;\n    property HeadPortrait: string read FHeadPortrait write SetHeadPortrait;\n    property Integral: Integer read FIntegral write SetIntegral;\n    property IsVip: Boolean read FIsVip write SetIsVip;\n    property VipLevel: Integer read FVipLevel write SetVipLevel;\n    property CreateTime: TDateTime read FCreateTime write SetCreateTime;\n    property IsDisabled: Boolean read FIsDisabled write SetIsDisabled;\n    property EmailIsUpdate: Boolean read FEmailIsUpdate write SetEmailIsUpdate;\n    property EmailConfirmToken: string read FEmailConfirmToken write SetEmailConfirmToken;\n    property IsAdmin: Boolean read FIsAdmin write SetIsAdmin;\npublic\nend;\n"
+        },
+        {
+          "title": "数据库实体配置",
+          "url": "\\docs\\entity.html#数据库实体配置",
+          "content": "数据库实体配置配置数据库表名\n可以通过在实体类型贴 [Table('表名')] 配置。配置列名\n有时候我们需要手动设置列名，这时候只需要在属性上面贴 [Column('列名')] 即可。配置列属性\n可以用 [Required]设置必需有值，用 [StringLength(len)] 配置字符串长度，用 [MaxLength(len)] 配置类型长度 用 [NotMapped] 设置跳过该列。配置Key\n可以通过在实体类型贴 [Key(True)] 配置。如果是自增类型要加上 [DatabaseGenerated(TDatabaseGeneratedOption.Identity)] 配置。\n"
+        }
+      ]
+    },
+    {
       "title": "仓储模式",
       "content": "",
       "url": "\\docs\\dbcontext-repository.html",
@@ -294,9 +348,63 @@ window.ydoc_plugin_search_json = {
           "content": "什么是仓储在领域层和数据映射层的中介,使用类似集合的接口来存取领域对象，实际上，仓储被用于领域对象在数据库上的操作（实体 Entity 和值对象 Value types）。一般来说,我们针对不同的实体(或聚合根 Aggregate Root)会创建相对应的仓储。简单来说，仓储就是数据存取操作的载体，但不限定于数据库。"
         },
         {
+          "title": "内置仓储",
+          "url": "\\docs\\dbcontext-repository.html#内置仓储",
+          "content": "内置仓储配置好数据库上下文 orm 后，使用 属性 Repository 获取仓储对象 TORMRepository 的实例。var\torm: IORM;\n\trepository: TORMRepository;\nbegin\n\torm := BuildORM;\n\trepository := orm.Repository;\nend;\n"
+        },
+        {
           "title": "仓储使用",
           "url": "\\docs\\dbcontext-repository.html#仓储使用",
-          "content": "仓储使用注入 IORM\ntype  IUserService = interface(IInterface)\n\t['{921EF59C-FA47-49C3-A667-4653828D56FB}']\n\tfunction GetUser(const email: string): TUsers; overload;\n\tfunction UserExists(const email, Nickname: string): Boolean;\n\tfunction CreateUser(const User: TUsers): Boolean;\n\tfunction GetUser(const Id: Integer): TUsers; overload;\n\tfunction GetMyMessage(const UserId: Integer): TArray; overload;\n  end;\n\n  TUserService = class(TInterfacedObject, IUserService)\n  private\n\t[IOC('MVCXE.ORM.TORMXE')]\n\torm: IORM;\n  public\n\tfunction GetUser(const email: string): TUsers; overload;\n\tfunction UserExists(const email, Nickname: string): Boolean;\n\tfunction CreateUser(const User: TUsers): Boolean;\n\tfunction GetUser(const Id: Integer): TUsers; overload;\n\tfunction GetMyMessage(const UserId: Integer): TArray; overload;\n  end;\n\nimplementation\n\n{ TUserService }\n\nfunction TUserService.CreateUser(const User: TUsers): Boolean;\nbegin\n  Result := orm.Repository.Insert\n\t.SetSource(User)\n\t.ExecuteAffrows>0;\nend;\n\nfunction TUserService.GetUser(const email: string): TUsers;\nbegin\n  Result := orm.Repository.Select\n\t.Where('Email', email)\n\t.Single;\nend;\n\nfunction TUserService.GetMyMessage(const UserId: Integer): TArray;\nbegin\n  Result := orm.Repository.Select\n\t.Include('FormUser','Id')\n\t.Where('ToId', UserId)\n\t.OrderBy('CreateTime', 'DESC')\n\t.ToArray;\n  orm.DB.Execute('UPDATE messages SET IsRead = 1 WHERE ToId=?',[UserId]);\nend;\n\nfunction TUserService.GetUser(const Id: Integer): TUsers;\nbegin\n  Result := orm.Repository.Select\n\t.Where('Id', Id)\n\t.SingleOrDefault;\nend;\n\nfunction TUserService.UserExists(const email, Nickname: string): Boolean;\nbegin\n  Result := orm.DB.Query('SELECT COUNT(*) FROM users WHERE Email=? OR Nickname=?',[email, Nickname]).ToInteger > 0;\nend;\n\nend."
+          "content": "仓储使用TORMRepository定义了几个常用方法。TORMRepository = classpublic\n\tprocedure StartTransaction(const AIsolation: Integer = 2);\n\tprocedure Commit;\n\tprocedure Rollback;\n\tfunction Select: IORMSelectRepo; overload;\n\tfunction Select(const ASqlMap: string): IORMSelectRepo; overload;\n\n\tfunction Update: IORMUpdateRepo; overload;\n\tfunction Update(const ASqlMap: string): IORMUpdateRepo; overload;\n\tfunction Update(const Entity: T): IORMUpdateRepo; overload;\n\n\tfunction Delete: IORMDeleteRepo; overload;\n\tfunction Delete(const ASqlMap: string): IORMDeleteRepo; overload;\n\tfunction Delete(const Entity: T): IORMDeleteRepo; overload;\n\n\tfunction Insert: IORMInsertRepo; overload;\n\tfunction Insert(const ASqlMap: string): IORMInsertRepo; overload;\n\tfunction Insert(const Entity: T): IORMInsertRepo; overload;\nend;\n"
+        },
+        {
+          "title": "SqlMap",
+          "url": "\\docs\\dbcontext-repository.html#sqlmap",
+          "content": "SqlMap仓储的查询/更新/新增/删除操作，如果传入的是数据库实体，MVCXE.ORM 会按sql标准生成sql语句，用于执行，但有的时候，我们需要使用一些特殊的sql语句语法来进行数据库操作，那么我们可以使用SqlMap。在根目录建立SqlMap.xml文件，在里面定义你的SqlMap。\n\t\n\t\t\n\t\t\tSELECT A.*, \n\t\t\tB.Id _TUsers_Id, B.Email _TUsers_Email, B.Nickname _TUsers_Nickname, B.Title _TUsers_Title, \n\t\t\tB.Gender _TUsers_Gender, B.HeadPortrait _TUsers_HeadPortrait, B.IsVip _TUsers_IsVip, B.VipLevel _TUsers_VipLevel \n\t\t\tFROM posts A\n\t\t\tLEFT JOIN users B ON B.Id = A.UserId\n\t\t\tWHERE A.IsTop=0 \n\t\t\tORDER BY A.UpdateTime DESC\n\t\t\tLIMIT {Count}\n\t\t\n\t\t\n\t\t\tSELECT A.*\n\t\t\tFROM posts A\n\t\t\tWHERE A.UserId=:UserId \n\t\t\tORDER BY A.CreateTime DESC\n\t\t\tLIMIT {Count}\n\t\t\n\t\n\t\n\t\t\n\t\t\tSELECT A.*, \n\t\t\tB.Title PostTitle \n\t\t\tFROM comments A\n\t\t\tLEFT JOIN posts B ON B.Id = A.PostId\n\t\t\tWHERE A.UserId=:UserId \n\t\t\tORDER BY A.CreateTime DESC\n\t\t\tLIMIT {Count}\n\t\t\n\t\n\t\n\t\t\n\t\t\tSELECT A.*, \n\t\t\tB.role_name \n\t\t\tFROM sys_user A\n\t\t\tLEFT JOIN sys_role B ON B.role_id = A.role_id\n\t\t\tWHERE A.username=:username \n\t\t\n\t\t\n\t\t\tSELECT A.*, \n\t\t\tB.role_name \n\t\t\tFROM sys_user A\n\t\t\tLEFT JOIN sys_role B ON B.role_id = A.role_id\n\t\t\tLimit {Skip},{Count}\n\t\t\t\n\t\t\t\tSELECT count(*) \n\t\t\t\tFROM sys_user A\n\t\t\t\n\t\t\n\t\t\n\t\t\tinsert into sys_user \n(nick_name,phone,role_id,salt,avatar,sex,email,dept_id,post_id,create_by,update_by,remark,status,create_time,username,password)\nvalues\n(:nick_name,:phone,:role_id,:salt,:avatar,:sex,:email,:dept_id,:post_id,:create_by,:update_by,:remark,:status,:create_time,:username,:password)\n\t\t\n\t\t\n\t\t\tupdate sys_user set\nnick_name=:nick_name,phone=:phone,role_id=:role_id,salt=:salt,avatar=:avatar,sex=:sex,email=:email,dept_id=:dept_id,post_id=:post_id,update_by=:update_by,remark=:remark,status=:status,update_time=:update_time\nwhere user_id=:user_id\n\t\t\n\t\n\t\n\t\t\n\t\t\tSELECT A.*, \n\t\t\tFROM sys_role A\n\t\t\tLimit {Skip},{Count}\n\t\t\t\n\t\t\t\tSELECT count(*) \n\t\t\t\tFROM sys_role A\n\t\t\t\n\t\t\n\t\n\t\n\t\t\n\tSELECT\n\t\ta.click_date,\n\t\tifnull( b.total, 0 ) AS total,\n\t\tifnull( b.overs, 0 ) AS overs,\n\t\tifnull( b.processing, 0 ) AS processing\n\tFROM\n\t\t({DataValue}) a\n\t\tLEFT JOIN (\n\t\tSELECT\n\t\t\ta1.datetime AS datetime,\n\t\t\ta1.count AS total,\n\t\t\tb1.count AS overs,\n\t\t\tc.count AS processing\n\t\tFROM\n\t\t\t(\n\t\t\tSELECT\n\t\t\t\tdate( create_time ) AS datetime,\n\t\t\t\tcount(*) AS count\n\t\t\tFROM\n\t\t\t\tp_work_order_info\n\t\t\tGROUP BY\n\t\t\tdate( create_time )) a1\n\t\t\tLEFT JOIN (\n\t\t\tSELECT\n\t\t\t\tdate( create_time ) AS datetime,\n\t\t\t\tcount(*) AS count\n\t\t\tFROM\n\t\t\t\tp_work_order_info\n\t\t\tWHERE\n\t\t\t\tis_end = 1\n\t\t\tGROUP BY\n\t\t\tdate( create_time )) b1 ON a1.datetime = b1.datetime\n\t\t\tLEFT JOIN (\n\t\t\tSELECT\n\t\t\t\tdate( create_time ) AS datetime,\n\t\t\t\tcount(*) AS count\n\t\t\tFROM\n\t\t\t\tp_work_order_info\n\t\t\tWHERE\n\t\t\t\tis_end = 0\n\t\t\tGROUP BY\n\t\t\tdate( create_time )) c ON a1.datetime = c.datetime\n\t\t) b ON a.click_date = b.datetime order by a.click_date\n\t\t\n\t\n\t\n\t\t\n\t\t\tselect p_process_info.name as name, count(p_work_order_info.id) as total from p_work_order_info\nleft join p_process_info on p_process_info.id = p_work_order_info.process\nwhere p_work_order_info.create_time between :start_time and :end_time\ngroup by p_work_order_info.process\norder by total desc\nlimit 10\n\t\t\n\t\n\t\n\t\t\n\t\t\tselect p_work_order_circulation_history.processor_id as user_id, p_work_order_circulation_history.processor as nickname, sys_user.username as username, count(p_work_order_circulation_history.id) as count from p_work_order_circulation_history\nleft join sys_user on sys_user.user_id = p_work_order_circulation_history.processor_id and p_work_order_circulation_history.create_time between :start_time and :end_time\nwhere p_work_order_circulation_history.source like 'receiveTask%' and p_work_order_circulation_history.status = 1\ngroup by p_work_order_circulation_history.processor, p_work_order_circulation_history.processor_id\norder by count desc\n\t\t\n\t\n\t\n\t\t\n\t\t\tselect p_work_order_circulation_history.processor_id as user_id, p_work_order_circulation_history.processor as nickname, sys_user.username as username, round(sum(p_work_order_circulation_history.cost_duration), 2) as cost_duration from p_work_order_circulation_history\nleft join sys_user on sys_user.user_id = p_work_order_circulation_history.processor_id\nwhere p_work_order_circulation_history.source like 'receiveTask%' and p_work_order_circulation_history.status = 1 and p_work_order_circulation_history.create_time between :start_time and :end_time\ngroup by p_work_order_circulation_history.processor, p_work_order_circulation_history.processor_id\norder by cost_duration desc\n\t\t\n\t\n\nRoot\n根节点标签是sqlMap节点查找\n第一级节点名是实体类名，如 ， 第二级节点是   当 使用repository.Select('sqlid') 时，仓储查找节点下的子节点, 并使用该节点的content作为 sql 语句执行数据库操作。Sql特性\n:参数名 对应实体类的属性字段名。\n{Skip},{Count}对应 IORMSelectRepo 接口的Take方法参数，用于分页处处理，如orm.Repository.Select('sqlid').Take(skipval, countval)。\n{sql代码块名}可在代码中用Replace('sql代码块名', 'sql代码')替换。\n"
+        }
+      ]
+    },
+    {
+      "title": "Sql 操作",
+      "content": "",
+      "url": "\\docs\\dbcontext-db.html",
+      "children": [
+        {
+          "title": "关于 Sql 操作",
+          "url": "\\docs\\dbcontext-db.html#关于-sql-操作",
+          "content": "关于 Sql 操作MVCXE 框架提供非常灵活的 sql 操作方法，且性能不输于 FireDAC。"
+        },
+        {
+          "title": "Sql操作对象",
+          "url": "\\docs\\dbcontext-db.html#sql操作对象",
+          "content": "Sql操作对象配置好数据库上下文 orm 后，使用 属性 DB 获取Sql操作对象 TORMDB 的实例。var\torm: IORM;\n\tdb: TORMDB;\nbegin\n\torm := BuildORM;\n\tdb := orm.DB;\nend;\n"
+        },
+        {
+          "title": "Sql操作使用",
+          "url": "\\docs\\dbcontext-db.html#sql操作使用",
+          "content": "Sql操作使用TORMDB定义了几个常用方法。TORMDB = classpublic\n    procedure StartTransaction(const AIsolation: Integer = 2);\n    procedure Commit;\n    procedure Rollback;\n    function Query(const ASql: string): IORMDBQuery; overload;\n    function Query(const ASql: string): IORMDBQuery; overload;\n    function Query(const ASql: string; const Args: array of const)\n    : IORMDBQuery; overload;\n    function Query(const ASql: string; const Args: TParams)\n    : IORMDBQuery; overload;\n    function Query(const ASql: string; const Args: TValue)\n    : IORMDBQuery; overload;\n\n    function Execute(const ASql: string): Integer; overload;\n    function Execute(const ASql: string; const Args: TParams): Integer;\n    overload;\n    function Execute(const ASql: string; const Args: TValue): Integer; overload;\n    function Execute(const ASql: string; const Args: array of const)\n    : Integer; overload;\n    function Execute(const ASql: string; const Names, Args: array of const)\n    : Integer; overload;\n\n    function ExecProc(const StoredProcName: string): IORMDBQuery;\n    overload;\n    function ExecProc(const SchemaName: string; const StoredProcName: string)\n    : IORMDBQuery; overload;\n\n    procedure ExecProc(const StoredProcName: string); overload;\n    procedure ExecProc(const SchemaName: string;\n    const StoredProcName: string); overload;\n    procedure ExecProc(const StoredProcName: string;\n    var Args: TParams); overload;\n    procedure ExecProc(const SchemaName: string; const StoredProcName: string;\n    var Args: TParams); overload;\n    procedure ExecProc(const StoredProcName: string;\n    const Args: TValue); overload;\n    procedure ExecProc(const SchemaName: string; const StoredProcName: string;\n    const Args: TValue); overload;\n\n    function ExecFunc(const FunctionName: string): Variant; overload;\n    function ExecFunc(const SchemaName: string; const FunctionName: string)\n    : Variant; overload;\n    function ExecFunc(const FunctionName: string; var Args: TParams)\n    : Variant; overload;\n    function ExecFunc(const SchemaName: string; const FunctionName: string;\n    var Args: TParams): Variant; overload;\n    function ExecFunc(const FunctionName: string; const Args: TValue)\n    : Variant; overload;\n    function ExecFunc(const SchemaName: string; const FunctionName: string;\n    const Args: TValue): Variant; overload;\nend;"
+        }
+      ]
+    },
+    {
+      "title": "新增操作",
+      "content": "",
+      "url": "\\docs\\dbcontext-add.html",
+      "children": [
+        {
+          "title": "SqlMap.xml",
+          "url": "\\docs\\dbcontext-add.html#sqlmap.xml",
+          "content": "SqlMap.xml\n    \n        \n\t\t  INSERT INTO User (Name, Age) VALUES (:Name,:Age)\n        \n    \n\n"
+        },
+        {
+          "title": "新增一条",
+          "url": "\\docs\\dbcontext-add.html#新增一条",
+          "content": "新增一条type[Table('User')]\nTUser = record\n    [Key(True)]\n    [DatabaseGenerated(TDatabaseGeneratedOption.Identity)]\n    id: Integer;\n    Name: string;\n    Age : Integer;\n    class function Empty: TSystemAdmin; static;\nend;\nIUserService = interface(IInterface)\n    ['{C6A0BCCF-967B-4189-B723-64F75927561F}']\n    function CreateUser(const User: TUser): Integer;\nend;\nTUserService = class(TInterfacedObject, IUserService)\nprivate\n    [IOC('MVCXE.ORM.TORMXE')]\n    orm: IORM;\npublic\n    function CreateUser(const User: TUser): Boolean;\n    function CreateUserBySqlMap(const User: TUser): Boolean;\n    function NewUser(const User: TUser): Integer;\n    procedure InsertUser(const User: TUser);\nend;\n\nimplementation\n\n{ TUser }\n\nclass function TUser.Empty: TUser;\nbegin\n  Result := Default (TUser);\nend;\n\n{ TUserService }\n\nfunction TUserService.CreateUser(const User: TUsers): Boolean;\nbegin\n  Result := orm.Repository.Insert\n    .SetSource(User)\n    .ExecuteAffrows>0;\nend;\n\nfunction TUserService.CreateUserBySqlMap(const User: TUser): Boolean;\nbegin\n  Result := orm.Repository.Insert('CreateUser')\n    .SetSource(User)\n    .ExecuteAffrows>0;\nend;\n\nfunction TUserService.NewUser(const User: TUsers): Integer;\nbegin\n  Result := orm.Repository.Insert(User)\n    .ExecuteAffrows;\nend;\n\nprocedure TUserService.InsertUser(const User: TUser);\nbegin\n  orm.DB.Execute('INSERT INTO User (Name, Age) VALUES (?,?)', [User.Name, User.Age]);\n  orm.DB.Execute('INSERT INTO User (Name, Age) VALUES (:Name,:Age)', TValue.From(User));\nend;\n\nend.\n"
+        },
+        {
+          "title": "新增实体仓储",
+          "url": "\\docs\\dbcontext-add.html#新增实体仓储",
+          "content": "新增实体仓储IORMInsertRepo = interface(IInterface)    ['{17652C89-B5E4-4BFE-8180-0B8A9739E915}']\n    function SetSource(const Source: T): IORMInsertRepo;\n    function SetValue(const FieldName: string; const FieldValue: TValue)\n    : IORMInsertRepo; overload;\n    function SetValue(const FieldName: string; const FieldValue: TValue;\n    const DataType: TFieldType)\n    : IORMInsertRepo; overload;\n    function IgnoreColumns(const Fields: array of const): IORMInsertRepo;\n    function ExecuteAffrows: Integer;\n    function Replace(const ParamName, ParamValue: string)\n    : IORMInsertRepo;\nend;"
         }
       ]
     }
