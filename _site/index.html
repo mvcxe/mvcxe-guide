@@ -1,0 +1,34 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charSet="UTF-8"/><meta content="text/html; charset=utf-8" http-equiv="Content-Type"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-status-bar-style" content="black"/><link rel="apple-touch-icon" sizes="180x180" href="images\apple-touch-icon.png"/><link rel="icon" type="image/png" sizes="32x32" href="images\favicon-32x32.png"/><link rel="icon" type="image/png" sizes="16x16" href="images\favicon-16x16.png"/><link rel="manifest" href="images\manifest.json"/><link rel="mask-icon" href="images\safari-pinned-tab.svg" color="#5bbad5"/><meta name="theme-color" content="#ffffff"/><meta http-equiv="Cache-Control" content="no-transform"/><meta http-equiv="Cache-Control" content="no-siteapp"/><title>MVCXE</title><link rel="stylesheet" href="ydoc\styles\style.css"/><meta name="author" content="roc.long"/><meta name="keywords"/><meta name="description" content="MVCXE | 中国首个DELPHI MVC WEB框架"/><meta id="releativePath" content=""/><link rel="stylesheet" href="ydoc\ydoc-plugin-search\search.css"/></head><body><div class="g-doc"><div class="m-main" id="js-panel"><header class="m-header" id="js-header"><div class="m-header-title js-logo"><a href="" target="_self"><img class="logo" width="36" src="images\logo.png"/><h6 class="name">MVCXE</h6></a></div><div><div class="m-search">
+      <div class="icon">&#xf0fd;</div>
+      <input type="text" class="input js-input" placeholder="搜索" />
+      <div class="m-search-result js-search-result"></div>
+    </div></div><nav class="m-header-nav js-nav"><ul class="m-header-items"><li class="item "><a class="href" href="docs\index.html">文档</a></li><li class="item "><a class="href" href="about\index.html">关于</a></li></ul></nav><div id="js-nav-btn" class="m-header-btn ui-font-ydoc"></div></header><div class="m-content" id="js-content"><div class="g-home"><section class="m-section home"><div class="m-section-container"><div class="m-section-title"><h4 class="name">MVCXE | 中国首个DELPHI MVC WEB框架</h4><p class="desc">让Delphi Web开发更简单，更通用，更流行。</p><div class="m-section-btngroup"><a href="./docs/index.html"><div class="btn ">开 始</div></a><a href="https://gitee.com/mvcxe/mvcxe-guide"><div class="btn btn-ghost">Gitee &gt;</div></a></div><p class="caption">当前版本: v3.0 rc1</p></div><div class="m-section-banner"><img src="./ydoc/images/dogbg@1x.png" alt="bg" srcSet="./ydoc/images/dogbg@2x.png 2x"/></div></div></section><section class="m-section feature"><div class="m-section-container"><div class="m-section-box"><div class="item"><h6 class="title">为WEB开发而生</h6><p class="desc">编译为高性能二进制Web服务器和BPL库，内置强大出色的HTML模板引擎，可快速构建界面出色、体验优秀的页面和应用。</p></div><div class="item"><h6 class="title">模块化，轻量级，高性能</h6><p class="desc">先进的 MVC 分层理念，具有低耦合性、高重用性、可维护性和可适用性，利于软件工程化管理，大幅度提升你的开发效率。</p></div><div class="item"><h6 class="title">像诗一样优美，像钢一样强壮</h6><p class="desc">基于Delphi 10+，没有历史包袱，极速上手，继承TController/TWebApi即可用，减少代码量，使开发者更专注于业务和服务端!</p></div><div class="item"><h6 class="title">来自于强大的Pascal语言</h6><p class="desc">纯Pascal原生开发，打造一个简单易用的MVC框架。您的痛点，MVCXE已阅已历；MVCXE的惊喜，您且慢慢享受。</p></div></div></div></section></div><footer class="m-footer"><div class="m-footer-container"><div class="m-footer-links"><div class="group"><p class="title">范例</p><ul><li><a class="href" href="https://www.mvcxe.com/">Fly社区</a></li><li><a class="href" href="https://www.mvcxe.com/">Delphi Admin脚手架</a></li><li><a class="href" href="https://www.mvcxe.com/">Ferry后端Api</a></li><li><a class="href" href="https://www.mvcxe.com/">会议室预约</a></li><li><a class="href" href="https://www.mvcxe.com/">Blog</a></li><li><a class="href" href="https://www.mvcxe.com/">BBS</a></li></ul></div><div class="group"><p class="title">交流</p><ul><li><a class="href" href="https://gitee.com/mvcxe/mvcxe-guide">Gitee</a></li><li><a class="href" href="https://jq.qq.com/?_wv=1027&amp;k=BF3tLeir">QQ群:324415936</a></li></ul></div></div><div class="m-footer-title"><p class="copyright">© 2023 <a class="href" href="https://www.mvcxe.com/">MVCXE.COM</a></p><p>Build by <a class="href" href="https://hellosean1025.github.io/ydoc/">ydoc</a></p></div></div></footer></div></div></div><div></div><script>
+    var $content = document.getElementById('js-content');
+    var $summaryItems = Array.prototype.slice.call(document.querySelectorAll('#js-menu .href'));
+    var $menu = document.getElementById('js-menu');
+    if (sessionStorage.prevPathname) {
+      sessionStorage.setItem('prevPrevPathname', sessionStorage.prevPathname);
+      sessionStorage.setItem('prevPrevMenuScrollTop', sessionStorage.prevMenuScrollTop);
+      sessionStorage.setItem('prevPrevContentScrollTop', sessionStorage.prevContentScrollTop);
+    }
+    if (sessionStorage.locationPathname) {
+      sessionStorage.setItem('prevPathname', sessionStorage.locationPathname);
+      sessionStorage.setItem('prevMenuScrollTop', sessionStorage.menuScrollTop);
+      sessionStorage.setItem('prevContentScrollTop', sessionStorage.contentScrollTop);
+    }
+    if ($menu && sessionStorage.menuScrollTop) {
+		  $menu.scrollTop = sessionStorage.menuScrollTop;
+    }
+    // 刷新页面但不切换 pathname 的时候，内容区恢复到记忆的高度
+    if ($content && sessionStorage.contentScrollTop && window.location.pathname == sessionStorage.locationPathname) {
+      $content.scrollTop = sessionStorage.contentScrollTop;
+    } else if (sessionStorage.prevPrevPathname && sessionStorage.prevPrevPathname === window.location.pathname) {
+      if ($menu && sessionStorage.prevPrevMenuScrollTop) {
+        $menu.scrollTop = sessionStorage.prevPrevMenuScrollTop;
+      }
+      if ($content && sessionStorage.prevPrevContentScrollTop) {
+        $content.scrollTop = sessionStorage.prevPrevContentScrollTop;
+      }
+    }
+    sessionStorage.setItem('locationPathname', window.location.pathname);
+    </script><script src="ydoc\scripts\plugins\dollar.min.js"></script><script src="ydoc\scripts\plugins\responsive-nav.min.js"></script><script src="ydoc\scripts\plugins\slideout.min.js"></script><script src="ydoc\scripts\app.js"></script><script src="ydoc\ydoc-plugin-search\core.js"></script><script src="ydoc\ydoc-plugin-search\search.js"></script><script src="search_json.js"></script></body></html>

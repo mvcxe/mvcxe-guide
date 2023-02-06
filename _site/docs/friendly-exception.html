@@ -1,0 +1,218 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charSet="UTF-8"/><meta content="text/html; charset=utf-8" http-equiv="Content-Type"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-status-bar-style" content="black"/><link rel="apple-touch-icon" sizes="180x180" href="..\images\apple-touch-icon.png"/><link rel="icon" type="image/png" sizes="32x32" href="..\images\favicon-32x32.png"/><link rel="icon" type="image/png" sizes="16x16" href="..\images\favicon-16x16.png"/><link rel="manifest" href="..\images\manifest.json"/><link rel="mask-icon" href="..\images\safari-pinned-tab.svg" color="#5bbad5"/><meta name="theme-color" content="#ffffff"/><meta http-equiv="Cache-Control" content="no-transform"/><meta http-equiv="Cache-Control" content="no-siteapp"/><title>友好异常处理-文档</title><link rel="stylesheet" href="..\ydoc\styles\style.css"/><meta name="author" content="roc.long"/><meta name="keywords"/><meta name="description" content="MVCXE | 中国首个DELPHI MVC WEB框架"/><meta id="releativePath" content=".."/><link rel="stylesheet" href="..\ydoc\ydoc-plugin-search\search.css"/></head><body><div class="g-doc"><div class="m-aside"><div class="m-summary" id="js-menu"><div class="m-summary-content" id="js-menu-content"><div class="m-summary-block"><ul class="m-summary-list"><li class="item"><a href="installation.html" class="href">一分钟上手</a></li></ul></div><div class="m-summary-block"><div class="m-summary-title">开始使用</div><ul class="m-summary-list indent"><li class="item"><a href="intro.html#" class="href">介绍</a></li></ul></div><div class="m-summary-block"><div class="m-summary-title">Web服务</div><ul class="m-summary-list indent"><li class="item"><a href="appstartup.html" class="href">应用启动 Startup</a></li><li class="item"><a href="configuration.html" class="href">配置</a></li><li class="item"><a href="options.html" class="href">选项</a></li></ul></div><div class="m-summary-block"><div class="m-summary-title">Web应用开发</div><ul class="m-summary-list indent"><li class="item"><a href="dynamic-api-controller.html" class="href">动态 WebAPI</a></li><li class="item"><a href="httpcontext.html" class="href">HttpContext</a></li></ul></div><div class="m-summary-block"><div class="m-summary-title">规范化接口文档</div><ul class="m-summary-list indent"><li class="item"><a href="specification-document.html" class="href">Swagger</a></li></ul></div><div class="m-summary-block"><div class="m-summary-title">异常与审计处理</div><ul class="m-summary-list indent"><li class="item"><a href="" class="href">友好异常处理</a></li></ul></div><div class="m-summary-block"><div class="m-summary-title">数据库操作指南</div><ul class="m-summary-list indent"><li class="item"><a href="dbcontext-start.html" class="href">入门简要</a></li><li class="item"><a href="dbcontext-repository.html" class="href">仓储模式</a></li></ul></div></div></div><div class="m-summary-switch" id="js-summary-switch"><svg viewBox="0 0 926.23699 573.74994" version="1.1" x="0px" y="0px" width="15" height="15" class="bottom"><g transform="translate(904.92214,-879.1482)"><path d="m -673.67664,1221.6502 -231.2455,-231.24803 55.6165,-55.627 c 30.5891,-30.59485 56.1806,-55.627 56.8701,-55.627 0.6894,0 79.8637,78.60862 175.9427,174.68583 l 174.6892,174.6858 174.6892,-174.6858 c 96.079,-96.07721 175.253196,-174.68583 175.942696,-174.68583 0.6895,0 26.281,25.03215 56.8701,55.627 l 55.6165,55.627 -231.245496,231.24803 c -127.185,127.1864-231.5279,231.248 -231.873,231.248 -0.3451,0 -104.688,-104.0616 -231.873,-231.248 z" fill="#fff"></path></g></svg><svg viewBox="0 0 926.23699 573.74994" version="1.1" x="0px" y="0px" width="15" height="15" class="top"><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="aaa" fill="#fff" fill-rule="nonzero"><path d="M231.2455,342.502 L0,111.25397 L55.6165,55.62697 C86.2056,25.03212 111.7971,-2.99999998e-05 112.4866,-2.99999998e-05 C113.176,-2.99999998e-05 192.3503,78.60859 288.4293,174.6858 L463.1185,349.3716 L637.8077,174.6858 C733.8867,78.60859 813.060896,-2.99999997e-05 813.750396,-2.99999997e-05 C814.439896,-2.99999997e-05 840.031396,25.03212 870.620496,55.62697 L926.236996,111.25397 L694.9915,342.502 C567.8065,469.6884 463.4636,573.75 463.1185,573.75 C462.7734,573.75 358.4305,469.6884 231.2455,342.502 Z" id="Shape" transform="translate(463.118498, 286.874985) scale(1, -1) translate(-463.118498, -286.874985) "></path></g></g></svg></div></div><div class="m-main" id="js-panel"><header class="m-header" id="js-header"><div class="m-header-title js-logo"><a href="..\index.html" target="_self"><img class="logo" width="36" src="..\images\logo.png"/><h6 class="name">MVCXE</h6></a></div><div><div class="m-search">
+      <div class="icon">&#xf0fd;</div>
+      <input type="text" class="input js-input" placeholder="搜索" />
+      <div class="m-search-result js-search-result"></div>
+    </div></div><nav class="m-header-nav js-nav"><ul class="m-header-items"><li class="item active"><a class="href" href="index.html">文档</a></li><li class="item "><a class="href" href="..\about\index.html">关于</a></li></ul></nav><div id="js-nav-btn" class="m-header-btn ui-font-ydoc"></div></header><div class="m-content" id="js-content"><div id="markdown-body" class="m-content-container markdown-body"><h1>友好异常处理</h1>
+<h2 id="什么是异常">什么是异常</h2>
+<p>异常一般是指运行期（此处特指<code>TException</code>类）会发生的导致程序意外中止的问题，是一种对问题的描述后的封装对象。</p>
+<p>在过去开发中，通常异常由系统运行时出错抛出，但现在的开发过程中，我们应在程序开发中合理的抛出异常，比如更新一条不存在的实体，或查询一个不存在的数据等等。</p>
+<h2 id="处理异常方式">处理异常方式</h2>
+<ul>
+<li>不处理，直接中断程序执行（不推荐）</li>
+<li>通过 try catch finally 处理（不推荐）</li>
+<li>全局统一处理，并记录异常信息（推荐）</li>
+<li>异常注解方式处理，支持本地化 （推荐）</li>
+</ul>
+<h2 id="什么是友好异常处理">什么是友好异常处理</h2>
+<blockquote>
+<p>非友好异常处理</p>
+</blockquote>
+<p>在了解友好异常处理之前可以看看非友好异常处理：</p>
+<ul>
+<li>对终端用户抛出 500状态码 堆栈信息</li>
+<li>大量的 try catch 代码，污染正常业务逻辑</li>
+<li>没有规范化的异常状态码和异常消息管理</li>
+<li>没有异常日志收集记录</li>
+<li>不支持异常消息本地化处理</li>
+<li>不支持异常策略，失败后程序立即终止</li>
+<li>不支持分布式事务 CAP</li>
+<li>不支持异常传播</li>
+<li>返回的异常格式杂乱</li>
+</ul>
+<blockquote>
+<p>友好异常处理</p>
+</blockquote>
+<ul>
+<li>对终端用户提示友好</li>
+<li>对后端开发人员提供详细的异常堆栈</li>
+<li>不干扰正常业务逻辑代码，如 没有 try catch 代码</li>
+<li>支持异常状态码多方设置</li>
+<li>支持异常消息本地化</li>
+<li>异常信息统一配置管理</li>
+<li>支持异常策略，如重试</li>
+<li>支持异常日志收集记录</li>
+<li>支持 CAP 分布式事务关联</li>
+<li>支持内部异常外部传播</li>
+<li>支持返回统一的异常格式数据</li>
+</ul>
+<h2 id="友好异常处理使用示例">友好异常处理使用示例</h2>
+<p>MVCXE 框架提供了非常灵活的友好异常处理方式。</p>
+<blockquote>
+<p>引入友好异常单元</p>
+</blockquote>
+<pre><code>uses MVCXE.Exception;
+</code></pre>
+<blockquote>
+<p>两个例子</p>
+</blockquote>
+<p>简单抛个异常</p>
+<pre><code>type
+  TMyWebApi = class(TWebApi)
+  public
+	function Get(id: Integer): string;
+  end;
+implementation
+function TMyWebApi.Get(id: Integer): string;
+begin
+  if id &lt; 3 then
+  begin
+    raise Oops.Oh('%d 不能小于3', [id]);
+  end;
+
+  Result := id;
+end;
+</code></pre>
+<p>抛出特定类型异常</p>
+<pre><code>type
+  TMyWebApi = class(TWebApi)
+  public
+	function Get(id: Integer): string;
+  end;
+implementation
+function TMyWebApi.Get(id: Integer): string;
+begin
+  if id &lt; 3 then
+  begin
+    raise Oops.Oh('%d 不能小于3', TypeInfo(TMyException), [id]);
+  end;
+
+  Result := id;
+end;
+</code></pre>
+<h2 id="关于-oops.oh">关于 Oops.Oh</h2>
+<p>通过上面的例子可以看出，Oops.Oh(errorMessage) 可以结合 raise 抛出异常。对于熟悉C#的人员来说，raise 后面只能 TException 实例。Oops.Oh(...) 方法返回正是 TException 实例。</p>
+<blockquote>
+<p>为什么起这个名字？</p>
+</blockquote>
+<p>这个名字来源于一个英语句子：Oh, Oops!，意思是 噢（哎），出错了！，所以就有了 Oops.Oh。</p>
+<blockquote>
+<p>Oops.Oh 重载方法</p>
+</blockquote>
+<pre><code>type
+  Oops = class
+  public
+	class function Oh(const errorMessage: string;
+	  const args: array of const): Exception; overload;
+	class function Oh(const errorCode: Integer;
+	  const args: array of const): Exception; overload;
+	class function Oh(const errorMessage: string; exceptionType: PTypeInfo;
+	  const args: array of const): Exception; overload;
+	class function Oh(const errorCode: Integer; exceptionType: PTypeInfo;
+	  const args: array of const): Exception; overload;
+	class function Bah(const errorMessage: string;
+	  const args: array of const): Exception; overload;
+	class function Bah(const errorCode: Integer;
+	  const args: array of const): Exception; overload;
+  end;
+</code></pre>
+<h2 id="最佳实践">最佳实践</h2>
+<p>在<code>MVCXE</code>框架中，提供了非常灵活且规范化的友好异常处理方式，通过这个方式可以方便管理异常状态码、异常信息及异常本地化。</p>
+<blockquote>
+<p>appsetting.json 中配置异常信息类型</p>
+</blockquote>
+<pre><code>{
+  &quot;ErrorCodeMessageSettings&quot;: {
+	&quot;Definitions&quot;: [
+	  [5000, &quot;%s 不能小于 %s&quot;, &quot;1&quot;, &quot;0&quot;],
+	  [5001, &quot;我叫 %s 名字&quot;, &quot;MVCXE&quot;],
+	  [5002, &quot;Oops! 出错了&quot;]
+	]
+  }
+}
+</code></pre>
+<p>Definitions 类型为二维数组，二维数组中的每一个数组第一个参数为 ErrorCode 也就是错误码，第二个参数为 ErrorMessage 消息内容，剩余参数作为 ErrorMessage 的格式化参数。</p>
+<blockquote>
+<p>使用示例</p>
+</blockquote>
+<pre><code>type
+  TMyWebApi = class(TWebApi)
+  public
+	function Get(id: Integer): string;
+  end;
+implementation
+function TMyWebApi.Get(id: Integer): string;
+begin
+  if id &lt; 3 then
+  begin
+    raise Oops.Oh(500, [IntToStr(id), '3']);
+  end;
+
+  Result := id;
+end;
+</code></pre>
+<blockquote>
+<p>更多例子</p>
+</blockquote>
+<pre><code>raise Oops.Oh(1000);
+raise Oops.Oh(&quot;哈哈哈哈&quot;);
+raise Oops.Oh(errorCode: &quot;x1001&quot;);
+raise Oops.Oh(1000, TypeInfo(TMyException));
+raise Oops.Bah(&quot;用户名或密码错误&quot;); // 抛出业务异常，状态码为 400
+raise Oops.Bah(1000);
+</code></pre>
+<h2 id="onexception-使用">OnException 使用</h2>
+<p>在控制器类中添加OnException方法，当控制器类中的动作抛出异常会触发OnException</p>
+<pre><code>type
+  TMyWebApi = class(TWebApi)
+  public
+	function Get(id: Integer): string;
+	function OnException(const e: Exception): string;
+  end;
+implementation
+function TMyWebApi.Get(id: Integer): string;
+begin
+  if id &lt; 3 then
+  begin
+    raise Oops.Oh(500, [IntToStr(id), '3']);
+  end;
+
+  Result := id;
+end;
+
+function TIndexController.OnException(const e: Exception): string;
+begin
+  Result := e.Message;
+end;
+</code></pre>
+<h2 id="mvc错误页">MVC错误页</h2>
+<p>如果在views目录中有模板文件{HttpStatusCode}.htm，当MVC的控制器抛出异常，系统会根据对应的HttpStatusCode加载对应的模板，错误信息注入变量{message}</p>
+</div><div class="m-content-container m-paging"><div class="m-paging-prev m-paging-item"><a href="specification-document.html" class="href"><span class="ui-font-ydoc"></span>Swagger</a></div><div class="m-paging-next m-paging-item"><a href="dbcontext-start.html" class="href">入门简要<span class="ui-font-ydoc"></span></a></div></div></div></div></div><div></div><script>
+    var $content = document.getElementById('js-content');
+    var $summaryItems = Array.prototype.slice.call(document.querySelectorAll('#js-menu .href'));
+    var $menu = document.getElementById('js-menu');
+    if (sessionStorage.prevPathname) {
+      sessionStorage.setItem('prevPrevPathname', sessionStorage.prevPathname);
+      sessionStorage.setItem('prevPrevMenuScrollTop', sessionStorage.prevMenuScrollTop);
+      sessionStorage.setItem('prevPrevContentScrollTop', sessionStorage.prevContentScrollTop);
+    }
+    if (sessionStorage.locationPathname) {
+      sessionStorage.setItem('prevPathname', sessionStorage.locationPathname);
+      sessionStorage.setItem('prevMenuScrollTop', sessionStorage.menuScrollTop);
+      sessionStorage.setItem('prevContentScrollTop', sessionStorage.contentScrollTop);
+    }
+    if ($menu && sessionStorage.menuScrollTop) {
+		  $menu.scrollTop = sessionStorage.menuScrollTop;
+    }
+    // 刷新页面但不切换 pathname 的时候，内容区恢复到记忆的高度
+    if ($content && sessionStorage.contentScrollTop && window.location.pathname == sessionStorage.locationPathname) {
+      $content.scrollTop = sessionStorage.contentScrollTop;
+    } else if (sessionStorage.prevPrevPathname && sessionStorage.prevPrevPathname === window.location.pathname) {
+      if ($menu && sessionStorage.prevPrevMenuScrollTop) {
+        $menu.scrollTop = sessionStorage.prevPrevMenuScrollTop;
+      }
+      if ($content && sessionStorage.prevPrevContentScrollTop) {
+        $content.scrollTop = sessionStorage.prevPrevContentScrollTop;
+      }
+    }
+    sessionStorage.setItem('locationPathname', window.location.pathname);
+    </script><script src="..\ydoc\scripts\plugins\dollar.min.js"></script><script src="..\ydoc\scripts\plugins\responsive-nav.min.js"></script><script src="..\ydoc\scripts\plugins\slideout.min.js"></script><script src="..\ydoc\scripts\app.js"></script><script src="..\ydoc\ydoc-plugin-search\core.js"></script><script src="..\ydoc\ydoc-plugin-search\search.js"></script><script src="..\search_json.js"></script></body></html>
