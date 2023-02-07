@@ -28,3 +28,6 @@
 * [仓储模式](dbcontext-repository.md)
 * [Sql操作模式](dbcontext-db.md)
 * [新增操作](dbcontext-add.md)
+* [更新操作](dbcontext-update.md)
+* [删除操作](dbcontext-delete.md)
+* [查询操作](dbcontext-query.md)

@@ -399,12 +399,123 @@ window.ydoc_plugin_search_json = {
         {
           "title": "新增一条",
           "url": "\\docs\\dbcontext-add.html#新增一条",
-          "content": "新增一条type[Table('User')]\nTUser = record\n    [Key(True)]\n    [DatabaseGenerated(TDatabaseGeneratedOption.Identity)]\n    id: Integer;\n    Name: string;\n    Age : Integer;\n    class function Empty: TSystemAdmin; static;\nend;\nIUserService = interface(IInterface)\n    ['{C6A0BCCF-967B-4189-B723-64F75927561F}']\n    function CreateUser(const User: TUser): Integer;\nend;\nTUserService = class(TInterfacedObject, IUserService)\nprivate\n    [IOC('MVCXE.ORM.TORMXE')]\n    orm: IORM;\npublic\n    function CreateUser(const User: TUser): Boolean;\n    function CreateUserBySqlMap(const User: TUser): Boolean;\n    function NewUser(const User: TUser): Integer;\n    procedure InsertUser(const User: TUser);\nend;\n\nimplementation\n\n{ TUser }\n\nclass function TUser.Empty: TUser;\nbegin\n  Result := Default (TUser);\nend;\n\n{ TUserService }\n\nfunction TUserService.CreateUser(const User: TUsers): Boolean;\nbegin\n  Result := orm.Repository.Insert\n    .SetSource(User)\n    .ExecuteAffrows>0;\nend;\n\nfunction TUserService.CreateUserBySqlMap(const User: TUser): Boolean;\nbegin\n  Result := orm.Repository.Insert('CreateUser')\n    .SetSource(User)\n    .ExecuteAffrows>0;\nend;\n\nfunction TUserService.NewUser(const User: TUsers): Integer;\nbegin\n  Result := orm.Repository.Insert(User)\n    .ExecuteAffrows;\nend;\n\nprocedure TUserService.InsertUser(const User: TUser);\nbegin\n  orm.DB.Execute('INSERT INTO User (Name, Age) VALUES (?,?)', [User.Name, User.Age]);\n  orm.DB.Execute('INSERT INTO User (Name, Age) VALUES (:Name,:Age)', TValue.From(User));\nend;\n\nend.\n"
+          "content": "新增一条type[Table('User')]\nTUser = record\n    [Key(True)]\n    [DatabaseGenerated(TDatabaseGeneratedOption.Identity)]\n    id: Integer;\n    Name: string;\n    Age : Integer;\n    class function Empty: TSystemAdmin; static;\nend;\nIUserService = interface(IInterface)\n    ['{C6A0BCCF-967B-4189-B723-64F75927561F}']\n    function CreateUser(const User: TUser): Boolean;\n    function CreateUserBySqlMap(const User: TUser): Boolean;\n    function NewUser(const User: TUser): Integer;\n    procedure InsertUser(const User: TUser);\nend;\nTUserService = class(TInterfacedObject, IUserService)\nprivate\n    [IOC('MVCXE.ORM.TORMXE')]\n    orm: IORM;\npublic\n    function CreateUser(const User: TUser): Boolean;\n    function CreateUserBySqlMap(const User: TUser): Boolean;\n    function NewUser(const User: TUser): Integer;\n    procedure InsertUser(const User: TUser);\nend;\n\nimplementation\n\n{ TUser }\n\nclass function TUser.Empty: TUser;\nbegin\n  Result := Default (TUser);\nend;\n\n{ TUserService }\n\nfunction TUserService.CreateUser(const User: TUsers): Boolean;\nbegin\n  Result := orm.Repository.Insert\n    .SetSource(User)\n    .ExecuteAffrows>0;\nend;\n\nfunction TUserService.CreateUserBySqlMap(const User: TUser): Boolean;\nbegin\n  Result := orm.Repository.Insert('CreateUser')\n    .SetSource(User)\n    .ExecuteAffrows>0;\nend;\n\nfunction TUserService.NewUser(const User: TUsers): Integer;\nbegin\n  Result := orm.Repository.Insert(User)\n    .ExecuteAffrows;\nend;\n\nprocedure TUserService.InsertUser(const User: TUser);\nbegin\n  orm.DB.Execute('INSERT INTO User (Name, Age) VALUES (?,?)', [User.Name, User.Age]);\n  orm.DB.Execute('INSERT INTO User (Name, Age) VALUES (:Name,:Age)', TValue.From(User));\nend;\n\nend.\n"
         },
         {
           "title": "新增实体仓储",
           "url": "\\docs\\dbcontext-add.html#新增实体仓储",
           "content": "新增实体仓储IORMInsertRepo = interface(IInterface)    ['{17652C89-B5E4-4BFE-8180-0B8A9739E915}']\n    function SetSource(const Source: T): IORMInsertRepo;\n    function SetValue(const FieldName: string; const FieldValue: TValue)\n    : IORMInsertRepo; overload;\n    function SetValue(const FieldName: string; const FieldValue: TValue;\n    const DataType: TFieldType)\n    : IORMInsertRepo; overload;\n    function IgnoreColumns(const Fields: array of const): IORMInsertRepo;\n    function ExecuteAffrows: Integer;\n    function Replace(const ParamName, ParamValue: string)\n    : IORMInsertRepo;\nend;"
+        }
+      ]
+    },
+    {
+      "title": "更新操作",
+      "content": "",
+      "url": "\\docs\\dbcontext-update.html",
+      "children": [
+        {
+          "title": "SqlMap.xml",
+          "url": "\\docs\\dbcontext-update.html#sqlmap.xml",
+          "content": "SqlMap.xml\n    \n        \n\t\t  Update User Set Name=:Name, Age=:Age Where id=:id\n        \n    \n\n"
+        },
+        {
+          "title": "更新全部列",
+          "url": "\\docs\\dbcontext-update.html#更新全部列",
+          "content": "更新全部列type[Table('User')]\nTUser = record\n    [Key(True)]\n    [DatabaseGenerated(TDatabaseGeneratedOption.Identity)]\n    id: Integer;\n    Name: string;\n    Age : Integer;\n    class function Empty: TSystemAdmin; static;\nend;\nIUserService = interface(IInterface)\n    ['{C6A0BCCF-967B-4189-B723-64F75927561F}']\n    function UpdateUser(const User: TUser): Boolean;\n    function UpdateUserBySqlMap(const User: TUser): Integer;\n    procedure UpdateUserBySql(const User: TUser);\nend;\nTUserService = class(TInterfacedObject, IUserService)\nprivate\n    [IOC('MVCXE.ORM.TORMXE')]\n    orm: IORM;\npublic\n    function UpdateUser(const User: TUser): Boolean;\n    function UpdateUserBySqlMap(const User: TUser): Integer;\n    procedure UpdateUserBySql(const User: TUser);\nend;\n\nimplementation\n\n{ TUser }\n\nclass function TUser.Empty: TUser;\nbegin\n  Result := Default (TUser);\nend;\n\n{ TUserService }\n\nfunction TUserService.UpdateUser(const User: TUsers): Boolean;\nbegin\n  Result := orm.Repository.Update(User)\n    .ExecuteAffrows>0;\nend;\n\nfunction TUserService.UpdateUserBySqlMap(const User: TUser): Integer;\nbegin\n  Result := orm.Repository.Update('UpdateUser')\n    .SetSource(User)\n    .ExecuteAffrows;\nend;\n\nprocedure TUserService.UpdateUserBySql(const User: TUser);\nbegin\n  orm.DB.Execute('Update User Set Name=?, Age=? Where id=?', [User.Name, User.Age, User.id]);\n  orm.DB.Execute('Update User Set Name=:Name, Age=:Age Where id=:id', TValue.From(User));\nend;\n\nend.\n"
+        },
+        {
+          "title": "更新部分列",
+          "url": "\\docs\\dbcontext-update.html#更新部分列",
+          "content": "更新部分列function TUserService.UpdateUser(const User: TUsers): Boolean;begin\n  Result := orm.Repository.Update\n    .SetValue('Age', User.Age)\n    .Where('id', User.id)\n    .ExecuteAffrows>0;\nend;\n"
+        },
+        {
+          "title": "排除特定列更新",
+          "url": "\\docs\\dbcontext-update.html#排除特定列更新",
+          "content": "排除特定列更新function TUserService.UpdateUser(const User: TUsers): Boolean;begin\n  Result := orm.Repository.Update(User)\n    .IgnoreColumns(['Name'])\n    .ExecuteAffrows>0;\nend;\n"
+        },
+        {
+          "title": "更新实体仓储",
+          "url": "\\docs\\dbcontext-update.html#更新实体仓储",
+          "content": "更新实体仓储IORMUpdateRepo = interface(IInterface)    ['{B111ED22-A3A2-4383-B06E-FC45361B5959}']\n    function SetSource(const Source: T): IORMUpdateRepo;\n    function SetValue(const FieldName: string; const FieldValue: TValue)\n    : IORMUpdateRepo; overload;\n    function SetValue(const FieldName: string; const FieldValue: TValue;\n    const DataType: TFieldType)\n    : IORMUpdateRepo; overload;\n    function IgnoreColumns(const Fields: array of const): IORMUpdateRepo;\n    function Replace(const ParamName, ParamValue: string)\n    : IORMUpdateRepo;\n\n    function Where(const ParamName: string; const ParamValue: TValue)\n    : IORMUpdateRepo; overload;\n    function Where(const ParamName: string; const ParamValue: TValue;\n    const ParamType: TParamType; const DataType: TFieldType)\n    : IORMUpdateRepo; overload;\n    function Where(const ParamName, ParamOperator: string; const ParamValue: TValue)\n    : IORMUpdateRepo; overload;\n    function Where(const ParamName, ParamOperator: string; const ParamValue: TValue;\n    const ParamType: TParamType; const DataType: TFieldType)\n    : IORMUpdateRepo; overload;\n    function Where(const Param: TParam): IORMUpdateRepo; overload;\n    function ExecuteAffrows: Integer;\nend;"
+        }
+      ]
+    },
+    {
+      "title": "删除操作",
+      "content": "",
+      "url": "\\docs\\dbcontext-delete.html",
+      "children": [
+        {
+          "title": "SqlMap.xml",
+          "url": "\\docs\\dbcontext-delete.html#sqlmap.xml",
+          "content": "SqlMap.xml\n    \n        \n\t\t  Delete User Where id=:id\n        \n    \n\n"
+        },
+        {
+          "title": "删除一行",
+          "url": "\\docs\\dbcontext-delete.html#删除一行",
+          "content": "删除一行type[Table('User')]\nTUser = record\n    [Key(True)]\n    [DatabaseGenerated(TDatabaseGeneratedOption.Identity)]\n    id: Integer;\n    Name: string;\n    Age : Integer;\n    class function Empty: TSystemAdmin; static;\nend;\nIUserService = interface(IInterface)\n    ['{C6A0BCCF-967B-4189-B723-64F75927561F}']\n    function DeleteUser(const User: TUser): Boolean;\n    function DeleteUserBySqlMap(const User: TUser): Integer;\n    procedure DeleteUserBySql(const User: TUser);\nend;\nTUserService = class(TInterfacedObject, IUserService)\nprivate\n    [IOC('MVCXE.ORM.TORMXE')]\n    orm: IORM;\npublic\n    function DeleteUser(const User: TUser): Boolean;\n    function DeleteUserBySqlMap(const User: TUser): Integer;\n    procedure DeleteUserBySql(const User: TUser);\nend;\n\nimplementation\n\n{ TUser }\n\nclass function TUser.Empty: TUser;\nbegin\n  Result := Default (TUser);\nend;\n\n{ TUserService }\n\nfunction TUserService.DeleteUser(const User: TUsers): Boolean;\nbegin\n  Result := orm.Repository.Delete(User)\n    .ExecuteAffrows>0;\nend;\n\nfunction TUserService.UpdateUserBySqlMap(const User: TUser): Integer;\nbegin\n  Result := orm.Repository.Delete('DeleteUser')\n    .SetSource(User)\n    .ExecuteAffrows;\nend;\n\nprocedure TUserService.DeleteUserBySql(const User: TUser);\nbegin\n  orm.DB.Execute('Delete User Where id=?', [User.id]);\n  orm.DB.Execute('Delete User Where id=:id', TValue.From(User));\nend;\n\nend.\n"
+        },
+        {
+          "title": "按条件删除",
+          "url": "\\docs\\dbcontext-delete.html#按条件删除",
+          "content": "按条件删除function TUserService.DeleteUser(const User: TUsers): Boolean;begin\n  Result := orm.Repository.Delete\n    .Where('id', User.id)\n    .ExecuteAffrows>0;\nend;\n"
+        },
+        {
+          "title": "删除实体仓储",
+          "url": "\\docs\\dbcontext-delete.html#删除实体仓储",
+          "content": "删除实体仓储IORMDeleteRepo = interface(IInterface)    ['{F5B7DF81-0BBD-4455-BB55-FB1ACAC1F434}']\n    function SetSource(const Source: T): IORMDeleteRepo;\n    function Replace(const ParamName, ParamValue: string)\n    : IORMDeleteRepo;\n    function Where(const ParamName: string; const ParamValue: TValue)\n    : IORMDeleteRepo; overload;\n    function Where(const ParamName: string; const ParamValue: TValue;\n    const DataType: TFieldType)\n    : IORMDeleteRepo; overload;\n    function Where(const Param: TParam): IORMDeleteRepo; overload;\n    function ExecuteAffrows: Integer;\nend;"
+        }
+      ]
+    },
+    {
+      "title": "查询操作",
+      "content": "",
+      "url": "\\docs\\dbcontext-query.html",
+      "children": [
+        {
+          "title": "SqlMap.xml",
+          "url": "\\docs\\dbcontext-query.html#sqlmap.xml",
+          "content": "SqlMap.xml\n    \n        \n\t\t  Select * From User Where id=:id\n        \n        \n\t\t  Select * From User Where Age=:Age\n        \n        \n\t\t  Select * From User Limit {Skip},{Count}\n        \n    \n\n"
+        },
+        {
+          "title": "根据条件查询一条",
+          "url": "\\docs\\dbcontext-query.html#根据条件查询一条",
+          "content": "根据条件查询一条type[Table('User')]\nTUser = record\n    [Key(True)]\n    [DatabaseGenerated(TDatabaseGeneratedOption.Identity)]\n    id: Integer;\n    Name: string;\n    Age : Integer;\n    class function Empty: TSystemAdmin; static;\nend;\nIUserService = interface(IInterface)\n    ['{C6A0BCCF-967B-4189-B723-64F75927561F}']\n    function FindUser(const Id: Integer): TUser;\n    function FindUserBySqlMap(const Id: Integer): TUser;\n    function FindUserBySql(const Id: Integer): TUser;\nend;\nTUserService = class(TInterfacedObject, IUserService)\nprivate\n    [IOC('MVCXE.ORM.TORMXE')]\n    orm: IORM;\npublic\n    function FindUser(const Id: Integer): TUser;\n    function FindUserBySqlMap(const Id: Integer): TUser;\n    function FindUserBySql(const Id: Integer): TUser;\nend;\n\nimplementation\n\n{ TUser }\n\nclass function TUser.Empty: TUser;\nbegin\n  Result := Default (TUser);\nend;\n\n{ TUserService }\n\nfunction TUserService.FindUser(const Id: Integer): TUser;\nbegin\n  Result := orm.Repository.Select\n    .Where('id', Id)\n    .SingleOrDefault;\nend;\n\nfunction TUserService.FindUserBySqlMap(const Id: Integer): TUser;\nbegin\n  Result := orm.Repository.Select('FindUser')\n    .Where('id', Id)\n    .Single;\nend;\n\nprocedure TUserService.FindUserBySql(const Id: Integer): TUser;\nbegin\n  orm.DB.Query('Select * From User Where id=:id')\n    .AddParam('id', Id)\n    .SingleOrDefault;\nend;\n\nend.\n"
+        },
+        {
+          "title": "查询所有数据",
+          "url": "\\docs\\dbcontext-query.html#查询所有数据",
+          "content": "查询所有数据function TUserService.AllUser: TArray;begin\n  Result := orm.Repository.Select\n    .ToArray;\nend;\n"
+        },
+        {
+          "title": "根据条件查询所有数据",
+          "url": "\\docs\\dbcontext-query.html#根据条件查询所有数据",
+          "content": "根据条件查询所有数据function TUserService.UserList(const Age: Integer): TList;begin\n  Result := orm.Repository.Select('UserList')\n    .Where('Age', Age)\n    .ToList;\nend;\n\nfunction TUserService.UserLikeName(const Key: String): TArray;\nbegin\n  Result := orm.DB.Query('Select * From User Where Name like :Key')\n    .AddParam('Key', '%'+Key+'%')\n    .ToArray;\nend;\n"
+        },
+        {
+          "title": "分页查询",
+          "url": "\\docs\\dbcontext-query.html#分页查询",
+          "content": "分页查询function TUserService.Users(const page, pagesize: Integer): TArray;begin\n  Result := orm.Repository.Select\n    .Take((page-1)*pagesize, pagesize)\n    .ToArray;\nend;\n\nfunction TUserService.Users(const page, pagesize: Integer): TArray;\nbegin\n  Result := orm.Repository.Select('UserPage')\n    .Take((page-1)*pagesize, pagesize)\n    .ToArray;\nend;\n\nfunction TUserService.Users(const page, pagesize: Integer): TArray;\nbegin\n  Result := orm.DB.Select('Select * From User Limit {Skip},{Count}')\n    .Take((page-1)*pagesize, pagesize)\n    .ToArray;\nend;\n"
+        },
+        {
+          "title": "查询记录数",
+          "url": "\\docs\\dbcontext-query.html#查询记录数",
+          "content": "查询记录数function TUserService.UserCount: Integer;var\n  c: Integer;\nbegin\n  orm.Repository.Select\n    .Count(c);\n  Result := c;\nend;\n"
+        },
+        {
+          "title": "查询单个字段值",
+          "url": "\\docs\\dbcontext-query.html#查询单个字段值",
+          "content": "查询单个字段值function TUserService.UserName(const Id: Integer): String;begin\n  Result := orm.DB.Query('Select Name From User Where Id=:id', [Id])\n    .ToString;\nend;\n"
+        },
+        {
+          "title": "查询实体仓储",
+          "url": "\\docs\\dbcontext-query.html#查询实体仓储",
+          "content": "查询实体仓储IORMSelectRepo = interface(IInterface)    ['{0AA94D59-D17B-436B-B470-0A86C7217B33}']\n    function ToArray: TArray;\n    function ToList: TList;\n    function SingleOrDefault: T;\n    function Single: T;\n    function OrderBy(const FieldNames: string; const Order: string=''): IORMSelectRepo;\n    function Include(const Join: string; const OnFeildName: string): IORMSelectRepo;\n    function Take(const Count: Integer): IORMSelectRepo; overload;\n    function Take(const Skip, Count: Integer): IORMSelectRepo; overload;\n    function Count(var RecordCount: Integer): IORMSelectRepo;\n    function Replace(const ParamName, ParamValue: string)\n    : IORMSelectRepo;\n\n    function Where(const WhereStr: string)\n    : IORMSelectRepo; overload;\n    function Where(const ParamName: string; const ParamValue: TValue)\n    : IORMSelectRepo; overload;\n    function Where(const ParamName: string; const ParamValue: TValue;\n    const DataType: TFieldType)\n    : IORMSelectRepo; overload;\n    function Where(const ParamName, ParamOperator: string; const ParamValue: TValue)\n    : IORMSelectRepo; overload;\n    function Where(const ParamName, ParamOperator: string; const ParamValue: TValue;\n    const ParamType: TParamType; const DataType: TFieldType)\n    : IORMSelectRepo; overload;\n    function Where(const Param: TParam): IORMSelectRepo; overload;\nend;\n"
+        },
+        {
+          "title": "Sql查询返回",
+          "url": "\\docs\\dbcontext-query.html#sql查询返回",
+          "content": "Sql查询返回IORMDBQuery = interface(IInterface)    ['{D9F9185B-4974-4C2D-8040-7BFC45A61775}']\n    function GetParams: TParams;\n    property Params: TParams read GetParams;\n    function ToArray: TArray;\n    function ToList: TList;\n    function SingleOrDefault: T;\n    function Single: T;\n    function ToScalar: Variant;\n    function ToInteger: Integer;\n    function ToString: string;\n    function Take(const Count: Integer): IORMDBQuery; overload;\n    function Take(const Skip, Count: Integer): IORMDBQuery; overload;\n    function AddParam(const ParamName: string; const ParamValue: TValue)\n    : IORMDBQuery; overload;\n    function AddParam(const ParamName: string; const ParamValue: TValue;\n    const ParamType: TParamType; const DataType: TFieldType)\n    : IORMDBQuery; overload;\n    function AddParam(const Param: TParam): IORMDBQuery; overload;\n    function AddParam(const Params: TParams): IORMDBQuery; overload;\n    function AddParam(const Params: array of const): IORMDBQuery; overload;\n    function Join(const Name: string; const SplitOn: string): IORMDBQuery;\n    function Groupby(const Names: string): IORMDBQuery;\nend;\n\nIORMDBQuery = interface(IInterface)\n    ['{ECAAE0AE-621F-493A-8F5E-D1B66960B9C8}']\n    function Row: TFieldList;\n    procedure NextRecordSet;\n    procedure Next;\n    function Eof: Boolean;\n    function ToScalar: Variant;\n    function ToInteger: Integer;\n    function ToString: string;\nend;"
         }
       ]
     }

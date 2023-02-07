@@ -25,7 +25,10 @@
     end;
     IUserService = interface(IInterface)
         ['{C6A0BCCF-967B-4189-B723-64F75927561F}']
-        function CreateUser(const User: TUser): Integer;
+        function CreateUser(const User: TUser): Boolean;
+        function CreateUserBySqlMap(const User: TUser): Boolean;
+        function NewUser(const User: TUser): Integer;
+        procedure InsertUser(const User: TUser);
     end;
     TUserService = class(TInterfacedObject, IUserService)
     private
