@@ -518,6 +518,38 @@ window.ydoc_plugin_search_json = {
           "content": "Sql查询返回IORMDBQuery = interface(IInterface)    ['{D9F9185B-4974-4C2D-8040-7BFC45A61775}']\n    function GetParams: TParams;\n    property Params: TParams read GetParams;\n    function ToArray: TArray;\n    function ToList: TList;\n    function SingleOrDefault: T;\n    function Single: T;\n    function ToScalar: Variant;\n    function ToInteger: Integer;\n    function ToString: string;\n    function Take(const Count: Integer): IORMDBQuery; overload;\n    function Take(const Skip, Count: Integer): IORMDBQuery; overload;\n    function AddParam(const ParamName: string; const ParamValue: TValue)\n    : IORMDBQuery; overload;\n    function AddParam(const ParamName: string; const ParamValue: TValue;\n    const ParamType: TParamType; const DataType: TFieldType)\n    : IORMDBQuery; overload;\n    function AddParam(const Param: TParam): IORMDBQuery; overload;\n    function AddParam(const Params: TParams): IORMDBQuery; overload;\n    function AddParam(const Params: array of const): IORMDBQuery; overload;\n    function Join(const Name: string; const SplitOn: string): IORMDBQuery;\n    function Groupby(const Names: string): IORMDBQuery;\nend;\n\nIORMDBQuery = interface(IInterface)\n    ['{ECAAE0AE-621F-493A-8F5E-D1B66960B9C8}']\n    function Row: TFieldList;\n    procedure NextRecordSet;\n    procedure Next;\n    function Eof: Boolean;\n    function ToScalar: Variant;\n    function ToInteger: Integer;\n    function ToString: string;\nend;"
         }
       ]
+    },
+    {
+      "title": "高级查询操作",
+      "content": "",
+      "url": "\\docs\\dbcontext-hight-query.html",
+      "children": [
+        {
+          "title": "关联数据模型",
+          "url": "\\docs\\dbcontext-hight-query.html#关联数据模型",
+          "content": "关联数据模型Base\ntypeTMyDB = class\npublished\n    [Key(True)]\n    [DatabaseGenerated(TDatabaseGeneratedOption.Identity)]\n    property Id: Integer;\nend;\nPerson\n[Table('Person')]TPerson = class(TMyDB)\npublished\n    property Name: string;\n    property Age : Integer;\n    property Address: string;\n    property PersonDetail: TPersonDetail;\n    property Childrens: TArray;\nend;\nPersonDetail\n[Table('PersonDetail')]TPersonDetail = class(TMyDB)\npublished\n    property PhoneNumber: string;\n    property QQ: string;\n    property PersonId : Integer;\nend;\nChildren\n[Table('Children')]TChildren = class(TMyDB)\npublished\n    property Name: string;\n    property Gender : Integer;\n    property PersonId : Integer;\nend;\nPost\n[Table('Post')]TPost = class(TMyDB)\npublished\n    property Title: string;\n    property PersonId : Integer;\n    property UpdateTime: TDateTime;\nend;\n"
+        },
+        {
+          "title": "一对一查询",
+          "url": "\\docs\\dbcontext-hight-query.html#一对一查询",
+          "content": "一对一查询增加属性是[NotMapped]和[Navigate]变量，Navigate的参数是Key字段对应的property变量的引用写法字符串，'关联类名.关联Key字段名'，如Post表是用PersonId字段来记录与Persion表的一对一关系，所以参数就是'TPost.PersonId'\nTPost = class(TMyDB)    [NotMapped]\n    [Navigate('TPost.PersonId')]\n    Person: TPerson;\nend;\n使用Include方法引入一对一查询，参数是带有[Navigate]属性的变量名，关联类的Key字段名\nfunction TPostService.TopPosts(const Count: Integer): TArray;begin\n  Result := orm.Repository.Select\n    .Include('Person','Id')\n    .Take(Count)\n    .ToArray;\nend;\n使用SqlMap进行一对一查询，从表的各字段需要As成_带有[Navigate]属性的变量名_，如Person表的Name字段要As成_Person_Name\n\n    \n        \n\t\t  Select A.*, B.Id _Person_Id, B.Name _Person_Name, B.Age _Person_Age, B.Address _Person_Address From Post A Left Join Person B On B.Id=A.PersonId Limit {Count}\n        \n    \n\n\nfunction TPostService.TopPostsBySqlMap(const Count: Integer): TArray;\nbegin\n  Result := orm.Repository.Select('TopPosts')\n    .Take(Count)\n    .ToArray;\nend;\n"
+        },
+        {
+          "title": "对多查询",
+          "url": "\\docs\\dbcontext-hight-query.html#对多查询",
+          "content": "对多查询TPerson = class(TMyDB)private\n    _PersonDetail: TPersonDetail;\n    _Childrens: TArray;\n\n    function GetPersonDetail: TPersonDetail;\n    function GetChildrens: TArray;\npublished\n    [NotMapped]\n    property PersonDetail: TPersonDetail read GetPersonDetail;\n    [NotMapped]\n    property Childrens: TArray read GetChildrens;\nend;\n\nimplementation\n\n{ TPerson }\n\nfunction TPerson.GetPersonDetail: TPersonDetail;\nvar\n  orm: IORM;\nbegin\n  if _PersonDetail = nil Then\n  begin\n    orm := BuildORM;\n    _PersonDetail := orm.Repository.Select\n      .Where('PersonId', Id)\n      .SingleOrDefault;\n  end;\n  Result := _PersonDetail;\nend;\n\nfunction TPerson.GetChildrens: TArray;\nvar\n  orm: IORM;\nbegin\n  if _Childrens = nil Then\n  begin\n    orm := BuildORM;\n    _Childrens := orm.Repository.Select\n      .Where('PersonId', Id)\n      .ToArray;\n  end;\n  Result := _Childrens;\nend;\n"
+        },
+        {
+          "title": "查询排序",
+          "url": "\\docs\\dbcontext-hight-query.html#查询排序",
+          "content": "查询排序正序\nfunction TPostService.TopPosts(const Count: Integer): TArray;begin\n  Result := orm.Repository.Select\n    .OrderBy('Id')\n    //或.OrderBy('Id','Asc')\n    .Take(Count)\n    .ToArray;\nend;\n倒序\nfunction TPostService.TopPosts(const Count: Integer): TArray;begin\n  Result := orm.Repository.Select\n    .OrderBy('Id','Desc')\n    .Take(Count)\n    .ToArray;\nend;\n混合\nfunction TPostService.TopPosts(const Count: Integer): TArray;begin\n  Result := orm.Repository.Select\n    .OrderBy('Age', 'Asc')\n    .OrderBy('Id','Desc')\n    .Take(Count)\n    .ToArray;\nend;\n"
+        },
+        {
+          "title": "其它高级用法请使用Sql和Pascal的函数实现",
+          "url": "\\docs\\dbcontext-hight-query.html#其它高级用法请使用sql和pascal的函数实现",
+          "content": "其它高级用法请使用Sql和Pascal的函数实现"
+        }
+      ]
     }
   ]
 }
