@@ -122,7 +122,7 @@
 
     function TUserService.Users(const page, pagesize: Integer): TArray<TUsers>;
     begin
-      Result := orm.DB.Select<TUsers>('Select * From User Limit {Skip},{Count}')
+      Result := orm.DB.Query<TUsers>('Select * From User Limit {Skip},{Count}')
         .Take((page-1)*pagesize, pagesize)
         .ToArray;
     end;

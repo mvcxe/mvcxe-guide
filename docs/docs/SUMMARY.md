@@ -32,3 +32,5 @@
 * [删除操作](dbcontext-delete.md)
 * [查询操作](dbcontext-query.md)
 * [高级查询操作](dbcontext-hight-query.md)
+* [存储过程操作](dbcontext-proc.md)
+* [函数操作](dbcontext-function.md)

@@ -495,7 +495,7 @@ window.ydoc_plugin_search_json = {
         {
           "title": "分页查询",
           "url": "\\docs\\dbcontext-query.html#分页查询",
-          "content": "分页查询function TUserService.Users(const page, pagesize: Integer): TArray;begin\n  Result := orm.Repository.Select\n    .Take((page-1)*pagesize, pagesize)\n    .ToArray;\nend;\n\nfunction TUserService.Users(const page, pagesize: Integer): TArray;\nbegin\n  Result := orm.Repository.Select('UserPage')\n    .Take((page-1)*pagesize, pagesize)\n    .ToArray;\nend;\n\nfunction TUserService.Users(const page, pagesize: Integer): TArray;\nbegin\n  Result := orm.DB.Select('Select * From User Limit {Skip},{Count}')\n    .Take((page-1)*pagesize, pagesize)\n    .ToArray;\nend;\n"
+          "content": "分页查询function TUserService.Users(const page, pagesize: Integer): TArray;begin\n  Result := orm.Repository.Select\n    .Take((page-1)*pagesize, pagesize)\n    .ToArray;\nend;\n\nfunction TUserService.Users(const page, pagesize: Integer): TArray;\nbegin\n  Result := orm.Repository.Select('UserPage')\n    .Take((page-1)*pagesize, pagesize)\n    .ToArray;\nend;\n\nfunction TUserService.Users(const page, pagesize: Integer): TArray;\nbegin\n  Result := orm.DB.Query('Select * From User Limit {Skip},{Count}')\n    .Take((page-1)*pagesize, pagesize)\n    .ToArray;\nend;\n"
         },
         {
           "title": "查询记录数",
@@ -548,6 +548,60 @@ window.ydoc_plugin_search_json = {
           "title": "其它高级用法请使用Sql和Pascal的函数实现",
           "url": "\\docs\\dbcontext-hight-query.html#其它高级用法请使用sql和pascal的函数实现",
           "content": "其它高级用法请使用Sql和Pascal的函数实现"
+        }
+      ]
+    },
+    {
+      "title": "存储过程操作",
+      "content": "",
+      "url": "\\docs\\dbcontext-proc.html",
+      "children": [
+        {
+          "title": "关于存储过程",
+          "url": "\\docs\\dbcontext-proc.html#关于存储过程",
+          "content": "关于存储过程引用百度百科：存储过程（Stored Procedure）是在大型数据库系统中，一组为了完成特定功能的 SQL 语句集，它存储在数据库中，一次编译后永久有效，用户通过指定存储过程的名字并给出参数（如果该存储过程带有参数）来执行它。\n存储过程是数据库中的一个重要对象。在数据量特别庞大的情况下利用存储过程能达到倍速的效率提升。\n简单来说，存储过程就是关系型数据库中（Sqlite 除外）中编写逻辑的函数/方法，通过这种方式，可以将 sql 编译缓存起来，大大提高存储过程的执行效率。这里不讨论存储过程的优缺点。"
+        },
+        {
+          "title": "支持存储过程的数据库",
+          "url": "\\docs\\dbcontext-proc.html#支持存储过程的数据库",
+          "content": "支持存储过程的数据库\n\nSqlServer\nSqlite\nInMemoryDatabase\nMySql\nPostgreSQL\nOracle\nFirebird\n\n\n\n\n✔\n✔\n\n✔\n✔\n✔\n✔\n\n\n"
+        },
+        {
+          "title": "存储过程使用",
+          "url": "\\docs\\dbcontext-proc.html#存储过程使用",
+          "content": "存储过程使用TORMDB定义了几个常用方法。TORMDB = classpublic\n    function ExecProc(const StoredProcName: string): IORMDBQuery;\n    overload;\n    function ExecProc(const SchemaName: string; const StoredProcName: string)\n    : IORMDBQuery; overload;\n\n    procedure ExecProc(const StoredProcName: string); overload;\n    procedure ExecProc(const SchemaName: string;\n    const StoredProcName: string); overload;\n    procedure ExecProc(const StoredProcName: string;\n    var Args: TParams); overload;\n    procedure ExecProc(const SchemaName: string; const StoredProcName: string;\n    var Args: TParams); overload;\n    procedure ExecProc(const StoredProcName: string;\n    const Args: TValue); overload;\n    procedure ExecProc(const SchemaName: string; const StoredProcName: string;\n    const Args: TValue); overload;\n\nend;\n"
+        },
+        {
+          "title": "范例",
+          "url": "\\docs\\dbcontext-proc.html#范例",
+          "content": "范例建立用于分页的存储过程sp_viewPage\n-- ------------------------------ Procedure structure for sp_viewPage\n-- ----------------------------\nDROP PROCEDURE IF EXISTS `sp_viewPage`;\ndelimiter ;;\nCREATE PROCEDURE `sp_viewPage`(IN _fields VARCHAR(1000),\nIN _tables VARCHAR(1000),\nIN _where VARCHAR(2000),\nIN _orderby VARCHAR(200),\nIN _pageindex INT,\nIN _pageSize INT,\nOUT _totalcount INT,\nOUT _pagecount INT)\nBEGIN\n#140529-xxj-分页存储过程\n#计算起始行号\nSET @startRow = _pageSize * (_pageIndex - 1);\nSET @pageSize = _pageSize;\nSET @rowindex = 0; #行号\n\n#合并字符串\nSET @strsql = CONCAT(\n#'select sql_calc_found_rows @rowindex:=@rowindex+1 as rownumber,' #记录行号\n'select sql_calc_found_rows '\n,_fields\n,' from '\n,_tables\n,IF(IFNULL(_where, '')='','',CONCAT(' where ', _where))\n,IF(IFNULL(_orderby, '')='','',CONCAT(' order by ', _orderby))\n,' limit '\n,@startRow\n,','\n,@pageSize\n);\n\nPREPARE strsql FROM @strsql;#定义预处理语句\nEXECUTE strsql; #执行预处理语句\nDEALLOCATE PREPARE strsql; #删除定义\n#通过 sql_calc_found_rows 记录没有使用 limit 语句的记录，使用 found_rows() 获取行数\nSET _totalcount = FOUND_ROWS();\n\n#计算总页数\nIF (_totalcount  0) THEN\nSET _pagecount = _totalcount DIV _pageSize + 1;\nELSE\nSET _pagecount = _totalcount DIV _pageSize;\nEND IF;\nEND IF;\n\nEND\n;;\ndelimiter ;\n关联的实体\nconst  tb_systemlog = 'xe_system_log';\n\ntype\n  [Table(tb_systemlog)]\n  TSystemLog = record\n    [Key(True)]\n    [DatabaseGenerated(TDatabaseGeneratedOption.Identity)]\n    id: Integer;\n    admin_id: Integer;\n    url: string;\n    method: string;\n    title: string;\n    content: string;\n    ip: string;\n    useragent: string;\n    [CustomJsonNode('UnixTimeToStr', 'yyyy-MM-dd HH:mm:ss')]\n    create_time: Int64;\n    [NotMapped]\n    admin_username: string;\n  end;\n注入IORM实例orm, 使用orm.DB.ExecProc执行存储过程\nfunction TSystemAdminService.SystemLogs(const page, limit: Integer; var count: Integer): TArray;var\n    Params: TParams;\n    p: IORMDBQuery;\nbegin\n    Params := TParams.Create(nil);\n    try\n        with Params.AddParameter do\n        begin\n            Name := '_fields';\n            ParamType := ptInput;\n            DataType := ftString;\n            Value := 'A.*, B.username as admin_username';\n        end;\n        with Params.AddParameter do\n        begin\n            Name := '_tables';\n            ParamType := ptInput;\n            DataType := ftString;\n            Value := tb_systemlog+' A Left Join '+tb_systemadmin+' B On B.id=A.admin_id';\n        end;\n        with Params.AddParameter do\n        begin\n            Name := '_where';\n            ParamType := ptInput;\n            DataType := ftString;\n            Value := '1=1';\n        end;\n        with Params.AddParameter do\n        begin\n            Name := '_orderby';\n            ParamType := ptInput;\n            DataType := ftString;\n            Value := 'A.create_time DESC';\n        end;\n        with Params.AddParameter do\n        begin\n            Name := '_pageindex';\n            ParamType := ptInput;\n            DataType := ftInteger;\n            Value := page;\n        end;\n        with Params.AddParameter do\n        begin\n            Name := '_pageSize';\n            ParamType := ptInput;\n            DataType := ftInteger;\n            Value := limit;\n        end;\n        with Params.AddParameter do\n        begin\n            Name := '_totalcount';\n            ParamType := ptOutput;\n            DataType := ftInteger;\n        end;\n        with Params.AddParameter do\n        begin\n            Name := '_pagecount';\n            ParamType := ptOutput;\n            DataType := ftInteger;\n        end;\n        p := orm.DB.ExecProc('sp_viewPage')\n            .AddParam(Params);\n    finally\n        Params.Free;\n    end;\n    Result := p.ToArray;\n    count := StrToIntDef(VarToStr(p.Params.ParamByName('_totalcount').Value),0);\nend;"
+        }
+      ]
+    },
+    {
+      "title": "函数操作",
+      "content": "",
+      "url": "\\docs\\dbcontext-function.html",
+      "children": [
+        {
+          "title": "关于函数操作",
+          "url": "\\docs\\dbcontext-function.html#关于函数操作",
+          "content": "关于函数操作引用百度百科：数据库函数是指当需要分析数据清单中的数值是否符合特定条件时，使用数据库工作表函数。\n简单来说，数据库函数就是用于子计算的函数。其计算的结果可以用于构建 sql 语句。"
+        },
+        {
+          "title": "支持标量函数的数据库",
+          "url": "\\docs\\dbcontext-function.html#支持标量函数的数据库",
+          "content": "支持标量函数的数据库\n\nSqlServer\nSqlite\nInMemoryDatabase\nMySql\nPostgreSQL\nOracle\nFirebird\n\n\n\n\n✔\n✔\n\n✔\n✔\n✔\n\n\n\n"
+        },
+        {
+          "title": "函数使用",
+          "url": "\\docs\\dbcontext-function.html#函数使用",
+          "content": "函数使用TORMDB定义了几个常用方法。TORMDB = classpublic\n    function ExecFunc(const FunctionName: string): Variant; overload;\n    function ExecFunc(const SchemaName: string; const FunctionName: string)\n    : Variant; overload;\n    function ExecFunc(const FunctionName: string; var Args: TParams)\n    : Variant; overload;\n    function ExecFunc(const SchemaName: string; const FunctionName: string;\n    var Args: TParams): Variant; overload;\n    function ExecFunc(const FunctionName: string; const Args: TValue)\n    : Variant; overload;\n    function ExecFunc(const SchemaName: string; const FunctionName: string;\n    const Args: TValue): Variant; overload;\nend;\n"
+        },
+        {
+          "title": "范例",
+          "url": "\\docs\\dbcontext-function.html#范例",
+          "content": "范例建立用于发贴扣减积分的函数，返回扣减后的积分\n-- ------------------------------ Function structure for func_DecIntegral\n-- ----------------------------\nDROP FUNCTION IF EXISTS `func_DecIntegral`;\ndelimiter ;;\nCREATE FUNCTION `func_DecIntegral`(_UserId INT,\n_Integral INT)\nRETURNS int(11)\nBEGIN\n    SET @Integral = _Integral;\n    SET @UserId = _UserId;\n    SET @var_i = 0;\n    UPDATE users SET Integral=Integral-@Integral WHERE Id=@UserId;\n    SELECT Integral INTO @var_i FROM users WHERE Id=@UserId;\n    \n    RETURN @var_i;\nEND\n;;\ndelimiter ;\n注入IORM实例orm, 使用orm.DB.ExecFunc执行存储过程\nfunction TPostService.DecIntegral(const UserId, Reward: Integer): Integer;var\n    Params: TParams;\nbegin\n    Params := TParams.Create(nil);\n    try\n        with Params.AddParameter do\n        begin\n            Name := '_UserId';\n            ParamType := ptInput;\n            DataType := ftInteger;\n            Value := UserId;\n        end;\n        with Params.AddParameter do\n        begin\n            Name := '_Integral';\n            ParamType := ptInput;\n            DataType := ftInteger;\n            Value := Reward;\n        end;\n        Result := orm.DB.ExecFunc('func_DecIntegral', Params);\n        if Result < 0 then\n            raise Exception.Create('分数不够');\n    finally\n        Params.Free;\n    end;\nend;"
         }
       ]
     }
