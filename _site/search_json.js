@@ -564,7 +564,7 @@ window.ydoc_plugin_search_json = {
         {
           "title": "支持存储过程的数据库",
           "url": "\\docs\\dbcontext-proc.html#支持存储过程的数据库",
-          "content": "支持存储过程的数据库\n\nSqlServer\nSqlite\nInMemoryDatabase\nMySql\nPostgreSQL\nOracle\nFirebird\n\n\n\n\n✔\n✔\n\n✔\n✔\n✔\n✔\n\n\n"
+          "content": "支持存储过程的数据库\n\nSqlServer\nSqlite\nInMemoryDatabase\nMySql\nPostgreSQL\nOracle\nFirebird\n\n\n\n\n✔\n\n\n✔\n✔\n✔\n✔\n\n\n"
         },
         {
           "title": "存储过程使用",
@@ -602,6 +602,28 @@ window.ydoc_plugin_search_json = {
           "title": "范例",
           "url": "\\docs\\dbcontext-function.html#范例",
           "content": "范例建立用于发贴扣减积分的函数，返回扣减后的积分\n-- ------------------------------ Function structure for func_DecIntegral\n-- ----------------------------\nDROP FUNCTION IF EXISTS `func_DecIntegral`;\ndelimiter ;;\nCREATE FUNCTION `func_DecIntegral`(_UserId INT,\n_Integral INT)\nRETURNS int(11)\nBEGIN\n    SET @Integral = _Integral;\n    SET @UserId = _UserId;\n    SET @var_i = 0;\n    UPDATE users SET Integral=Integral-@Integral WHERE Id=@UserId;\n    SELECT Integral INTO @var_i FROM users WHERE Id=@UserId;\n    \n    RETURN @var_i;\nEND\n;;\ndelimiter ;\n注入IORM实例orm, 使用orm.DB.ExecFunc执行存储过程\nfunction TPostService.DecIntegral(const UserId, Reward: Integer): Integer;var\n    Params: TParams;\nbegin\n    Params := TParams.Create(nil);\n    try\n        with Params.AddParameter do\n        begin\n            Name := '_UserId';\n            ParamType := ptInput;\n            DataType := ftInteger;\n            Value := UserId;\n        end;\n        with Params.AddParameter do\n        begin\n            Name := '_Integral';\n            ParamType := ptInput;\n            DataType := ftInteger;\n            Value := Reward;\n        end;\n        Result := orm.DB.ExecFunc('func_DecIntegral', Params);\n        if Result < 0 then\n            raise Exception.Create('分数不够');\n    finally\n        Params.Free;\n    end;\nend;"
+        }
+      ]
+    },
+    {
+      "title": "事务",
+      "content": "",
+      "url": "\\docs\\tran.html",
+      "children": [
+        {
+          "title": "关于事务",
+          "url": "\\docs\\tran.html#关于事务",
+          "content": "关于事务事务指作为单个逻辑工作单元执行的一系列操作，要么完全地执行，要么完全地不执行。简单的说，事务就是并发控制的单位，是用户定义的一个操作序列。 而一个逻辑工作单元要成为事务，就必须满足 ACID 属性。A：原子性（Atomicity）：事务中的操作要么都不做，要么就全做\nC：一致性（Consistency）：事务执行的结果必须是从数据库从一个一致性状态转换到另一个一致性状态\nI：隔离性（Isolation）：一个事务的执行不能被其他事务干扰\nD：持久性（Durability）：一个事务一旦提交，它对数据库中数据的改变就应该是永久性的\n"
+        },
+        {
+          "title": "如何使用",
+          "url": "\\docs\\tran.html#如何使用",
+          "content": "如何使用TORMRepository包含了事务调用方法\nTORMRepository = classpublic\n\tprocedure StartTransaction(const AIsolation: Integer = 2);\n\tprocedure Commit;\n\tprocedure Rollback;\nend;\nTORMDB包含了事务了调用方法\nTORMDB = classpublic\n    procedure StartTransaction(const AIsolation: Integer = 2);\n    procedure Commit;\n    procedure Rollback;\nend;\nStartTransaction的事务类型,默认xiReadCommitted\n0:xiUnspecified\n1:xiDirtyRead\n2:xiReadCommitted\n3:xiRepeatableRead\n4:xiSnapshot\n5:xiSerializible\n"
+        },
+        {
+          "title": "范例",
+          "url": "\\docs\\tran.html#范例",
+          "content": "范例procedure TPostService.DeletePost(const Id: Integer);begin\n  orm.StartTransaction;\n  try\n    orm.DB.Execute('DELETE FROM likes WHERE CommentId in (SELECT Id FROM comments WHERE PostId=?)',[Id]);\n    orm.DB.Execute('DELETE FROM comments WHERE PostId=?',[Id]);\n    orm.DB.Execute('DELETE FROM posts WHERE Id='+IntToStr(Id));\n    orm.Commit;\n  except\n    on e: Exception do\n    begin\n      orm.Rollback;\n    end;\n  end;\nend;\n\nfunction TPostService.ReplyPost(const comment: TComments): Integer;\nbegin\n  Result := 0;\n\n  orm.StartTransaction;\n  try\n    Result := orm.Repository.Insert\n        .SetSource(comment)\n        .ExecuteAffrows;\n    orm.DB.Execute('UPDATE posts SET CommentCount=CommentCount+1 WHERE Id=?',[comment.PostId]);\n    orm.Commit;\n  except\n    on ex: Exception do\n    begin\n      orm.Rollback;\n      raise ex;\n    end;\n  end;\nend;"
         }
       ]
     }
