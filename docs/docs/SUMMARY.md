@@ -35,3 +35,6 @@
 * [存储过程操作](dbcontext-proc.md)
 * [函数操作](dbcontext-function.md)
 * [事务](tran.md)
+
+### 对象容器
+* [依赖注入/控制反转](dependency-injection.md)
