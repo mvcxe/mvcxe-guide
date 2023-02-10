@@ -14,6 +14,7 @@
 ### Web应用开发
 * [动态 WebAPI](dynamic-api-controller.md)
 * [HttpContext](httpcontext.md)
+* [缓存](cache.md)
 
 ### 规范化接口文档
 * [Swagger](specification-document.md)
@@ -38,3 +39,4 @@
 
 ### 对象容器
 * [依赖注入/控制反转](dependency-injection.md)
+* [对象数据映射](object-mapper.md)

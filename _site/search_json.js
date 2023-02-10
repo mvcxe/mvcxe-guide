@@ -153,6 +153,43 @@ window.ydoc_plugin_search_json = {
       ]
     },
     {
+      "title": "缓存",
+      "content": "",
+      "url": "\\docs\\cache.html",
+      "children": [
+        {
+          "title": "什么是缓存",
+          "url": "\\docs\\cache.html#什么是缓存",
+          "content": "什么是缓存缓存可以减少生成内容所需的工作，从而显著提高应用程序的性能和可伸缩性。 缓存适用于不经常更改的数据，因为生成成本很高。 通过缓存，可比从数据源返回数据的副本速度快得多。 应该对应用进行编写和测试，使其不要永远依赖于缓存的数据。"
+        },
+        {
+          "title": "缓存类型",
+          "url": "\\docs\\cache.html#缓存类型",
+          "content": "缓存类型内存缓存：顾名思义，就是缓存在应用部署所在服务器的内存中\n分布式缓存：分布式缓存是由多个应用服务器共享的缓存\n响应缓存：缓存服务器端 Not Modified 的数据\n"
+        },
+        {
+          "title": "ICache接口",
+          "url": "\\docs\\cache.html#icache接口",
+          "content": "ICache接口MVCXE 框架提供了ICache接口来使用缓存ICache = interface    ['{1CACE348-8D9E-47B1-9656-913C3603A2EA}']\n    function ContainsKey(const Key: string): Boolean;\n    function Get(const Key: string): TValue;\n    function ValueAsObject(const Key: string): TObject;\n    function ValueAsString(const Key: string): string;\n    function ValueAsInteger(const Key: string): Integer;\n    function ValueAsInt64(const Key: string): Int64;\n    function ValueAsBool(const Key: string): Boolean;\n    function ValueAsFloat(const Key: string): Extended;\n    procedure Put(const Key: string; const Value: TValue;\n      const Expires: TDateTime); overload;\n    procedure Put(const Key: string; const Value: string;\n      const Expires: TDateTime); overload;\n    procedure Put(const Key: string; const Value: Integer;\n      const Expires: TDateTime); overload;\n    procedure Put(const Key: string; const Value: Int64;\n      const Expires: TDateTime); overload;\n    procedure Put(const Key: string; const Value: Boolean;\n      const Expires: TDateTime); overload;\n    procedure Put(const Key: string; const Value: Extended;\n      const Expires: TDateTime); overload;\n    procedure Remove(const Key: string);\n    procedure Clear;\nend;\n"
+        },
+        {
+          "title": "内存缓存使用",
+          "url": "\\docs\\cache.html#内存缓存使用",
+          "content": "内存缓存使用内存缓存是最常用的缓存方式，具有存取快，效率高特点。内存缓存通过注入[IOC('MVCXE.MemoryCache.TMemoryCache')] ICache方式注入即可。基本使用\ntype  ICategorieService = interface(IInterface)\n    ['{D3F3E71A-28AB-4EFE-9D60-5DDA7D78AD20}']\n    function List: TArray;\n  end;\n  TCategorieService = class(TInterfacedObject, ICategorieService)\n  private\n    [IOC('MVCXE.MemoryCache.TMemoryCache')]\n    Cache: ICache;\n  public\n    function List: TArray;\n  end;\n\nimplementation\n\nuses\n  MVCXE.ORM;\n\n{ TCategorieService }\n\nfunction TCategorieService.List: TArray;\nvar\n  Categories: TArray;\n  orm: IORM;\nbegin\n  if Cache.ContainsKey('Categories') then\n  begin\n    Result := Cache.Get('Categories').AsType>;\n  end\n  else\n  begin\n    orm := BuildORM;\n    Categories := orm.Repository.Select.ToArray;\n    Cache.Put('Categories', TValue.From>(Categories), Now+1);\n    Result := Categories;\n  end;\nend;\n\nend.\n"
+        },
+        {
+          "title": "分布式缓存",
+          "url": "\\docs\\cache.html#分布式缓存",
+          "content": "分布式缓存分布式缓存是由多个应用服务器共享的缓存，通常作为外部服务在访问它的应用服务器上维护。 分布式缓存可以提高MVCXE应用程序的性能和可伸缩性，尤其是在应用程序由云服务或服务器场托管时。与其他缓存方案相比，分布式缓存具有多项优势，其中缓存的数据存储在单个应用服务器上。当分布式缓存数据时，数据将：(一致性) 跨多个 服务器的请求\n存活在服务器重启和应用部署之间\n不使用本地内存\n分布式缓存配置是特定于实现的。 本文介绍如何配置Redis分布式缓存。在appsetting.json中配置Redis服务器连接参数，可以同时有多台Redis服务器\n{  \"Redis\": {\n        \"Ip\": [\"127.0.0.1\"],\n        \"Port\": [6379],\n        \"Password\": \"\",\n        \"Db\": \"0\"\n  }\n}\n通过注入[IOC('MVCXE.RedisCache.TRedisCache')] ICache方式注入即可与内存缓存一样的方式使用。\n"
+        },
+        {
+          "title": "自定义你的缓存实现",
+          "url": "\\docs\\cache.html#自定义你的缓存实现",
+          "content": "自定义你的缓存实现可以参考MVCXE.Cache.bpl中的代码，开发如：SqlServer等缓存方式。"
+        }
+      ]
+    },
+    {
       "title": "规范化接口文档",
       "content": "",
       "url": "\\docs\\specification-document.html",
@@ -676,6 +713,33 @@ window.ydoc_plugin_search_json = {
           "title": "手动创建有注入动作的对象",
           "url": "\\docs\\dependency-injection.html#手动创建有注入动作的对象",
           "content": "手动创建有注入动作的对象如果用默认的.Create方法创建对象，类中注入动作不会生效，需要使用RttiCreate来创建对象。function TPosts.Category: string;var\n  Cache: ICache;\n  Categories: TArray;\n  i: Integer;\nbegin\n  Cache := RttiCreate('MVCXE.MemoryCache.TMemoryCache').AsType;\n  Categories := Cache.Get('Categories').AsType>;\n  for i := 0 to High(Categories) do\n  begin\n    if FPostCategoryId = Categories[i].Id then\n    begin\n      Result := Categories[i].CategoryName;\n    Exit;\n    end;\n  end;\nend;\n"
+        }
+      ]
+    },
+    {
+      "title": "对象数据映射(开发中)",
+      "content": "",
+      "url": "\\docs\\object-mapper.html",
+      "children": [
+        {
+          "title": "对象映射",
+          "url": "\\docs\\object-mapper.html#对象映射",
+          "content": "对象映射简单来说，就是将一个对象的数据根据特定规则批量映射到另一个对象中，减少手工操作和降低人为出错率。如将 DTO 对象映射到 Entity 实体中，反之亦然。"
+        },
+        {
+          "title": "先看例子",
+          "url": "\\docs\\object-mapper.html#先看例子",
+          "content": "先看例子在过去，我们需要将一个对象的值转换到另一个对象中，我们需要这样做，如：var  entity: TEntity;\n  dto: TDto;\nbegin\n  entity := TEntity.Create;\n  dto := TDto.Create;\n  dto.Id := entity.Id;\n  dto.Name := entity.Name;\n  dto.Age := entity.Age;\n  dto.Address := entity.Address;\n  dto.FullName := entity.FirstName + entity.LastName;\n  dto.IdCard := entity.IdCard.Replace('1234', '****'');\nend;\n上面的例子似乎没有任何问题，但是如果很多地方需要这样的赋值操作、或者相同的赋值操作在多个地方使用，又或者一个类中含有非常多的属性或自定义赋值操作。那么这样的操作效率极低，容易出错，且代码非常臃肿和冗余。所以，实现自动映射赋值和支持特殊配置的需求就有了。"
+        },
+        {
+          "title": "Mapster 使用",
+          "url": "\\docs\\object-mapper.html#mapster-使用",
+          "content": "Mapster 使用现在，我们可以通过依赖注入IMapper的方法改造上面的例子：typeTUserService = class(TInterfacedObject, IUserService)\nprivate\n    [IOC]\n    mapper: IMapper;\npublic\n    function CopyUser(const entity: TUser): TDto;\nend;\n\nimplementation\n\n{ TUserService }\n\nfunction TUserService.CopyUser(const entity: TUser): TDto;\nbegin\n  Result := mapper.Adapt.Map(entity);\nend;\n仅仅一行代码就可以实现 entity -> dto 的转换，如果涉及到赋值的复制操作，如 dto.FullName 和 dto.IdCard，我们只需要自定义映射规则类即可。"
+        },
+        {
+          "title": "自定义映射规则",
+          "url": "\\docs\\object-mapper.html#自定义映射规则",
+          "content": "自定义映射规则"
         }
       ]
     }
