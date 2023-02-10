@@ -15,6 +15,7 @@
 * [动态 WebAPI](dynamic-api-controller.md)
 * [HttpContext](httpcontext.md)
 * [缓存](cache.md)
+* [安全鉴权](auth-control.md)
 
 ### 规范化接口文档
 * [Swagger](specification-document.md)
