@@ -28,3 +28,396 @@ OAuth（开放授权）是一个开放标准，允许用户授权第三方网站
 OAuth 协议又有 1.0 和 2.0 两个版本。相比较 1.0 版，2.0 版整个授权验证流程更简单更安全，也是目前最主要的用户身份验证和授权方式。
 
 ## 如何使用
+
+  uses MVCXE.Authorization;
+
+> 默认的身份结构包括名字字符串，是否已认证通过，角色字符串，认证类型。
+
+  TIdentity = record
+      Name: string;
+      IsAuthenticated: Boolean;
+      Roles: string;
+      AuthenticationType: string;
+  end;
+
+> 使用`accessor.HttpContext.User`获取包含TIdentity的接口`IPrincipal`
+
+  IPrincipal = interface
+    ['{952A2782-CE55-41C0-A155-35080914FEAA}']
+    function GetIdentity: TIdentity;
+    procedure SetIdentity(Value: TIdentity);
+    property Identity: TIdentity read GetIdentity write SetIdentity;
+    function IsInRole(const role: string): Boolean;
+    procedure UpdateFormsAuthenticationTicket(Response: TMVCXEResponse; const Expires: TDateTime);
+    procedure RemoveFormsAuthenticationTicket(Response: TMVCXEResponse);
+  end;
+
+  THttpContext = class
+  public
+    function User: IPrincipal; overload;
+  end;
+
+> 例子, 我们将登陆信息存储在TIdentity.Name中，格式是：`用户名$用户id$用户Email$是否登陆`
+
+  type
+    BaseController = class(TController)
+    private
+    protected
+      [IOC('MVCXE.HttpContext.THttpContextAccessor')]
+      accessor: IHttpContextAccessor;
+      function IsLogin: Boolean;
+      function CurrentAccount: String;
+      function CurrentUserId: Integer;
+      function EmailConfirmed: Boolean;
+      function IsAdmin: Boolean;
+    public
+    end;
+
+  implementation
+
+  uses
+    Fly.Authorization;
+
+  { BaseController }
+
+  function BaseController.CurrentAccount: String;
+  var
+    name: string;
+  begin
+    if not IsLogin then
+      Result := nil
+    else
+    begin
+      name := accessor.HttpContext.User.Identity.name;
+      Result := name.Split(['$'])[0];
+    end;
+  end;
+
+  function BaseController.CurrentUserId: Integer;
+  var
+    name: string;
+  begin
+    if not IsLogin then
+      Result := -1
+    else
+    begin
+      name := accessor.HttpContext.User.Identity.name;
+      Result := StrToInt(name.Split(['$'])[1]);
+    end;
+  end;
+
+  function BaseController.EmailConfirmed: Boolean;
+  var
+    name: string;
+  begin
+    if not IsLogin then
+      Result := False
+    else
+    begin
+      name := accessor.HttpContext.User.Identity.name;
+      Result := StrToBool(name.Split(['$'])[2]);
+    end;
+  end;
+
+  function BaseController.IsAdmin: Boolean;
+  begin
+    Result := accessor.HttpContext.User.IsInRole('admin');
+  end;
+
+  function BaseController.IsLogin: Boolean;
+  begin
+    Result := accessor.HttpContext.User.Identity.IsAuthenticated;
+  end;
+
+> 登陆代码
+
+  function TAccountController.check(const email, pass, vercode: string)
+    : TAccountFormResult;
+  var
+    User: TUsers;
+    HashMD5: THashMD5;
+    s: string;
+    Membership: TIdentity;
+  begin
+    Response.ContentType := 'application/json';
+    Result.success := False;
+    s := accessor.HttpContext.Session.Get<string>('ValidationCode');
+    if not SameText(vercode, s) then
+    begin
+      Result.msg := '验证码不正确.';
+      Exit;
+    end;
+    User := UserService.GetUser(email);
+    if User = nil then
+    begin
+      Result.msg := '找不到用户.';
+      Exit;
+    end;
+    HashMD5 := THashMD5.Create;
+    s := HashMD5.GetHashString(pass);
+    if not SameText(User.Password, s) then
+    begin
+      Result.msg := '密码不正确.';
+      Exit;
+    end;
+    Membership.Name := User.Email + '$' + IntToStr(User.Id) + '$' + BoolToStr(User.EmailConfirmed) + '$' + BoolToStr(User.IsAdmin);
+    Membership.IsAuthenticated := True;
+    if User.IsAdmin then
+      Membership.Roles := 'admin,';
+    accessor.HttpContext.User.Identity := Membership;
+    accessor.HttpContext.User.UpdateFormsAuthenticationTicket(Response, Now+30);
+
+    Result.msg := '登陆成功.';
+    User.Password := '';
+    Result.user := User;
+    Result.success := True;
+  end;
+
+## 自定身份验证类
+
+> 自定我们的身份验证类TMyPrincipal
+
+    uses
+      System.Classes, System.SysUtils, MVCXE.HTTPApp, MVCXE.HttpContext,
+      Fly.Model.Users;
+
+    type
+      TMyPrincipal = class(BasePrincipal)
+      const SecretKey = 'Fly.Authorization';
+      const CookieKey = 'Fly.Authorization';
+      private
+        FAuthorization: string;
+        FIdentity: TUsers;
+        procedure TrySetUserInfo;
+        function FormsAuthenticationTicket: string;
+      public
+        function Identity: TUsers;
+        function IsInRole(const role: string): Boolean;
+        procedure SignIn(const User: TUsers);
+        procedure UpdateFormsAuthenticationTicket(Response: TMVCXEResponse; const Expires: TDateTime);
+        procedure RemoveFormsAuthenticationTicket(Response: TMVCXEResponse);
+      end;
+
+> TMyPrincipal中Identity是获取身份的方法，它一般返回用户表的实体类，也可以自定义，其它辅助方法可以自由添加。
+
+  uses
+    MVCXE.JWT;
+
+  { TMyPrincipal }
+
+  function TMyPrincipal.FormsAuthenticationTicket: string;
+  var
+    JwtBearer: TJwtBearer;
+  begin
+    JwtBearer := TJwtBearer.Create;
+    JwtBearer.SecretKey := SecretKey;
+    JwtBearer.Algorithm := TJWTAlgorithm.HS256;
+    JwtBearer.Subject := 'Fly Authentication Ticket';
+    JwtBearer.Audience := 'Fly';
+    JwtBearer.AddClaim('MemberShip', Identity);
+    Result := JwtBearer.Token;
+  end;
+
+  procedure TMyPrincipal.TrySetUserInfo;
+  var
+    JwtBearer: TJwtBearer;
+  begin
+    //演示用cookie来记录登陆状态，也可以用session
+    if HttpContext.Request.Cookies.ContainsKey(CookieKey) then
+      FAuthorization := HttpContext.Request.Cookies[CookieKey];
+    if FAuthorization<>'' then
+    begin
+      try
+        JwtBearer := TJwtBearer.Create(FAuthorization,SecretKey);
+        FIdentity := JwtBearer.GetClaim<TUsers>('MemberShip');
+      except
+      end;
+      if Assigned(JwtBearer) then
+        FreeAndNil(JwtBearer);
+    end;
+  end;
+
+  procedure TMyPrincipal.UpdateFormsAuthenticationTicket(Response: TMVCXEResponse;
+    const Expires: TDateTime);
+  begin
+    Response.AddCookie(CookieKey, FormsAuthenticationTicket, Expires);
+  end;
+
+  procedure TMyPrincipal.RemoveFormsAuthenticationTicket(
+    Response: TMVCXEResponse);
+  begin
+    Response.AddCookie(CookieKey, '', 0);
+  end;
+
+  function TMyPrincipal.Identity: TUsers;
+  begin
+    if not Assigned(FIdentity) then
+    begin
+      TrySetUserInfo;
+    end;
+    Result := FIdentity;
+  end;
+
+  function TMyPrincipal.IsInRole(const role: string): Boolean;
+  begin
+    Result := False;
+    if Not Assigned(FIdentity) then
+      FIdentity := Identity;
+    if Assigned(FIdentity) and (FIdentity.Id>0) then
+    begin
+      if role='admin' then
+        Result := FIdentity.IsAdmin;
+    end;
+  end;
+
+  procedure TMyPrincipal.SignIn(const User: TUsers);
+  begin
+    FIdentity := User;
+  end;
+
+> 上面的例子，使用cookie记录了一个身份信息的JWT token字符串，如果不使用cookie也可以用Session记录，也可以用HttpHeader的Authorization来记录。
+
+> 使用`accessor.HttpContext.User<TMyPrincipal>`获取我们自定的身份验证类TMyPrincipal
+
+  function TAccountController.check(const email, pass, vercode: string)
+    : TAccountFormResult;
+  var
+    User: TUsers;
+    HashMD5: THashMD5;
+    s: string;
+  begin
+    Response.ContentType := 'application/json';
+    Result.success := False;
+    s := accessor.HttpContext.Session.Get<string>('ValidationCode');
+    if not SameText(vercode, s) then
+    begin
+      Result.msg := '验证码不正确.';
+      Exit;
+    end;
+    User := UserService.GetUser(email);
+    if User = nil then
+    begin
+      Result.msg := '找不到用户.';
+      Exit;
+    end;
+    HashMD5 := THashMD5.Create;
+    s := HashMD5.GetHashString(pass);
+    if not SameText(User.Password, s) then
+    begin
+      Result.msg := '密码不正确.';
+      Exit;
+    end;
+
+    with accessor.HttpContext.User<TMyPrincipal> do
+    begin
+      SignIn(User);
+      UpdateFormsAuthenticationTicket(Response, Now+30);
+    end;
+
+    Result.msg := '登陆成功.';
+    User.Password := '';
+    Result.user := User;
+    Result.success := True;
+  end;
+
+## WebApi验证
+
+> 创建我们的验证类
+
+  type
+    TFerryAuthorization = class(TAuthorization)
+    private
+      [IOC('MVCXE.HttpContext.THttpContextAccessor')]
+      accessor: IHttpContextAccessor;
+    published
+    public
+      procedure OnAuthorization; override;
+    end;
+  implementation
+  { TFerryAuthorization }
+
+  procedure TFerryAuthorization.OnAuthorization;
+  begin
+    inherited;
+    isAuth := True;
+    if AuthorizeParam = 'dashboard' then
+    begin
+      if not accessor.HttpContext.User<TFerryPrincipal>.IsAuthenticated then
+      begin
+        isAuth := False;
+        Response.Content := '{"code":401,"msg":"cookie token is empty"}';
+      end;
+    end
+    else if AuthorizeParam = 'index' then
+    begin
+      if not accessor.HttpContext.User<TFerryPrincipal>.IsAuthenticated then
+      begin
+        isAuth := False;
+        Response.StatusCode := 403;
+        Exit;
+      end;
+    end
+    else if AuthorizeParam = 'admin' then
+    begin
+      if not accessor.HttpContext.User<TFerryPrincipal>.IsAuthenticated then
+      begin
+        isAuth := False;
+        Response.StatusCode := 403;
+        Exit;
+      end;
+    end;
+  end;
+
+> 在WebApi中用`[Authorize]`标记该Api或某方法使用我们定义的验证类，当访问这些Api的时候，`MVCXE`框架会先触发我们定义的验证类的OnAuthorization，如果验证不通过，返回Response的StatusCode并结束这次处理。
+
+  type
+    TsysUserWebApi = class(BackendBaseWebApi)
+    private
+      [IOC]
+      SysService: ISysService;
+    public
+      constructor Create;
+      [Authorize('Ferry.Authorization.TFerryAuthorization', 'dashboard')]
+      function GET: TSysUserResult;
+      [Authorize('Ferry.Authorization.TFerryAuthorization', 'dashboard')]
+      function POST([FormBody]user: TSysUser): TSysUserResult;
+    end;
+  implementation
+  function TsysUserWebApi.GET: TSysUserResult;
+  begin
+    Result.code := 200;
+    Result.data.posts := SysService.Posts;
+    Result.data.roles := SysService.Roles;
+    Result.msg := '';
+  end;
+
+  function TsysUserWebApi.POST(user: TSysUser): TSysUserResult;
+  begin
+    Result.code := 200;
+    if SysService.UserByName(user.username).user_id>0 then
+    begin
+      Result.code := -1;
+      Result.msg := '账户已存在！';
+      Exit;
+    end;
+    user.create_by := IntToStr(current_user.user_id);
+    user.update_by := IntToStr(current_user.user_id);
+    user.create_time := Now;
+    user.password := THashMD5.GetHashString(user.password);
+    try
+    if SysService.SaveUser(user)<1 then
+    begin
+      Result.code := -1;
+      Result.msg := '保存失败！';
+      Exit;
+    end;
+    except
+      on e:Exception do
+      begin
+        Result.code := -1;
+        Result.msg := '保存失败！'+e.Message;
+        Exit;
+      end;
+    end;
+    Result.msg := '保存成功！';
+  end;
