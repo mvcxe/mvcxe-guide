@@ -217,6 +217,33 @@ window.ydoc_plugin_search_json = {
       ]
     },
     {
+      "title": "CORS 跨域",
+      "content": "",
+      "url": "\\docs\\cors.html",
+      "children": [
+        {
+          "title": "什么是跨域",
+          "url": "\\docs\\cors.html#什么是跨域",
+          "content": "什么是跨域简单来说，当一个请求 url 的协议、域名、端口三者之间任意一个与当前页面 url 不同即为跨域。那为什么会出现跨域问题呢？出于浏览器的同源策略限制。同源策略（Sameoriginpolicy）是一种约定，它是浏览器最核心也最基本的安全功能，如果缺少了同源策略，则浏览器的正常功能可能都会受到影响。可以说 Web 是构建在同源策略基础之上的，浏览器只是针对同源策略的一种实现。同源策略会阻止一个域的 javascript 脚本和另外一个域的内容进行交互。所谓同源（即指在同一个域）就是两个页面具有相同的协议（protocol），主机（host）和端口号（port）"
+        },
+        {
+          "title": "有跨域行为示例",
+          "url": "\\docs\\cors.html#有跨域行为示例",
+          "content": "有跨域行为示例\n\n当前页面 url\n被请求页面 url\n是否跨域\n原因\n\n\n\n\nhttp://www.mvcxe.com/\nhttp://www.mvcxe.com/index.html\n否\n同源（协议、域名、端口号相同）\n\n\nhttp://www.mvcxe.com/\nhttps://www.mvcxe.com/index.html\n跨域\n协议不同（http/https）\n\n\nhttp://www.mvcxe.com/\nhttp://www.baidu.com/\n跨域\n主域名不同（mvcxe/baidu）\n\n\nhttp://www.mvcxe.com/\nhttp://blog.mvcxe.com/\n跨域\n子域名不同（www/blog）\n\n\nhttp://www.mvcxe.com:8080/\nhttp://www.mvcxe.com:7001/\n跨域\n端口号不同（8080/7001）\n\n\n"
+        },
+        {
+          "title": "什么是 CORS",
+          "url": "\\docs\\cors.html#什么是-cors",
+          "content": "什么是 CORS跨源资源共享 (CORS) ：是一种 W3C 标准，可让服务器放宽相同的源策略。\n不是一项安全功能，CORS 放宽 security。 API 不能通过允许 CORS 来更安全。 有关详细信息，请参阅 CORS 工作原理。\n允许服务器明确允许一些跨源请求，同时拒绝其他请求。\n比早期的技术（如 JSONP）更安全且更灵活。\n"
+        },
+        {
+          "title": "如何使用",
+          "url": "\\docs\\cors.html#如何使用",
+          "content": "如何使用创建一个基类，需要跨越支持的WebApi继承这个基类\n    type      FerryBaseWebApi = class(TWebApi)\n      private\n      protected\n      public\n        constructor Create;\n        function OPTIONS: string;\n      end;\n    implementation\n\n    { FerryBaseWebApi }\n\n    constructor FerryBaseWebApi.Create;\n    begin\n      inherited;\n      Response.AddHeader('Access-Control-Allow-Origin', '*');\n    end;\n\n    function FerryBaseWebApi.OPTIONS: string;\n    begin\n      Response.ContentType := 'application/json';\n      Response.AddHeader('Access-Control-Allow-Headers', 'authorization, origin, content-type, accept');\n      Response.AddHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');\n      Response.AddHeader('Allow', 'HEAD,GET,POST,PUT,PATCH,DELETE,OPTIONS');\n      Response.AddHeader('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate, value');\n      Response.StatusCode := 204;\n      Result := '{}';\n    end;\n"
+        }
+      ]
+    },
+    {
       "title": "规范化接口文档",
       "content": "",
       "url": "\\docs\\specification-document.html",

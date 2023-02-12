@@ -16,6 +16,7 @@
 * [HttpContext](httpcontext.md)
 * [缓存](cache.md)
 * [安全鉴权](auth-control.md)
+* [CORS 跨域](cors.md)
 
 ### 规范化接口文档
 * [Swagger](specification-document.md)
