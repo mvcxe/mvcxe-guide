@@ -46,8 +46,11 @@
 	end;
 	
 ## 创建工程
-先将Dcp目录的文件Copy到Delphi 11的Dcp公共目录，如：C:\Users\Public\Documents\Embarcadero\Studio\22.0\Dcp<br/>
-在Delphi IDE中打开mvcxe.groupproj，运行Project:Webborker.Console<br/>
+> 先将Dcp目录的文件Copy到Delphi 11的Dcp公共目录，如：C:\Users\Public\Documents\Embarcadero\Studio\22.0\Dcp
+
+![CopyDcp](../images/CopyDcp.png)
+
+> 在Delphi IDE中打开mvcxe.groupproj，运行Project:Webborker.Console
 
 - 在控制台窗口中输入create回车，创建工程
 
