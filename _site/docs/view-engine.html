@@ -1,0 +1,240 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charSet="UTF-8"/><meta content="text/html; charset=utf-8" http-equiv="Content-Type"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-status-bar-style" content="black"/><link rel="apple-touch-icon" sizes="180x180" href="..\images\apple-touch-icon.png"/><link rel="icon" type="image/png" sizes="32x32" href="..\images\favicon-32x32.png"/><link rel="icon" type="image/png" sizes="16x16" href="..\images\favicon-16x16.png"/><link rel="manifest" href="..\images\manifest.json"/><link rel="mask-icon" href="..\images\safari-pinned-tab.svg" color="#5bbad5"/><meta name="theme-color" content="#ffffff"/><meta http-equiv="Cache-Control" content="no-transform"/><meta http-equiv="Cache-Control" content="no-siteapp"/><title>视图引擎-文档</title><link rel="stylesheet" href="..\ydoc\styles\style.css"/><meta name="author" content="roc.long"/><meta name="keywords"/><meta name="description" content="MVCXE | 中国首个DELPHI MVC WEB框架"/><meta id="releativePath" content=".."/><link rel="stylesheet" href="..\ydoc\ydoc-plugin-search\search.css"/></head><body><div class="g-doc"><div class="m-aside"><div class="m-summary" id="js-menu"><div class="m-summary-content" id="js-menu-content"><div class="m-summary-block"><ul class="m-summary-list"><li class="item"><a href="installation.html" class="href">一分钟上手</a></li></ul></div><div class="m-summary-block"><div class="m-summary-title">开始使用</div><ul class="m-summary-list indent"><li class="item"><a href="intro.html#" class="href">介绍</a></li></ul></div><div class="m-summary-block"><div class="m-summary-title">Web服务</div><ul class="m-summary-list indent"><li class="item"><a href="appstartup.html" class="href">应用启动 Startup</a></li><li class="item"><a href="configuration.html" class="href">配置</a></li><li class="item"><a href="options.html" class="href">选项</a></li></ul></div><div class="m-summary-block"><div class="m-summary-title">Web应用开发</div><ul class="m-summary-list indent"><li class="item"><a href="dynamic-api-controller.html" class="href">动态 WebAPI</a></li><li class="item"><a href="httpcontext.html" class="href">HttpContext</a></li><li class="item"><a href="cache.html" class="href">缓存</a></li><li class="item"><a href="auth-control.html" class="href">安全鉴权</a></li><li class="item"><a href="cors.html" class="href">CORS 跨域</a></li><li class="item"><a href="" class="href">视图引擎</a></li></ul></div><div class="m-summary-block"><div class="m-summary-title">规范化接口文档</div><ul class="m-summary-list indent"><li class="item"><a href="specification-document.html" class="href">Swagger</a></li></ul></div><div class="m-summary-block"><div class="m-summary-title">异常与审计处理</div><ul class="m-summary-list indent"><li class="item"><a href="friendly-exception.html" class="href">友好异常处理</a></li></ul></div><div class="m-summary-block"><div class="m-summary-title">数据库操作指南</div><ul class="m-summary-list indent"><li class="item"><a href="dbcontext-start.html" class="href">入门简要</a></li><li class="item"><a href="dbcontext.html" class="href">数据库上下文</a></li><li class="item"><a href="entity.html" class="href">数据库实体</a></li><li class="item"><a href="dbcontext-repository.html" class="href">仓储模式</a></li><li class="item"><a href="dbcontext-db.html" class="href">Sql操作模式</a></li><li class="item"><a href="dbcontext-add.html" class="href">新增操作</a></li><li class="item"><a href="dbcontext-update.html" class="href">更新操作</a></li><li class="item"><a href="dbcontext-delete.html" class="href">删除操作</a></li><li class="item"><a href="dbcontext-query.html" class="href">查询操作</a></li><li class="item"><a href="dbcontext-hight-query.html" class="href">高级查询操作</a></li><li class="item"><a href="dbcontext-proc.html" class="href">存储过程操作</a></li><li class="item"><a href="dbcontext-function.html" class="href">函数操作</a></li><li class="item"><a href="tran.html" class="href">事务</a></li></ul></div><div class="m-summary-block"><div class="m-summary-title">对象容器</div><ul class="m-summary-list indent"><li class="item"><a href="dependency-injection.html" class="href">依赖注入/控制反转</a></li><li class="item"><a href="object-mapper.html" class="href">对象数据映射</a></li></ul></div></div></div><div class="m-summary-switch" id="js-summary-switch"><svg viewBox="0 0 926.23699 573.74994" version="1.1" x="0px" y="0px" width="15" height="15" class="bottom"><g transform="translate(904.92214,-879.1482)"><path d="m -673.67664,1221.6502 -231.2455,-231.24803 55.6165,-55.627 c 30.5891,-30.59485 56.1806,-55.627 56.8701,-55.627 0.6894,0 79.8637,78.60862 175.9427,174.68583 l 174.6892,174.6858 174.6892,-174.6858 c 96.079,-96.07721 175.253196,-174.68583 175.942696,-174.68583 0.6895,0 26.281,25.03215 56.8701,55.627 l 55.6165,55.627 -231.245496,231.24803 c -127.185,127.1864-231.5279,231.248 -231.873,231.248 -0.3451,0 -104.688,-104.0616 -231.873,-231.248 z" fill="#fff"></path></g></svg><svg viewBox="0 0 926.23699 573.74994" version="1.1" x="0px" y="0px" width="15" height="15" class="top"><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="aaa" fill="#fff" fill-rule="nonzero"><path d="M231.2455,342.502 L0,111.25397 L55.6165,55.62697 C86.2056,25.03212 111.7971,-2.99999998e-05 112.4866,-2.99999998e-05 C113.176,-2.99999998e-05 192.3503,78.60859 288.4293,174.6858 L463.1185,349.3716 L637.8077,174.6858 C733.8867,78.60859 813.060896,-2.99999997e-05 813.750396,-2.99999997e-05 C814.439896,-2.99999997e-05 840.031396,25.03212 870.620496,55.62697 L926.236996,111.25397 L694.9915,342.502 C567.8065,469.6884 463.4636,573.75 463.1185,573.75 C462.7734,573.75 358.4305,469.6884 231.2455,342.502 Z" id="Shape" transform="translate(463.118498, 286.874985) scale(1, -1) translate(-463.118498, -286.874985) "></path></g></g></svg></div></div><div class="m-main" id="js-panel"><header class="m-header" id="js-header"><div class="m-header-title js-logo"><a href="..\index.html" target="_self"><img class="logo" width="36" src="..\images\logo.png"/><h6 class="name">MVCXE</h6></a></div><div><div class="m-search">
+      <div class="icon">&#xf0fd;</div>
+      <input type="text" class="input js-input" placeholder="搜索" />
+      <div class="m-search-result js-search-result"></div>
+    </div></div><nav class="m-header-nav js-nav"><ul class="m-header-items"><li class="item active"><a class="href" href="index.html">文档</a></li><li class="item "><a class="href" href="..\about\index.html">关于</a></li></ul></nav><div id="js-nav-btn" class="m-header-btn ui-font-ydoc"></div></header><div class="m-content" id="js-content"><div id="markdown-body" class="m-content-container markdown-body"><h1>视图引擎</h1>
+<h2 id="关于视图引擎">关于视图引擎</h2>
+<p>视图引擎负责根据视图模板创建 HTML。视图通常是 HTML 和编程语言的某种混合。支持变量定义、方法调用及逻辑编写。</p>
+<p>在<code>MVCXE</code>框架中，底层集成了Pascal语言编写的高效视图引擎组件<code>TPLXE</code>, 并提供更加灵活方便的语法糖。</p>
+<h2 id="视图引擎作用">视图引擎作用</h2>
+<ul>
+<li>灵活的模板语法</li>
+<li>根据不同的数据编译模板产生不同的输出</li>
+<li>实现强大的插件化机制</li>
+<li>实现全站页面静态化</li>
+<li>可以用作邮件模板、短信模板、优惠券信息模板等</li>
+</ul>
+<h2 id="基础使用">基础使用</h2>
+<h3 id="基础使用-注册服务">注册服务</h3>
+<p>使用之前需在<code>Webborker</code>服务中注册MVC：</p>
+<pre><code>    app.UseMvc;
+</code></pre>
+<h2 id="使用方式">使用方式</h2>
+<p>构造函数注入 IViewEngine
+using Furion.DynamicApiController;
+using Furion.ViewEngine;</p>
+<p>namespace Furion.Application
+{
+public class ViewEngineService : IDynamicApiController
+{
+private readonly IViewEngine _viewEngine;
+public ViewEngineService(IViewEngine viewEngine)
+{
+_viewEngine = viewEngine;
+var result = _viewEngine.RunCompile(&quot;Hello @Model.Name&quot;, new { Name = &quot;Furion&quot; });
+}
+}
+}</p>
+<p>字符串方式
+var result = &quot;Hello @Model.Name&quot;.RunCompile(new { Name = &quot;Furion&quot; });</p>
+<p>17.3.3 弱类型模板
+var result = _viewEngine.RunCompile(&quot;Hello @Model.Name&quot;, new { Name = &quot;Furion&quot; });</p>
+<p>结果：</p>
+<p>Hello Furion</p>
+<p>支持异步 RunCompileAsync</p>
+<p>17.3.4 强类型模板
+类型定义
+namespace YourProject;  // Furion 4.8.4.16+ 支持无命名空间写法</p>
+<p>public class TestModel
+{
+public string Name { get; set; }
+public int[] Items { get; set; }
+}</p>
+<p>使用强类型
+var result = _viewEngine.RunCompile(@&quot;
+Hello @Model.Name
+@foreach(var item in Model.Items)
+{
+</p><p>@item</p>
+}
+&quot;, new TestModel
+{
+Name = &quot;Furion&quot;,
+Items = new[] { 3, 1, 2 }
+});<p></p>
+<p>结果：</p>
+<p>Hello Furion</p>
+<p>3</p>
+<p>1</p>
+<p>2</p>
+<p>支持异步 RunCompileAsync</p>
+<p>17.3.5 高性能模板缓存 🥇
+由于模板编译需要消耗大量的性能，所以建议使用带 FromCached 结尾的 RunCompileFromCached 替代。调用该方法后会自动将模板编译成 .dll 以便下次使用。减少第二次之后使用模板的性能损耗。</p>
+<p>如，强类型模板：</p>
+<p>var result = _viewEngine.RunCompileFromCached(@&quot;
+Hello @Model.Name
+@foreach(var item in Model.Items)
+{
+</p><p>@item</p>
+}
+&quot;, new TestModel
+{
+Name = &quot;Furion&quot;,
+Items = new[] { 3, 1, 2 }
+});<p></p>
+<p>结果：</p>
+<p>Hello Furion</p>
+<p>3</p>
+<p>1</p>
+<p>2</p>
+<p>调用 RunCompileFromCached 方法之后将会使用 MD5 加密模板并生成 MD5字符串的 .dll 存放在网站根目录下的 templates 目录中。只要模板内容不变，数据发生改变也不会重新编译模板。这样大大的提高了首次之后的性能。</p>
+<p>如，传入新的数据：</p>
+<p>var result = _viewEngine.RunCompileFromCached(@&quot;
+Hello @Model.Name
+@foreach(var item in Model.Items)
+{
+</p><p>@item</p>
+}
+&quot;, new TestModel
+{
+Name = &quot;Furion&quot;,
+Items = new[] { 5,6,7,8 }
+});<p></p>
+<p>结果：</p>
+<p>Hello Furion</p>
+<p>5</p>
+<p>6</p>
+<p>7</p>
+<p>8</p>
+<p>模板不再重新编译，只是重新替换数据。</p>
+<p>17.4 高级用法
+高级用法支持将特定程序集、特定命名空间、特定类型引入到模板中使用。</p>
+<p>17.4.1 添加程序集
+比如这里添加 System.IO 程序集：</p>
+<p>var result = _viewEngine.RunCompileFromCached(@&quot;<div>@System.IO.Path.Combine(&quot;&quot;Furion&quot;&quot;, &quot;&quot;ViewEngine&quot;&quot;)</div>&quot;, builderAction: builder =&gt;
+{
+builder.AddAssemblyReferenceByName(&quot;System.IO&quot;);
+});</p>
+<p>结果：</p>
+<div>Furion\\ViewEngine</div>
+<p>另外，Furion 提供多种方式加载程序集：</p>
+<p>builder.AddAssemblyReferenceByName(&quot;System.Security&quot;); // 通过名称
+builder.AddAssemblyReference(typeof(System.IO.File)); // 通过类型
+builder.AddAssemblyReference(Assembly.Load(&quot;source&quot;)); // 通过元数据引用</p>
+<p>17.4.2 添加命名空间
+var result = _viewEngine.RunCompileFromCached(@&quot;<div>@Path.Combine(&quot;&quot;Furion&quot;&quot;, &quot;&quot;ViewEngine&quot;&quot;)</div>&quot;, builderAction: builder =&gt;
+{
+builder.AddUsing(&quot;System.IO&quot;);
+builder.AddAssemblyReferenceByName(&quot;System.IO&quot;);
+});</p>
+<p>结果：</p>
+<div>Furion\\ViewEngine</div>
+<p>也支持加入多个 using：</p>
+<p>builder.AddUsing(&quot;System.IO&quot;);
+builder.AddUsing(&quot;Furion&quot;);</p>
+<p>17.4.3 定义模板方法
+var result = _viewEngine.RunCompileFromCached(@&quot;
+<area>
+@{ RecursionTest(3); }
+</p>
+<p>@{
+void RecursionTest(int level)
+{
+if (level &lt;= 0)
+{
+return;
+}</p>
+<pre><code>&lt;div&gt;LEVEL: @level&lt;/div&gt;
+@{ RecursionTest(level - 1); }
+</code></pre>
+<p>}
+}
+&quot;);</p>
+<p>结果：</p>
+<area>
+<div>LEVEL: 3</div>
+<div>LEVEL: 2</div>
+<div>LEVEL: 1</div>
+
+<p>17.4.4 调用类方法
+定义 CustomModel 类并继承 ViewEngineModel 基类</p>
+<p>public class CustomModel : ViewEngineModel
+{
+public int A { get; set; }
+public string B { get; set; }
+public string Decorator(object value)
+{
+return &quot;-=&quot; + value + &quot;=-&quot;;
+}
+}</p>
+<p>在模板中调用 Decorator(value) 方法：</p>
+<p>var content = @&quot;Hello @A, @B, @Decorator(123)&quot;;</p>
+<p>var template = _viewEngine.Compile<custommodel>(content);</custommodel></p>
+<p>var result = template.Run(instance =&gt;
+{
+instance.A = 10;
+instance.B = &quot;Alex&quot;;
+});</p>
+<p>结果：</p>
+<p>Hello 10, Alex, -=123=-</p>
+<p>17.5 IViewEngine 接口
+IViewEngine 提供了简单方便的 RunCompile 方法，也提供了最原始化的 Compile 和 Run 方法。</p>
+<p>通过原始的 Compile 和 Run 方法可以实现很多复杂的逻辑和自定义指令集。</p>
+<p>/// <summary>
+/// 编译模板
+/// </summary>
+/// <param name="content">
+/// <param name="builderAction">
+/// <returns></returns>
+IViewEngineTemplate Compile(string content, Action<iviewengineoptionsbuilder> builderAction = null);
+/// <summary>
+/// 编译模板
+/// </summary>
+/// <param name="content">
+/// <param name="builderAction">
+/// <returns></returns>
+Task<iviewenginetemplate> CompileAsync(string content, Action<iviewengineoptionsbuilder> builderAction = null);
+/// <summary>
+/// 编译模板
+/// </summary>
+/// <typeparam name="T"></typeparam>
+/// <param name="content">
+/// <param name="builderAction">
+/// <returns></returns>
+IViewEngineTemplate<t> Compile<t>(string content, Action<iviewengineoptionsbuilder> builderAction = null)
+where T : IViewEngineModel;
+/// <summary>
+/// 编译模板
+/// </summary>
+/// <typeparam name="T"></typeparam>
+/// <param name="content">
+/// <param name="builderAction">
+/// <returns></returns>
+Task&lt;IViewEngineTemplate<t>&gt; CompileAsync<t>(string content, Action<iviewengineoptionsbuilder> builderAction = null)
+where T : IViewEngineModel;</iviewengineoptionsbuilder></t></t></iviewengineoptionsbuilder></t></t></iviewengineoptionsbuilder></iviewenginetemplate></iviewengineoptionsbuilder></p>
+<p>17.6 字符串模板替换引擎
+Furion 除了内置视图引擎之外，还支持以下几种模板替换，如：</p>
+<p>// 提供数据模板方式
+var str = &quot;我叫{name}&quot;.Render(new Dictionary{ {&quot;name&quot;, &quot;Furion&quot;} });
+var str = &quot;我叫{Name}&quot;.Render(new { Name = &quot;Furion&quot; });
+var str = &quot;我叫{Detail.Name}&quot;.Render(new { Detail = new { Name = &quot;Furoin&quot; } });</p>
+<p>// 从配置读取方式
+var str = &quot;我叫#(Furion:Address)&quot;.Render();</p>
+<p>{
+&quot;Furion&quot;: {
+&quot;Address&quot;: &quot;https://www.furion.icu&quot;
+}
+}</p>
+<p>17.7 反馈与建议</p>
+</div><div class="m-content-container m-paging"><div class="m-paging-prev m-paging-item"><a href="cors.html" class="href"><span class="ui-font-ydoc"></span>CORS 跨域</a></div><div class="m-paging-next m-paging-item"><a href="specification-document.html" class="href">Swagger<span class="ui-font-ydoc"></span></a></div></div></div></div></div><div></div><script>
+    var $content = document.getElementById('js-content');
+    var $summaryItems = Array.prototype.slice.call(document.querySelectorAll('#js-menu .href'));
+    var $menu = document.getElementById('js-menu');
+    if ($menu && sessionStorage.menuScrollTop) {
+		$menu.scrollTop = sessionStorage.menuScrollTop;
+    }
+    // 刷新页面但不切换 pathname 的时候，内容区恢复到记忆的高度
+    if ($content && sessionStorage.contentScrollTop && window.location.pathname == sessionStorage.locationPathname) {
+      $content.scrollTop = sessionStorage.contentScrollTop;
+    }
+    sessionStorage.setItem('locationPathname', window.location.pathname);</script><script src="..\ydoc\scripts\plugins\dollar.min.js"></script><script src="..\ydoc\scripts\plugins\responsive-nav.min.js"></script><script src="..\ydoc\scripts\plugins\slideout.min.js"></script><script src="..\ydoc\scripts\app.js"></script><script src="..\ydoc\ydoc-plugin-search\core.js"></script><script src="..\ydoc\ydoc-plugin-search\search.js"></script><script src="..\search_json.js"></script></body></html>

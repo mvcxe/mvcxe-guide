@@ -7,10 +7,26 @@ window.ydoc_plugin_search_json = {
       "children": []
     },
     {
-      "title": "先欣赏两段常见代码创建工程",
-      "content": "MVC\ntype  THomeController = class(TController)\n  private\n\t[IOC]\n\tPostService: IPostService;\n  public\n\tfunction Index: string;\n  end;\nimplementation\nfunction THomeController.Index: string;\nbegin\n  ViewBag.Add('TopPosts', PostService.GetTopPosts(5));\n  Result := View;\nend;\nWebapi\ntype  [Route('user/profile')]\n  TUserWebApi = class(TWebApi)\n  private\n\t[IOC('Your.Service.UserService')]\n\tUserService: IUserService;\n  public\n\t[Authorize('Your.Authorization.YourAuthorization', 'your_role_str')]\n\tfunction GET: TUser;\n  end;\nimplementation\nfunction TUserProfileWebApi.GET: TUser;\nbegin\n  Result.code := 200;\n  Result.data := current_user;\n  Result.dept := SysService.DeptById(current_user.dept_id);\n  SetLength(Result.postIds, 1);\n  Result.postIds[0] := current_user.post_id;\n  Result.posts := SysService.Posts;\n  SetLength(Result.roleIds, 1);\n  Result.roleIds[0] := current_user.role_id;\n  Result.roles := SysService.Roles;\n  Result.msg := '';\nend;\n先将Dcp目录的文件Copy到Delphi 11的Dcp公共目录，如：C:\\Users\\Public\\Documents\\Embarcadero\\Studio\\22.0\\Dcp在Delphi IDE中打开mvcxe.groupproj，运行Project:Webborker.Console\n在控制台窗口中选择1，创建工程",
+      "title": "一分钟上手",
+      "content": "",
       "url": "\\docs\\installation.html",
-      "children": []
+      "children": [
+        {
+          "title": "先欣赏两段常见代码",
+          "url": "\\docs\\installation.html#先欣赏两段常见代码",
+          "content": "先欣赏两段常见代码MVC\ntype  THomeController = class(TController)\n  private\n\t[IOC]\n\tPostService: IPostService;\n  public\n\tfunction Index: string;\n  end;\nimplementation\nfunction THomeController.Index: string;\nbegin\n  ViewBag.Add('TopPosts', PostService.GetTopPosts(5));\n  Result := View;\nend;\nWebapi\ntype  [Route('user/profile')]\n  TUserWebApi = class(TWebApi)\n  private\n\t[IOC('Your.Service.UserService')]\n\tUserService: IUserService;\n  public\n\t[Authorize('Your.Authorization.YourAuthorization', 'your_role_str')]\n\tfunction GET: TUser;\n  end;\nimplementation\nfunction TUserProfileWebApi.GET: TUser;\nbegin\n  Result.code := 200;\n  Result.data := current_user;\n  Result.dept := SysService.DeptById(current_user.dept_id);\n  SetLength(Result.postIds, 1);\n  Result.postIds[0] := current_user.post_id;\n  Result.posts := SysService.Posts;\n  SetLength(Result.roleIds, 1);\n  Result.roleIds[0] := current_user.role_id;\n  Result.roles := SysService.Roles;\n  Result.msg := '';\nend;\n"
+        },
+        {
+          "title": "创建工程",
+          "url": "\\docs\\installation.html#创建工程",
+          "content": "创建工程先将Dcp目录的文件Copy到Delphi 11的Dcp公共目录，如：C:\\Users\\Public\\Documents\\Embarcadero\\Studio\\22.0\\Dcp在Delphi IDE中打开mvcxe.groupproj，运行Project:Webborker.Console在控制台窗口中输入create回车，创建工程\n输入工程名，例MyApp\n选择工程模板，选1是只有WebApi，选3是只有Mvc，选2是混合\n输入空间名，例MyCompany，可以为空\n最后用Delphi IDE打开工程MyApp.groupproj并编译\n运行Webborker.Console,自动打开浏览器，并访问默认的地址\n切换地址/swagger/index.html访问Swagger查看现有的WebApi\n"
+        },
+        {
+          "title": "将创建好的工程移到你常用的目录，添加到源码管理器git或svn，就可以进行Delphi Web开发的神奇之旅。",
+          "url": "\\docs\\installation.html#将创建好的工程移到你常用的目录，添加到源码管理器git或svn，就可以进行delphi-web开发的神奇之旅。",
+          "content": "将创建好的工程移到你常用的目录，添加到源码管理器git或svn，就可以进行Delphi Web开发的神奇之旅。"
+        }
+      ]
     },
     {
       "title": "序言名字的由来框架特点框架依赖性能",
@@ -240,6 +256,38 @@ window.ydoc_plugin_search_json = {
           "title": "如何使用",
           "url": "\\docs\\cors.html#如何使用",
           "content": "如何使用创建一个基类，需要跨越支持的WebApi继承这个基类\n    type      FerryBaseWebApi = class(TWebApi)\n      private\n      protected\n      public\n        constructor Create;\n        function OPTIONS: string;\n      end;\n    implementation\n\n    { FerryBaseWebApi }\n\n    constructor FerryBaseWebApi.Create;\n    begin\n      inherited;\n      Response.AddHeader('Access-Control-Allow-Origin', '*');\n    end;\n\n    function FerryBaseWebApi.OPTIONS: string;\n    begin\n      Response.ContentType := 'application/json';\n      Response.AddHeader('Access-Control-Allow-Headers', 'authorization, origin, content-type, accept');\n      Response.AddHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');\n      Response.AddHeader('Allow', 'HEAD,GET,POST,PUT,PATCH,DELETE,OPTIONS');\n      Response.AddHeader('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate, value');\n      Response.StatusCode := 204;\n      Result := '{}';\n    end;\n"
+        }
+      ]
+    },
+    {
+      "title": "视图引擎",
+      "content": "",
+      "url": "\\docs\\view-engine.html",
+      "children": [
+        {
+          "title": "关于视图引擎",
+          "url": "\\docs\\view-engine.html#关于视图引擎",
+          "content": "关于视图引擎视图引擎负责根据视图模板创建 HTML。视图通常是 HTML 和编程语言的某种混合。支持变量定义、方法调用及逻辑编写。在MVCXE框架中，底层集成了Pascal语言编写的高效视图引擎组件TPLXE, 并提供更加灵活方便的语法糖。"
+        },
+        {
+          "title": "视图引擎作用",
+          "url": "\\docs\\view-engine.html#视图引擎作用",
+          "content": "视图引擎作用灵活的模板语法\n根据不同的数据编译模板产生不同的输出\n实现强大的插件化机制\n实现全站页面静态化\n可以用作邮件模板、短信模板、优惠券信息模板等\n"
+        },
+        {
+          "title": "基础使用",
+          "url": "\\docs\\view-engine.html#基础使用",
+          "content": "基础使用"
+        },
+        {
+          "title": "注册服务",
+          "url": "\\docs\\view-engine.html#基础使用-注册服务",
+          "content": "注册服务使用之前需在Webborker服务中注册MVC：    app.UseMvc;"
+        },
+        {
+          "title": "使用方式",
+          "url": "\\docs\\view-engine.html#使用方式",
+          "content": "使用方式构造函数注入 IViewEngineusing Furion.DynamicApiController;\nusing Furion.ViewEngine;namespace Furion.Application{\npublic class ViewEngineService : IDynamicApiController\n{\nprivate readonly IViewEngine _viewEngine;\npublic ViewEngineService(IViewEngine viewEngine)\n{\n_viewEngine = viewEngine;\nvar result = _viewEngine.RunCompile(\"Hello @Model.Name\", new { Name = \"Furion\" });\n}\n}\n}字符串方式var result = \"Hello @Model.Name\".RunCompile(new { Name = \"Furion\" });17.3.3 弱类型模板var result = _viewEngine.RunCompile(\"Hello @Model.Name\", new { Name = \"Furion\" });结果：Hello Furion支持异步 RunCompileAsync17.3.4 强类型模板类型定义\nnamespace YourProject;  // Furion 4.8.4.16+ 支持无命名空间写法public class TestModel{\npublic string Name { get; set; }\npublic int[] Items { get; set; }\n}使用强类型var result = _viewEngine.RunCompile(@\"\nHello @Model.Name\n@foreach(var item in Model.Items)\n{\n@item}\n\", new TestModel\n{\nName = \"Furion\",\nItems = new[] { 3, 1, 2 }\n});结果：Hello Furion312支持异步 RunCompileAsync17.3.5 高性能模板缓存 🥇由于模板编译需要消耗大量的性能，所以建议使用带 FromCached 结尾的 RunCompileFromCached 替代。调用该方法后会自动将模板编译成 .dll 以便下次使用。减少第二次之后使用模板的性能损耗。如，强类型模板：var result = _viewEngine.RunCompileFromCached(@\"Hello @Model.Name\n@foreach(var item in Model.Items)\n{\n@item}\n\", new TestModel\n{\nName = \"Furion\",\nItems = new[] { 3, 1, 2 }\n});结果：Hello Furion312调用 RunCompileFromCached 方法之后将会使用 MD5 加密模板并生成 MD5字符串的 .dll 存放在网站根目录下的 templates 目录中。只要模板内容不变，数据发生改变也不会重新编译模板。这样大大的提高了首次之后的性能。如，传入新的数据：var result = _viewEngine.RunCompileFromCached(@\"Hello @Model.Name\n@foreach(var item in Model.Items)\n{\n@item}\n\", new TestModel\n{\nName = \"Furion\",\nItems = new[] { 5,6,7,8 }\n});结果：Hello Furion5678模板不再重新编译，只是重新替换数据。17.4 高级用法高级用法支持将特定程序集、特定命名空间、特定类型引入到模板中使用。17.4.1 添加程序集比如这里添加 System.IO 程序集：var result = _viewEngine.RunCompileFromCached(@\"@System.IO.Path.Combine(\"\"Furion\"\", \"\"ViewEngine\"\")\", builderAction: builder =>{\nbuilder.AddAssemblyReferenceByName(\"System.IO\");\n});结果：Furion\\\\ViewEngine另外，Furion 提供多种方式加载程序集：builder.AddAssemblyReferenceByName(\"System.Security\"); // 通过名称builder.AddAssemblyReference(typeof(System.IO.File)); // 通过类型\nbuilder.AddAssemblyReference(Assembly.Load(\"source\")); // 通过元数据引用17.4.2 添加命名空间var result = _viewEngine.RunCompileFromCached(@\"@Path.Combine(\"\"Furion\"\", \"\"ViewEngine\"\")\", builderAction: builder =>\n{\nbuilder.AddUsing(\"System.IO\");\nbuilder.AddAssemblyReferenceByName(\"System.IO\");\n});结果：Furion\\\\ViewEngine也支持加入多个 using：builder.AddUsing(\"System.IO\");builder.AddUsing(\"Furion\");17.4.3 定义模板方法var result = _viewEngine.RunCompileFromCached(@\"\n\n@{ RecursionTest(3); }\n@{void RecursionTest(int level)\n{\nif (level <= 0)\n{\nreturn;\n}LEVEL: @level@{ RecursionTest(level - 1); }\n}}\n\");结果：LEVEL: 3LEVEL: 2LEVEL: 1\n17.4.4 调用类方法定义 CustomModel 类并继承 ViewEngineModel 基类public class CustomModel : ViewEngineModel{\npublic int A { get; set; }\npublic string B { get; set; }\npublic string Decorator(object value)\n{\nreturn \"-=\" + value + \"=-\";\n}\n}在模板中调用 Decorator(value) 方法：var content = @\"Hello @A, @B, @Decorator(123)\";var template = _viewEngine.Compile(content);var result = template.Run(instance =>{\ninstance.A = 10;\ninstance.B = \"Alex\";\n});结果：Hello 10, Alex, -=123=-17.5 IViewEngine 接口IViewEngine 提供了简单方便的 RunCompile 方法，也提供了最原始化的 Compile 和 Run 方法。通过原始的 Compile 和 Run 方法可以实现很多复杂的逻辑和自定义指令集。/// /// 编译模板\n/// \n/// \n/// \n/// \nIViewEngineTemplate Compile(string content, Action builderAction = null);\n/// \n/// 编译模板\n/// \n/// \n/// \n/// \nTask CompileAsync(string content, Action builderAction = null);\n/// \n/// 编译模板\n/// \n/// \n/// \n/// \n/// \nIViewEngineTemplate Compile(string content, Action builderAction = null)\nwhere T : IViewEngineModel;\n/// \n/// 编译模板\n/// \n/// \n/// \n/// \n/// \nTask CompileAsync(string content, Action builderAction = null)\nwhere T : IViewEngineModel;17.6 字符串模板替换引擎Furion 除了内置视图引擎之外，还支持以下几种模板替换，如：// 提供数据模板方式var str = \"我叫{name}\".Render(new Dictionary{ {\"name\", \"Furion\"} });\nvar str = \"我叫{Name}\".Render(new { Name = \"Furion\" });\nvar str = \"我叫{Detail.Name}\".Render(new { Detail = new { Name = \"Furoin\" } });// 从配置读取方式var str = \"我叫#(Furion:Address)\".Render();{\"Furion\": {\n\"Address\": \"https://www.furion.icu\"\n}\n}17.7 反馈与建议"
         }
       ]
     },

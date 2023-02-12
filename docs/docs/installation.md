@@ -1,4 +1,6 @@
-# 先欣赏两段常见代码
+# 一分钟上手
+
+## 先欣赏两段常见代码
 > MVC
 
 	type
@@ -43,7 +45,33 @@
 	  Result.msg := '';
 	end;
 	
-# 创建工程
+## 创建工程
 先将Dcp目录的文件Copy到Delphi 11的Dcp公共目录，如：C:\Users\Public\Documents\Embarcadero\Studio\22.0\Dcp<br/>
 在Delphi IDE中打开mvcxe.groupproj，运行Project:Webborker.Console<br/>
-在控制台窗口中选择1，创建工程<br/>
+
+- 在控制台窗口中输入create回车，创建工程
+
+![create](../images/create.png)
+
+- 输入工程名，例MyApp
+
+![ProjectName](../images/ProjectName.png)
+
+- 选择工程模板，选1是只有WebApi，选3是只有Mvc，选2是混合
+- 输入空间名，例MyCompany，可以为空
+
+![SpaceName](../images/SpaceName.png)
+
+- 最后用Delphi IDE打开工程MyApp.groupproj并编译
+
+![OpenProject](../images/OpenProject.png)
+
+- 运行Webborker.Console,自动打开浏览器，并访问默认的地址
+
+![DemoHome](../images/demo_home.png)
+
+- 切换地址/swagger/index.html访问Swagger查看现有的WebApi
+
+![DemoSwagger](../images/demo_swagger.png)
+
+## 将创建好的工程移到你常用的目录，添加到源码管理器git或svn，就可以进行Delphi Web开发的神奇之旅。
