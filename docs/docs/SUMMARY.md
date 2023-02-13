@@ -19,6 +19,7 @@
 * [CORS 跨域](cors.md)
 * [视图引擎](view-engine.md)
 * [日志记录](logging.md)
+* [JSON 序列化](json-serialization.md)
 
 ### 规范化接口文档
 * [Swagger](specification-document.md)

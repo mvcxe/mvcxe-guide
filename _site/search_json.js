@@ -429,6 +429,68 @@ window.ydoc_plugin_search_json = {
       ]
     },
     {
+      "title": "JSON 序列化",
+      "content": "",
+      "url": "\\docs\\json-serialization.html",
+      "children": [
+        {
+          "title": "什么是 JSON",
+          "url": "\\docs\\json-serialization.html#什么是-json",
+          "content": "什么是 JSONJSON (JavaScript Object Notation, JS 对象标记) 是一种轻量级的数据交换格式。它基于 ECMAScript (w3c 制定的 js 规范)的一个子集，采用完全独立于编程语言的文本格式来存储和表示数据。简洁和清晰的层次结构使得 JSON 成为理想的数据交换语言。 易于人阅读和编写，同时也易于机器解析和生成，并有效地提升网络传输效率。简单来说，JSON，是一种数据格式，在与后端的数据交互中有较为广泛的应用。"
+        },
+        {
+          "title": "关于序列化库",
+          "url": "\\docs\\json-serialization.html#关于序列化库",
+          "content": "关于序列化库目前在Delphi提供了JSON序列化操作库：System.JsonMVCXE框架为了解决System.Json序列化操作不友好的问题，在System.Json的基础上包装成JsonSerializer类，并提供类方法进行JSON序列化操作JsonSerializer = classpublic\n    class procedure Deserialize(const AJson: string; var R: T); overload;\n    class function Serialize(const R: T): string;\n    class function Deserialize(const AJson: string): T; overload;\nend;\n"
+        },
+        {
+          "title": "如何使用",
+          "url": "\\docs\\json-serialization.html#如何使用",
+          "content": "如何使用"
+        },
+        {
+          "title": "序列化对象",
+          "url": "\\docs\\json-serialization.html#如何使用-序列化对象",
+          "content": "序列化对象type  TMyObj = class\n  published\n    property Id: Integer;\n    property Name : string;\n  end;\n\nfunction GetText: string;\nvar\n    obj: TMyObj;\nbegin\n    obj := TMyObj.Create;\n    obj.Id := 1;\n    obj.Name := 'MVCXE';\n    Result := JsonSerializer.Serialize(obj);\nend;\n"
+        },
+        {
+          "title": "反序列化字符串",
+          "url": "\\docs\\json-serialization.html#如何使用-反序列化字符串",
+          "content": "反序列化字符串function GetObject: TMyObj;var\n    json: string;\nbegin\n    json := '{\"Id\":1,\"Name\":\"MVCXE\"}';\n    Result := JsonSerializer.Deserialize(json);\nend;\n"
+        },
+        {
+          "title": "自定义序列化属性名",
+          "url": "\\docs\\json-serialization.html#如何使用-自定义序列化属性名",
+          "content": "自定义序列化属性名使用[AliasName('AliasNameString')]注解\ntype  TMyObj = class\n  published\n    property Id: Integer;\n    [AliasName('MyName')]\n    property Name : string;\n  end;\nTMyObj序列化后的字符串是{\"Id\":value,\"MyName\":value}"
+        },
+        {
+          "title": "时间格式化",
+          "url": "\\docs\\json-serialization.html#如何使用-时间格式化",
+          "content": "时间格式化使用[UTC]注解\ntype  TMyObj = class\n  published\n    property Id: Integer;\n    property Name : string;\n    [UTC]\n    property birthday: TDateTime;\n  end;\nTMyObj序列化后birthday的值是UTC时间"
+        },
+        {
+          "title": "自定义输入输出格式",
+          "url": "\\docs\\json-serialization.html#如何使用-自定义输入输出格式",
+          "content": "自定义输入输出格式使用[CustomJsonNode(function name, function paramstr)]注解\ntype  TMyObj = class\n  published\n    property Id: Integer;\n    property Name : string;\n    [CustomJsonNode('DateTimeToStr', 'yyyy-MM-dd\"T\"HH:mm:ss')]\n    property birthday: TDateTime;\n    [CustomJsonNode('UnixTimeToStr', 'yyyy-MM-dd HH:mm:ss')]\n    property createtime: Int64;\n    [CustomJsonNode('StrToJson', '')]\n    property content: TJsonValue\n  end;\n当前实现了：DateTimeToStr、UnixTimeToStr、StrToJson三个自定义输入输出格式"
+        },
+        {
+          "title": "空值不输出",
+          "url": "\\docs\\json-serialization.html#如何使用-空值不输出",
+          "content": "空值不输出使用[nullable]注解\n"
+        },
+        {
+          "title": "DataTable、DataSet 等序列化问题",
+          "url": "\\docs\\json-serialization.html#如何使用-datatable、dataset-等序列化问题",
+          "content": "DataTable、DataSet 等序列化问题不支持复杂类型，如 DataTable、DataSet 等类型"
+        },
+        {
+          "title": "范例",
+          "url": "\\docs\\json-serialization.html#范例",
+          "content": "范例我们要从appsettiong.json中读取log的配置信息，我们需要为这个json结构定对应的类结构，这样他们之间才可以正确序列化和反序列化{    \"logxe\": {\n        \"autoReload\": \"\",\n        \"throwExceptions\": \"\",\n        \"internalLogLevel\": \"\",\n        \"internalLogFile\": \"\",\n        \"variable\": [],\n        \"target\": [{\n            \"name\": \"console\",\n            \"type\": \"ColoredConsole\",\n            \"layout\": \"%0:s [TID %1:-8d][%2:-10s] %3:s [%4:s]\"\n            },{\n            \"name\": \"logfile\",\n            \"type\": \"File\",\n            \"layout\": \"%0:s [TID %1:10u][%2:-8s] %3:s [%4:s]\",\n            \"maxFileCount\": 5,\n            \"maxFileSize\": 1000,\n            \"logsFolder\": \"\",\n            \"logFileName\": \"logs\\\\%s.%2.2d.%s_info.log\"\n        }],\n        \"rule\": [{\n            \"name\": \"*\",\n            \"minlevel\": \"Trace\",\n            \"writeTo\": \"console\"\n            },{\n            \"name\": \"*\",\n            \"minlevel\": \"Info\",\n            \"writeTo\": \"logfile\"\n        }]\t\n    }\n}\n对应的类TMVCXEConfigLogerRef = classpublished\n    property ref: string;\nend;\n\nTMVCXEConfigLogParam = class\npublished\n    property Value: string;\nend;\n\nTMVCXEConfigLoger = class\npublished\n    property name: string;\n    property level: TMVCXEConfigLogParam;\n    [AliasName('appender-ref')]\n    property appenders: TArray;\nend;\n\nTMVCXEConfigLogAppenderFilter = class\npublished\n    [AliasName('type')]\n    property _type: string;\n    [AliasName('levelToMatch')]\n    property MatchLevels: TArray;\nend;\n\nTMVCXEConfigLogAppenderLayout = class\npublished\n    [AliasName('type')]\n    property _type: string;\n    property conversionPattern: TMVCXEConfigLogParam;\nend;\n\nTMVCXEConfigLogAppender = class\npublished\n    property name: string;\n    [AliasName('type')]\n    property _type: string;\n    [AliasName('filter')]\n    property filters: TArrays;\n    property layout: TMVCXEConfigLogAppenderLayout;\n    [AliasName('file')]\n    property _file: TMVCXEConfigLogParam;\n    property maximumFileSize: TMVCXEConfigLogParam;\n    property staticLogFileName: TMVCXEConfigLogParam;\n    property datePattern: TMVCXEConfigLogParam;\n    property maxSizeRollBackups: TMVCXEConfigLogParam;\nend;\n\nTMVCXEConfigLog = class\npublished\n    property writer: string;\n    property debug: string;\n    property root: TMVCXEConfigLoger;\n    [AliasName('logger')]\n    property loggers: TArray;\n    [AliasName('appender')]\n    property appenders: TArray;\nend;\n\nTLoggerProConfigTargetHighlightRow = class\npublished\n    property condition: string;\n    property foregroundColor: string;\nend;\n\nTLoggerProConfigTarget = class\npublished\n    [AliasName('type')]\n    property _type: string;\n    property name: string;\n    property layout: string;\n\n    property maxFileCount: string;\n    property maxFileSize: string;\n    property logsFolder: string;\n    property logFileName: string;\n\n    property fileName: string;\n    property keepFileOpen: string;\n    property useDefaultRowHighlightingRules: string;\n    [AliasName('highlight-row')]\n    property highlight_row: TArray;\nend;\n\nTLoggerProConfigRule = class\npublished\n    property name: string;\n    property minlevel: string;\n    property maxlevel: string;\n    property writeTo: string;\n    property targetIndex: Integer;\nend;\n\nTLoggerProConfigVariable = class\npublished\n    property name: string;\n    property Value: string;\nend;\n\nTLoggerProConfig = class\npublished\n    property autoReload: string;\n    property throwExceptions: string;\n    property internalLogLevel: string;\n    property internalLogFile: string;\n    [AliasName('variable')]\n    property variable: TArray;\n    [AliasName('target')]\n    property targets: TArray;\n    [AliasName('rule')]\n    property rules: TArray;\nend;\n反序列\nJsonSerializer.Deserialize(ConfigurationManager.Configuration.GetValue('logxe').ToJSON)   "
+        }
+      ]
+    },
+    {
       "title": "规范化接口文档",
       "content": "",
       "url": "\\docs\\specification-document.html",

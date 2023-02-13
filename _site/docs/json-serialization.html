@@ -1,0 +1,262 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charSet="UTF-8"/><meta content="text/html; charset=utf-8" http-equiv="Content-Type"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-status-bar-style" content="black"/><link rel="apple-touch-icon" sizes="180x180" href="..\images\apple-touch-icon.png"/><link rel="icon" type="image/png" sizes="32x32" href="..\images\favicon-32x32.png"/><link rel="icon" type="image/png" sizes="16x16" href="..\images\favicon-16x16.png"/><link rel="manifest" href="..\images\manifest.json"/><link rel="mask-icon" href="..\images\safari-pinned-tab.svg" color="#5bbad5"/><meta name="theme-color" content="#ffffff"/><meta http-equiv="Cache-Control" content="no-transform"/><meta http-equiv="Cache-Control" content="no-siteapp"/><title>JSON 序列化-文档</title><link rel="stylesheet" href="..\ydoc\styles\style.css"/><meta name="author" content="roc.long"/><meta name="keywords"/><meta name="description" content="MVCXE | 中国首个DELPHI MVC WEB框架"/><meta id="releativePath" content=".."/><link rel="stylesheet" href="..\ydoc\ydoc-plugin-search\search.css"/></head><body><div class="g-doc"><div class="m-aside"><div class="m-summary" id="js-menu"><div class="m-summary-content" id="js-menu-content"><div class="m-summary-block"><ul class="m-summary-list"><li class="item"><a href="installation.html" class="href">一分钟上手</a></li></ul></div><div class="m-summary-block"><div class="m-summary-title">开始使用</div><ul class="m-summary-list indent"><li class="item"><a href="intro.html#" class="href">介绍</a></li></ul></div><div class="m-summary-block"><div class="m-summary-title">Web服务</div><ul class="m-summary-list indent"><li class="item"><a href="appstartup.html" class="href">应用启动 Startup</a></li><li class="item"><a href="configuration.html" class="href">配置</a></li><li class="item"><a href="options.html" class="href">选项</a></li></ul></div><div class="m-summary-block"><div class="m-summary-title">Web应用开发</div><ul class="m-summary-list indent"><li class="item"><a href="dynamic-api-controller.html" class="href">动态 WebAPI</a></li><li class="item"><a href="httpcontext.html" class="href">HttpContext</a></li><li class="item"><a href="cache.html" class="href">缓存</a></li><li class="item"><a href="auth-control.html" class="href">安全鉴权</a></li><li class="item"><a href="cors.html" class="href">CORS 跨域</a></li><li class="item"><a href="view-engine.html" class="href">视图引擎</a></li><li class="item"><a href="logging.html" class="href">日志记录</a></li><li class="item"><a href="" class="href">JSON 序列化</a></li></ul></div><div class="m-summary-block"><div class="m-summary-title">规范化接口文档</div><ul class="m-summary-list indent"><li class="item"><a href="specification-document.html" class="href">Swagger</a></li></ul></div><div class="m-summary-block"><div class="m-summary-title">异常与审计处理</div><ul class="m-summary-list indent"><li class="item"><a href="friendly-exception.html" class="href">友好异常处理</a></li></ul></div><div class="m-summary-block"><div class="m-summary-title">数据库操作指南</div><ul class="m-summary-list indent"><li class="item"><a href="dbcontext-start.html" class="href">入门简要</a></li><li class="item"><a href="dbcontext.html" class="href">数据库上下文</a></li><li class="item"><a href="entity.html" class="href">数据库实体</a></li><li class="item"><a href="dbcontext-repository.html" class="href">仓储模式</a></li><li class="item"><a href="dbcontext-db.html" class="href">Sql操作模式</a></li><li class="item"><a href="dbcontext-add.html" class="href">新增操作</a></li><li class="item"><a href="dbcontext-update.html" class="href">更新操作</a></li><li class="item"><a href="dbcontext-delete.html" class="href">删除操作</a></li><li class="item"><a href="dbcontext-query.html" class="href">查询操作</a></li><li class="item"><a href="dbcontext-hight-query.html" class="href">高级查询操作</a></li><li class="item"><a href="dbcontext-proc.html" class="href">存储过程操作</a></li><li class="item"><a href="dbcontext-function.html" class="href">函数操作</a></li><li class="item"><a href="tran.html" class="href">事务</a></li></ul></div><div class="m-summary-block"><div class="m-summary-title">对象容器</div><ul class="m-summary-list indent"><li class="item"><a href="dependency-injection.html" class="href">依赖注入/控制反转</a></li><li class="item"><a href="object-mapper.html" class="href">对象数据映射</a></li></ul></div></div></div><div class="m-summary-switch" id="js-summary-switch"><svg viewBox="0 0 926.23699 573.74994" version="1.1" x="0px" y="0px" width="15" height="15" class="bottom"><g transform="translate(904.92214,-879.1482)"><path d="m -673.67664,1221.6502 -231.2455,-231.24803 55.6165,-55.627 c 30.5891,-30.59485 56.1806,-55.627 56.8701,-55.627 0.6894,0 79.8637,78.60862 175.9427,174.68583 l 174.6892,174.6858 174.6892,-174.6858 c 96.079,-96.07721 175.253196,-174.68583 175.942696,-174.68583 0.6895,0 26.281,25.03215 56.8701,55.627 l 55.6165,55.627 -231.245496,231.24803 c -127.185,127.1864-231.5279,231.248 -231.873,231.248 -0.3451,0 -104.688,-104.0616 -231.873,-231.248 z" fill="#fff"></path></g></svg><svg viewBox="0 0 926.23699 573.74994" version="1.1" x="0px" y="0px" width="15" height="15" class="top"><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="aaa" fill="#fff" fill-rule="nonzero"><path d="M231.2455,342.502 L0,111.25397 L55.6165,55.62697 C86.2056,25.03212 111.7971,-2.99999998e-05 112.4866,-2.99999998e-05 C113.176,-2.99999998e-05 192.3503,78.60859 288.4293,174.6858 L463.1185,349.3716 L637.8077,174.6858 C733.8867,78.60859 813.060896,-2.99999997e-05 813.750396,-2.99999997e-05 C814.439896,-2.99999997e-05 840.031396,25.03212 870.620496,55.62697 L926.236996,111.25397 L694.9915,342.502 C567.8065,469.6884 463.4636,573.75 463.1185,573.75 C462.7734,573.75 358.4305,469.6884 231.2455,342.502 Z" id="Shape" transform="translate(463.118498, 286.874985) scale(1, -1) translate(-463.118498, -286.874985) "></path></g></g></svg></div></div><div class="m-main" id="js-panel"><header class="m-header" id="js-header"><div class="m-header-title js-logo"><a href="..\index.html" target="_self"><img class="logo" width="36" src="..\images\logo.png"/><h6 class="name">MVCXE</h6></a></div><div><div class="m-search">
+      <div class="icon">&#xf0fd;</div>
+      <input type="text" class="input js-input" placeholder="搜索" />
+      <div class="m-search-result js-search-result"></div>
+    </div></div><nav class="m-header-nav js-nav"><ul class="m-header-items"><li class="item active"><a class="href" href="index.html">文档</a></li><li class="item "><a class="href" href="..\about\index.html">关于</a></li></ul></nav><div id="js-nav-btn" class="m-header-btn ui-font-ydoc"></div></header><div class="m-content" id="js-content"><div id="markdown-body" class="m-content-container markdown-body"><h1>JSON 序列化</h1>
+<h2 id="什么是-json">什么是 JSON</h2>
+<p>JSON (JavaScript Object Notation, JS 对象标记) 是一种轻量级的数据交换格式。它基于 ECMAScript (w3c 制定的 js 规范)的一个子集，采用完全独立于编程语言的文本格式来存储和表示数据。简洁和清晰的层次结构使得 JSON 成为理想的数据交换语言。 易于人阅读和编写，同时也易于机器解析和生成，并有效地提升网络传输效率。</p>
+<p>简单来说，JSON，是一种数据格式，在与后端的数据交互中有较为广泛的应用。</p>
+<h2 id="关于序列化库">关于序列化库</h2>
+<p>目前在<code>Delphi</code>提供了JSON序列化操作库：System.Json</p>
+<p><code>MVCXE</code>框架为了解决System.Json序列化操作不友好的问题，在System.Json的基础上包装成JsonSerializer类，并提供类方法进行JSON序列化操作</p>
+<pre><code>JsonSerializer = class
+public
+    class procedure Deserialize&lt;T&gt;(const AJson: string; var R: T); overload;
+    class function Serialize&lt;T&gt;(const R: T): string;
+    class function Deserialize&lt;T&gt;(const AJson: string): T; overload;
+end;
+</code></pre>
+<h2 id="如何使用">如何使用</h2>
+<h3 id="如何使用-序列化对象">序列化对象</h3>
+<pre><code>type
+  TMyObj = class
+  published
+    property Id: Integer;
+    property Name : string;
+  end;
+
+function GetText: string;
+var
+    obj: TMyObj;
+begin
+    obj := TMyObj.Create;
+    obj.Id := 1;
+    obj.Name := 'MVCXE';
+    Result := JsonSerializer.Serialize&lt;TMyObj&gt;(obj);
+end;
+</code></pre>
+<h3 id="如何使用-反序列化字符串">反序列化字符串</h3>
+<pre><code>function GetObject: TMyObj;
+var
+    json: string;
+begin
+    json := '{&quot;Id&quot;:1,&quot;Name&quot;:&quot;MVCXE&quot;}';
+    Result := JsonSerializer.Deserialize&lt;TMyObj&gt;(json);
+end;
+</code></pre>
+<h3 id="如何使用-自定义序列化属性名">自定义序列化属性名</h3>
+<blockquote>
+<p>使用<code>[AliasName('AliasNameString')]</code>注解</p>
+</blockquote>
+<pre><code>type
+  TMyObj = class
+  published
+    property Id: Integer;
+    [AliasName('MyName')]
+    property Name : string;
+  end;
+</code></pre>
+<p>TMyObj序列化后的字符串是<code>{&quot;Id&quot;:value,&quot;MyName&quot;:value}</code></p>
+<h3 id="如何使用-时间格式化">时间格式化</h3>
+<blockquote>
+<p>使用<code>[UTC]</code>注解</p>
+</blockquote>
+<pre><code>type
+  TMyObj = class
+  published
+    property Id: Integer;
+    property Name : string;
+    [UTC]
+    property birthday: TDateTime;
+  end;
+</code></pre>
+<p>TMyObj序列化后birthday的值是UTC时间</p>
+<h3 id="如何使用-自定义输入输出格式">自定义输入输出格式</h3>
+<blockquote>
+<p>使用<code>[CustomJsonNode(function name, function paramstr)]</code>注解</p>
+</blockquote>
+<pre><code>type
+  TMyObj = class
+  published
+    property Id: Integer;
+    property Name : string;
+    [CustomJsonNode('DateTimeToStr', 'yyyy-MM-dd&quot;T&quot;HH:mm:ss')]
+    property birthday: TDateTime;
+    [CustomJsonNode('UnixTimeToStr', 'yyyy-MM-dd HH:mm:ss')]
+    property createtime: Int64;
+    [CustomJsonNode('StrToJson', '')]
+    property content: TJsonValue
+  end;
+</code></pre>
+<p>当前实现了：DateTimeToStr、UnixTimeToStr、StrToJson三个自定义输入输出格式</p>
+<h3 id="如何使用-空值不输出">空值不输出</h3>
+<blockquote>
+<p>使用<code>[nullable]</code>注解</p>
+</blockquote>
+<h3 id="如何使用-datatable、dataset-等序列化问题">DataTable、DataSet 等序列化问题</h3>
+<p>不支持复杂类型，如 DataTable、DataSet 等类型</p>
+<h2 id="范例">范例</h2>
+<p>我们要从appsettiong.json中读取log的配置信息，我们需要为这个json结构定对应的类结构，这样他们之间才可以正确序列化和反序列化</p>
+<pre><code>{
+    &quot;logxe&quot;: {
+        &quot;autoReload&quot;: &quot;&quot;,
+        &quot;throwExceptions&quot;: &quot;&quot;,
+        &quot;internalLogLevel&quot;: &quot;&quot;,
+        &quot;internalLogFile&quot;: &quot;&quot;,
+        &quot;variable&quot;: [],
+        &quot;target&quot;: [{
+            &quot;name&quot;: &quot;console&quot;,
+            &quot;type&quot;: &quot;ColoredConsole&quot;,
+            &quot;layout&quot;: &quot;%0:s [TID %1:-8d][%2:-10s] %3:s [%4:s]&quot;
+            },{
+            &quot;name&quot;: &quot;logfile&quot;,
+            &quot;type&quot;: &quot;File&quot;,
+            &quot;layout&quot;: &quot;%0:s [TID %1:10u][%2:-8s] %3:s [%4:s]&quot;,
+            &quot;maxFileCount&quot;: 5,
+            &quot;maxFileSize&quot;: 1000,
+            &quot;logsFolder&quot;: &quot;&quot;,
+            &quot;logFileName&quot;: &quot;logs\\%s.%2.2d.%s_info.log&quot;
+        }],
+        &quot;rule&quot;: [{
+            &quot;name&quot;: &quot;*&quot;,
+            &quot;minlevel&quot;: &quot;Trace&quot;,
+            &quot;writeTo&quot;: &quot;console&quot;
+            },{
+            &quot;name&quot;: &quot;*&quot;,
+            &quot;minlevel&quot;: &quot;Info&quot;,
+            &quot;writeTo&quot;: &quot;logfile&quot;
+        }]	
+    }
+}
+</code></pre>
+<p><strong>对应的类</strong></p>
+<pre><code>TMVCXEConfigLogerRef = class
+published
+    property ref: string;
+end;
+
+TMVCXEConfigLogParam = class
+published
+    property Value: string;
+end;
+
+TMVCXEConfigLoger = class
+published
+    property name: string;
+    property level: TMVCXEConfigLogParam;
+    [AliasName('appender-ref')]
+    property appenders: TArray&lt;TMVCXEConfigLogerRef&gt;;
+end;
+
+TMVCXEConfigLogAppenderFilter = class
+published
+    [AliasName('type')]
+    property _type: string;
+    [AliasName('levelToMatch')]
+    property MatchLevels: TArray&lt;TMVCXEConfigLogParam&gt;;
+end;
+
+TMVCXEConfigLogAppenderLayout = class
+published
+    [AliasName('type')]
+    property _type: string;
+    property conversionPattern: TMVCXEConfigLogParam;
+end;
+
+TMVCXEConfigLogAppender = class
+published
+    property name: string;
+    [AliasName('type')]
+    property _type: string;
+    [AliasName('filter')]
+    property filters: TArray&lt;TMVCXEConfigLogAppenderFilter&gt;s;
+    property layout: TMVCXEConfigLogAppenderLayout;
+    [AliasName('file')]
+    property _file: TMVCXEConfigLogParam;
+    property maximumFileSize: TMVCXEConfigLogParam;
+    property staticLogFileName: TMVCXEConfigLogParam;
+    property datePattern: TMVCXEConfigLogParam;
+    property maxSizeRollBackups: TMVCXEConfigLogParam;
+end;
+
+TMVCXEConfigLog = class
+published
+    property writer: string;
+    property debug: string;
+    property root: TMVCXEConfigLoger;
+    [AliasName('logger')]
+    property loggers: TArray&lt;TMVCXEConfigLoger&gt;;
+    [AliasName('appender')]
+    property appenders: TArray&lt;TMVCXEConfigLogAppender&gt;;
+end;
+
+TLoggerProConfigTargetHighlightRow = class
+published
+    property condition: string;
+    property foregroundColor: string;
+end;
+
+TLoggerProConfigTarget = class
+published
+    [AliasName('type')]
+    property _type: string;
+    property name: string;
+    property layout: string;
+
+    property maxFileCount: string;
+    property maxFileSize: string;
+    property logsFolder: string;
+    property logFileName: string;
+
+    property fileName: string;
+    property keepFileOpen: string;
+    property useDefaultRowHighlightingRules: string;
+    [AliasName('highlight-row')]
+    property highlight_row: TArray&lt;TLoggerProConfigTargetHighlightRow&gt;;
+end;
+
+TLoggerProConfigRule = class
+published
+    property name: string;
+    property minlevel: string;
+    property maxlevel: string;
+    property writeTo: string;
+    property targetIndex: Integer;
+end;
+
+TLoggerProConfigVariable = class
+published
+    property name: string;
+    property Value: string;
+end;
+
+TLoggerProConfig = class
+published
+    property autoReload: string;
+    property throwExceptions: string;
+    property internalLogLevel: string;
+    property internalLogFile: string;
+    [AliasName('variable')]
+    property variable: TArray&lt;TLoggerProConfigVariable&gt;;
+    [AliasName('target')]
+    property targets: TArray&lt;TLoggerProConfigTarget&gt;;
+    [AliasName('rule')]
+    property rules: TArray&lt;TLoggerProConfigRule&gt;;
+end;
+</code></pre>
+<blockquote>
+<p>反序列</p>
+</blockquote>
+<pre><code>JsonSerializer.Deserialize&lt;TLoggerProConfig&gt;(ConfigurationManager.Configuration.GetValue&lt;TJsonValue&gt;('logxe').ToJSON)   </code></pre>
+</div><div class="m-content-container m-paging"><div class="m-paging-prev m-paging-item"><a href="logging.html" class="href"><span class="ui-font-ydoc"></span>日志记录</a></div><div class="m-paging-next m-paging-item"><a href="specification-document.html" class="href">Swagger<span class="ui-font-ydoc"></span></a></div></div></div></div></div><div></div><script>
+    var $content = document.getElementById('js-content');
+    var $summaryItems = Array.prototype.slice.call(document.querySelectorAll('#js-menu .href'));
+    var $menu = document.getElementById('js-menu');
+    if ($menu && sessionStorage.menuScrollTop) {
+		$menu.scrollTop = sessionStorage.menuScrollTop;
+    }
+    // 刷新页面但不切换 pathname 的时候，内容区恢复到记忆的高度
+    if ($content && sessionStorage.contentScrollTop && window.location.pathname == sessionStorage.locationPathname) {
+      $content.scrollTop = sessionStorage.contentScrollTop;
+    }
+    sessionStorage.setItem('locationPathname', window.location.pathname);</script><script src="..\ydoc\scripts\plugins\dollar.min.js"></script><script src="..\ydoc\scripts\plugins\responsive-nav.min.js"></script><script src="..\ydoc\scripts\plugins\slideout.min.js"></script><script src="..\ydoc\scripts\app.js"></script><script src="..\ydoc\ydoc-plugin-search\core.js"></script><script src="..\ydoc\ydoc-plugin-search\search.js"></script><script src="..\search_json.js"></script></body></html>
