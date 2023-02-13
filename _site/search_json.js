@@ -285,9 +285,79 @@ window.ydoc_plugin_search_json = {
           "content": "注册服务使用之前需在Webborker服务中注册MVC：    app.UseMvc;"
         },
         {
-          "title": "使用方式",
-          "url": "\\docs\\view-engine.html#使用方式",
-          "content": "使用方式"
+          "title": "在Controller中使用",
+          "url": "\\docs\\view-engine.html#在controller中使用",
+          "content": "在Controller中使用type  TMvcController = class(TController)\n  public\n    function Index: string;\n  end;\nimplementation\nfunction TMvcController.Index: string;\nbegin\n  Result := View;\nend;\nView方法会自动查找默认的模板文件解析后返回内容。"
+        },
+        {
+          "title": "默认的模板文件存放规则",
+          "url": "\\docs\\view-engine.html#在controller中使用-默认的模板文件存放规则",
+          "content": "默认的模板文件存放规则默认存放目录：.\\views\\[ControllerName]\n如果在launchSettings.json中配置了bpl的Area值，存放目录为:.\\areas\\[AreaName]\\views\\[ControllerName]\n默认模板文件名：[ActionName].htm\n上面的例子，模板文件是：.\\views\\Mvc\\Index.htm\nView可以传入参数模板文件名，如Result := View('Mvc\\Index.htm')，相对路径于.\\views\\或.\\areas\\[AreaName]\\views\\\n"
+        },
+        {
+          "title": "Layout",
+          "url": "\\docs\\view-engine.html#在controller中使用-layout",
+          "content": "Layout如果模板中没有指定Layout，且存在相对路径于.\\views\\或.\\areas\\[AreaName]\\views\\下有Shared\\_Layout.htm文件，会先解析Layout模板，然后将Action模板解析得到的内容替换到Layout模板中的{RenderBody}标签中。默认Layout文件不存在就不使用Layout\n使用{^ 'Shared\\DocLayout.htm'}指定模板\n使用{^ 'null'}指定不使用模板\nLayout模板中用{RenderJS}引用Action模板同名.js文件，例如上面例子，{RenderBody}是.\\views\\Mvc\\Index.htm解析的内容，{RenderJS}是.\\views\\Mvc\\Index.js解析的内容\n"
+        },
+        {
+          "title": "HttpStatusCode模板",
+          "url": "\\docs\\view-engine.html#在controller中使用-httpstatuscode模板",
+          "content": "HttpStatusCode模板如果控制器发生错误，被系统捕获，MVCXE框架会根据Response.StatusCode查找模板，相对路径于.\\views\\或.\\areas\\[AreaName]\\views\\下的[HttpStatusCode].htm文件，当前只处理403/404/500"
+        },
+        {
+          "title": "向模板注入内容",
+          "url": "\\docs\\view-engine.html#向模板注入内容",
+          "content": "向模板注入内容用模板很大的需求就是动态显示内容，这些内容是由代码中产生的常量、变量、对象按照一定的规则生成Html代码，所以，我们需要向模板注入运行中产生的常量、变量、对象。\n在Action方法函数中，用ViewBag.Add('[模板中用的变量名]', 应用中的变量名);\n  type\n    TUserController = class(BaseController)\n    public\n          function index([IOC('Fly.Service.Post.TPostService')]PostService: IPostService; CurrentPage: Integer): string;\n    end;\n  implementation\n  function TUserController.index([IOC('Fly.Service.Post.TPostService')]PostService: IPostService; CurrentPage: Integer): string;\n  var\n    posts: TArray;\n    TotalCount, PageCount: Integer;\n  begin\n    if not IsLogin then\n    begin\n          Response.StatusCode := 404;\n          Response.Abort;\n          Exit;\n    end;\n    if CurrentPage = 0 then\n          CurrentPage := 1;\n    posts := PostService.GetMyPosts(CurrentUserId, CurrentPage, PageSize, TotalCount, PageCount);\n    ViewBag.Add('Posts', posts);\n    ViewBag.Add('TotalCount', TotalCount);\n    ViewBag.Add('CurrentPage', CurrentPage);\n    ViewBag.Add('PageCount', PageCount);\n    ViewBag.Add('IsLogin', IsLogin);\n    ViewBag.Add('CurrentAccount', CurrentAccount);\n    ViewBag.Add('Action', RouteData['Action']);\n    Result := View;\n  end;\n\n\n\n在模板中用{var [模板中用的变量名]:[变量类型]}自定义。\n  {var abc:string}\n  {var i1:Integer}\n  {var tool:uTestService.TTools}\n  {var op:MVCXE.OperatorHelper.TOperatorHelper}\n  {var cache:MVCXE.MemoryCache.TMemoryCache}\n\n\n\n在模板中赋值用{let [模板中用的变量名]=[变量值]}\n  {var tool:uTestService.TTools}\n  {var op:MVCXE.OperatorHelper.TOperatorHelper}\n  {var abc:string}\n  {let abc=$op.Concat($tool.exec(),'abcdefg')}\n  {var i1:Integer}\n  {var i2:Integer}\n  {let i1=10}\n  {let i2=20}\n\n\n"
+        },
+        {
+          "title": "输出内容",
+          "url": "\\docs\\view-engine.html#输出内容",
+          "content": "输出内容"
+        },
+        {
+          "title": "输出值",
+          "url": "\\docs\\view-engine.html#输出内容-输出值",
+          "content": "输出值语法：{= $简单变量} 或 {= $对象变量.属性} 或 {= $对象变量.方法(参数)}\n描述：将服务器端的变量值或对象属性值在页面中输出\n    //输出Delphi代码在MVC Controller中注入的字符串变量    {= $username}\n    //输出Delphi代码在MVC Controller中注入对象的属性\n    {= $view.age}\n    //输出在模板中声明的对象实例里的函数结果\n    {= $tool.exec()}\n    //声明一个字符串变量\n    {var abc:string}\n    //字符串相加\n    {let abc=$op.Concat($tool.exec(),'abcdefg')}\n    //输出字符串的值\n    {= $abc}\n    //声明整型变量\n    {var i1:Integer}\n    {var i2:Integer}\n    //为整型变量赋值\n    {let i1=10}\n    {let i2=20}\n    //输出两个整数相加的结果\n    {= $op.IntPlus($i1,$i2)}\n"
+        },
+        {
+          "title": "输出带模板语法字符串解析后的值",
+          "url": "\\docs\\view-engine.html#输出内容-输出带模板语法字符串解析后的值",
+          "content": "输出带模板语法字符串解析后的值语法：{& $简单变量(字符串类型)} 或 {& $对象变量.属性(字符串类型)} 或 {& $对象变量.方法(参数)(返回字符串类型)}\n描述：将服务器端的变量值或对象属性值(这值是字符串类型，里面包含有模板语法)解析后在页面中输出\n    ViewBag.Add('content', '{if ($IsLogin)}Logout{end}');\n    //如果登陆了输出Logout，如果没有登陆为空\n    {& $content}\n"
+        },
+        {
+          "title": "输出字符串HtmlEncode后的值",
+          "url": "\\docs\\view-engine.html#输出内容-输出字符串htmlencode后的值",
+          "content": "输出字符串HtmlEncode后的值语法：{# $简单变量(字符串类型)} 或 {# $对象变量.属性(字符串类型)} 或 {# $对象变量.方法(参数)(返回字符串类型)}\n描述：将服务器端的变量值或对象属性值(这值是字符串类型，里面包含有模板语法)解析后在页面中输出\n    ViewBag.Add('content', 'Home');\n    //输出字符串Home，而不是链接Home\n    {# $content}\n"
+        },
+        {
+          "title": "输出Url，",
+          "url": "\\docs\\view-engine.html#输出内容-输出url，",
+          "content": "输出Url，语法：{~ '/urlpath'} 或 {~ $简单变量} 或 {~ $对象变量.属性} 或 {~ $对象变量.方法(参数)}\n描述：输出的url可自动加上[RootPath]\n    var    loginpage: string;\n    begin\n    loginpage = '/account/login';\n    ViewBag.Add('loginpage', loginpage);\n    end;\n\n    Login\n    Login\n"
+        },
+        {
+          "title": "循环",
+          "url": "\\docs\\view-engine.html#输出内容-循环",
+          "content": "循环语法：\n    {for (循环变量 in $循环对象.属性)}      循环区块的内容\n    {end}\n描述：按服务器端的数组类型变量顺序循环一遍\n循环值:$循环变量.index表示当前循环序号，由0开始。\n支持{break}\n$循环变量.value表示循环值，可以是一个简单变量，也可以是一个对象\n    posts := PostService.GetMyPosts(CurrentUserId, CurrentPage, PageSize, TotalCount, PageCount);    ViewBag.Add('Posts', posts);\n\n     \n    {for (Post in $Posts)}\n        \n            \n              \n            \n            \n              分享\n              {= $op.HtmlEncode($Post.Value.Title)}\n            \n        \n    {end}\n    \n"
+        },
+        {
+          "title": "条件判断",
+          "url": "\\docs\\view-engine.html#输出内容-条件判断",
+          "content": "条件判断语法：\n    {if (条件表达式)}      条件表达式为真时输出这块内容\n    {else}\n      条件表达式为假时输出这块内容\n    {end}\n描述：条件表达式支持=  = \n    {if ($IsLogin)}    \n            {if ($op.Logical_or($CurrentAccount.IsAdmin, ($Post.UserId = $CurrentAccount.Id)))}\n            删除\n            {end}\n            {if ($CurrentAccount.IsAdmin)}\n                    {if ($Post.IsTop = False)}\n                            置顶\n                    {else}\t\t\t\n                            取消置顶\n                    {end}\n                    {if ($Post.IsBoutique = False)}\n                            加精\n                    {else}\n                            取消加精\n                    {end}\n            {end}\n    \n    {end}\n"
+        },
+        {
+          "title": "Section代码块",
+          "url": "\\docs\\view-engine.html#section代码块",
+          "content": "Section代码块定义Section代码块\n    {@SectionName}      该Section代码块的内容\n    {end}\n引用Section代码块\n    {= @SectionName}描述：将某些多次用到的公用代码编写成代码块，在循环或条件判断中使用可以让模板代码简洁直观\n    {@TestSection}      刚刚\n    {end}\n     \n    {for (Post in $Posts)}\n        \n            \n              \n            \n            \n              分享\n              {= $op.HtmlEncode($Post.Value.Title)}\n            \n            \n              \n                    {= $Post.Value.User.Nickname}\n                    {if ($Post.Value.User.IsVip = True)}\n                            \n                            VIP{= $Post.Value.User.VipLevel}\n                    {end}\n              \n              {= @TestSection}\n            \n        \n    {end}\n    \n"
+        },
+        {
+          "title": "嵌入子模板",
+          "url": "\\docs\\view-engine.html#section代码块-嵌入子模板",
+          "content": "嵌入子模板语法：{! '子模板' }\n描述：子模板在.\\views\\或.\\areas\\[AreaName]\\views\\下按路径文件名匹配\n          \n            {! 'Config\\site.htm' }\n      \n      \n            {! 'Config\\logo.htm' }\n      \n      \n            {! 'Config\\upload.htm' }\n      \n    \n"
+        },
+        {
+          "title": "强制不解析",
+          "url": "\\docs\\view-engine.html#section代码块-强制不解析",
+          "content": "强制不解析语法：{}\n描述：内容原样输出，忽略上面的模板控制代码\n"
         }
       ]
     },

@@ -19,16 +19,313 @@
 <p>使用之前需在<code>Webborker</code>服务中注册MVC：</p>
 <pre><code>    app.UseMvc;
 </code></pre>
-<h2 id="使用方式">使用方式</h2>
+<h2 id="在controller中使用">在Controller中使用</h2>
+<pre><code>type
+  TMvcController = class(TController)
+  public
+    function Index: string;
+  end;
+implementation
+function TMvcController.Index: string;
+begin
+  Result := View;
+end;
+</code></pre>
+<p>View方法会自动查找默认的模板文件解析后返回内容。</p>
+<h3 id="在controller中使用-默认的模板文件存放规则">默认的模板文件存放规则</h3>
+<ul>
+<li>默认存放目录：<code>.\views\[ControllerName]</code></li>
+<li>如果在<code>launchSettings.json</code>中配置了bpl的Area值，存放目录为:<code>.\areas\[AreaName]\views\[ControllerName]</code></li>
+<li>默认模板文件名：<code>[ActionName].htm</code></li>
+<li>上面的例子，模板文件是：<code>.\views\Mvc\Index.htm</code></li>
+<li>View可以传入参数模板文件名，如<code>Result := View('Mvc\Index.htm')</code>，相对路径于<code>.\views\或.\areas\[AreaName]\views\</code></li>
+</ul>
+<h3 id="在controller中使用-layout">Layout</h3>
+<p>如果模板中没有指定Layout，且存在相对路径于<code>.\views\或.\areas\[AreaName]\views\</code>下有<code>Shared\_Layout.htm</code>文件，会先解析Layout模板，然后将Action模板解析得到的内容替换到Layout模板中的{RenderBody}标签中。</p>
+<ul>
+<li>默认Layout文件不存在就不使用Layout</li>
+<li>使用{^ 'Shared\DocLayout.htm'}指定模板</li>
+<li>使用{^ 'null'}指定不使用模板</li>
+<li>Layout模板中用{RenderJS}引用Action模板同名.js文件，例如上面例子，{RenderBody}是<code>.\views\Mvc\Index.htm</code>解析的内容，{RenderJS}是<code>.\views\Mvc\Index.js</code>解析的内容</li>
+</ul>
+<h3 id="在controller中使用-httpstatuscode模板">HttpStatusCode模板</h3>
+<p>如果控制器发生错误，被系统捕获，<code>MVCXE</code>框架会根据Response.StatusCode查找模板，相对路径于<code>.\views\或.\areas\[AreaName]\views\</code>下的<code>[HttpStatusCode].htm</code>文件，当前只处理403/404/500</p>
+<h2 id="向模板注入内容">向模板注入内容</h2>
+<p>用模板很大的需求就是动态显示内容，这些内容是由代码中产生的常量、变量、对象按照一定的规则生成Html代码，所以，我们需要向模板注入运行中产生的常量、变量、对象。</p>
+<ul>
+<li>
+<p>在Action方法函数中，用ViewBag.Add('[模板中用的变量名]', 应用中的变量名);</p>
+<pre><code>  type
+    TUserController = class(BaseController)
+    public
+          function index([IOC('Fly.Service.Post.TPostService')]PostService: IPostService; CurrentPage: Integer): string;
+    end;
+  implementation
+  function TUserController.index([IOC('Fly.Service.Post.TPostService')]PostService: IPostService; CurrentPage: Integer): string;
+  var
+    posts: TArray&lt;TPosts&gt;;
+    TotalCount, PageCount: Integer;
+  begin
+    if not IsLogin then
+    begin
+          Response.StatusCode := 404;
+          Response.Abort;
+          Exit;
+    end;
+    if CurrentPage = 0 then
+          CurrentPage := 1;
+    posts := PostService.GetMyPosts(CurrentUserId, CurrentPage, PageSize, TotalCount, PageCount);
+    ViewBag.Add('Posts', posts);
+    ViewBag.Add('TotalCount', TotalCount);
+    ViewBag.Add('CurrentPage', CurrentPage);
+    ViewBag.Add('PageCount', PageCount);
+    ViewBag.Add('IsLogin', IsLogin);
+    ViewBag.Add('CurrentAccount', CurrentAccount);
+    ViewBag.Add('Action', RouteData['Action']);
+    Result := View;
+  end;
+</code></pre>
+</li>
+<li>
+<p>在模板中用{var [模板中用的变量名]:[变量类型]}自定义。</p>
+<pre><code>  {var abc:string}
+  {var i1:Integer}
+  {var tool:uTestService.TTools}
+  {var op:MVCXE.OperatorHelper.TOperatorHelper}
+  {var cache:MVCXE.MemoryCache.TMemoryCache}
+</code></pre>
+</li>
+<li>
+<p>在模板中赋值用{let [模板中用的变量名]=[变量值]}</p>
+<pre><code>  {var tool:uTestService.TTools}
+  {var op:MVCXE.OperatorHelper.TOperatorHelper}
+  {var abc:string}
+  {let abc=$op.Concat($tool.exec(),'abcdefg')}
+  {var i1:Integer}
+  {var i2:Integer}
+  {let i1=10}
+  {let i2=20}
+</code></pre>
+</li>
+</ul>
+<h2 id="输出内容">输出内容</h2>
+<h3 id="输出内容-输出值">输出值</h3>
+<blockquote>
+<p>语法：{= $简单变量} 或 {= $对象变量.属性} 或 {= $对象变量.方法(参数)}<br>
+描述：将服务器端的变量值或对象属性值在页面中输出</p>
+</blockquote>
+<pre><code>    //输出Delphi代码在MVC Controller中注入的字符串变量&lt;br/&gt;
+    {= $username}&lt;br/&gt;
+    //输出Delphi代码在MVC Controller中注入对象的属性&lt;br/&gt;
+    {= $view.age}&lt;br/&gt;
+    //输出在模板中声明的对象实例里的函数结果&lt;br/&gt;
+    {= $tool.exec()}&lt;br/&gt;
+    //声明一个字符串变量&lt;br/&gt;
+    {var abc:string}
+    //字符串相加&lt;br/&gt;
+    {let abc=$op.Concat($tool.exec(),'abcdefg')}
+    //输出字符串的值&lt;br/&gt;
+    {= $abc}&lt;br/&gt;
+    //声明整型变量&lt;br/&gt;
+    {var i1:Integer}
+    {var i2:Integer}
+    //为整型变量赋值&lt;br/&gt;
+    {let i1=10}
+    {let i2=20}
+    //输出两个整数相加的结果&lt;br/&gt;
+    {= $op.IntPlus($i1,$i2)}&lt;br/&gt;
+</code></pre>
+<h3 id="输出内容-输出带模板语法字符串解析后的值">输出带模板语法字符串解析后的值</h3>
+<blockquote>
+<p>语法：{&amp; $简单变量(字符串类型)} 或 {&amp; $对象变量.属性(字符串类型)} 或 {&amp; $对象变量.方法(参数)(返回字符串类型)}<br>
+描述：将服务器端的变量值或对象属性值(这值是字符串类型，里面包含有模板语法)解析后在页面中输出</p>
+</blockquote>
+<pre><code>    ViewBag.Add('content', '{if ($IsLogin)}Logout{end}');
+
+    //如果登陆了输出Logout，如果没有登陆为空
+    {&amp; $content}
+</code></pre>
+<h3 id="输出内容-输出字符串htmlencode后的值">输出字符串HtmlEncode后的值</h3>
+<blockquote>
+<p>语法：{# $简单变量(字符串类型)} 或 {# $对象变量.属性(字符串类型)} 或 {# $对象变量.方法(参数)(返回字符串类型)}<br>
+描述：将服务器端的变量值或对象属性值(这值是字符串类型，里面包含有模板语法)解析后在页面中输出</p>
+</blockquote>
+<pre><code>    ViewBag.Add('content', '&lt;a href=&quot;/&quot;&gt;Home&lt;/a&gt;');
+
+    //输出字符串&lt;a href=&quot;/&quot;&gt;Home&lt;/a&gt;，而不是链接Home
+    {# $content}
+</code></pre>
+<h3 id="输出内容-输出url，">输出Url，</h3>
+<blockquote>
+<p>语法：{~ '/urlpath'} 或 {~ $简单变量} 或 {~ $对象变量.属性} 或 {~ $对象变量.方法(参数)}<br>
+描述：输出的url可自动加上[RootPath]</p>
+</blockquote>
+<pre><code>    var
+    loginpage: string;
+    begin
+    loginpage = '/account/login';
+    ViewBag.Add('loginpage', loginpage);
+    end;
+
+    &lt;a href=&quot;{~ $loginpage}&quot;&gt;Login&lt;/a&gt;
+    &lt;a href=&quot;{~ '/account/login'}&quot;&gt;Login&lt;/a&gt;
+</code></pre>
+<h3 id="输出内容-循环">循环</h3>
+<blockquote>
+<p>语法：</p>
+</blockquote>
+<pre><code>    {for (循环变量 in $循环对象.属性)}
+      循环区块的内容
+    {end}
+</code></pre>
+<blockquote>
+<p>描述：按服务器端的数组类型变量顺序循环一遍<br>
+循环值:$循环变量.index表示当前循环序号，由0开始。<br>
+支持{break}
+$循环变量.value表示循环值，可以是一个简单变量，也可以是一个对象</p>
+</blockquote>
+<pre><code>    posts := PostService.GetMyPosts(CurrentUserId, CurrentPage, PageSize, TotalCount, PageCount);
+    ViewBag.Add('Posts', posts);
+
+    &lt;ul class=&quot;fly-list&quot;&gt; 
+    {for (Post in $Posts)}
+        &lt;li&gt;
+            &lt;a href=&quot;{~ '/account/user/'}{= $Post.Value.User.Id}&quot; class=&quot;fly-avatar&quot;&gt;
+              &lt;img src=&quot;{~ $Post.Value.User.HeadPortrait}&quot; alt=&quot;{= $Post.Value.User.Nickname}&quot;&gt;
+            &lt;/a&gt;
+            &lt;h2&gt;
+              &lt;a class=&quot;layui-badge&quot;&gt;分享&lt;/a&gt;
+              &lt;a href=&quot;{~ '/post/detail/'}{= $Post.Value.Id}&quot;&gt;{= $op.HtmlEncode($Post.Value.Title)}&lt;/a&gt;
+            &lt;/h2&gt;
+        &lt;/li&gt;
+    {end}
+    &lt;/ul&gt;
+</code></pre>
+<h3 id="输出内容-条件判断">条件判断</h3>
+<blockquote>
+<p>语法：</p>
+</blockquote>
+<pre><code>    {if (条件表达式)}
+      条件表达式为真时输出这块内容
+    {else}
+      条件表达式为假时输出这块内容
+    {end}
+</code></pre>
+<blockquote>
+<p>描述：条件表达式支持= &lt; &gt; &lt;= &gt;= &lt;&gt;</p>
+</blockquote>
+<pre><code>    {if ($IsLogin)}
+    &lt;div class=&quot;fly-admin-box&quot; data-id=&quot;{= $Post.Id}&quot;&gt;
+            {if ($op.Logical_or($CurrentAccount.IsAdmin, ($Post.UserId = $CurrentAccount.Id)))}
+            &lt;span class=&quot;layui-btn layui-btn-xs jie-admin&quot; type=&quot;del&quot;&gt;删除&lt;/span&gt;
+            {end}
+            {if ($CurrentAccount.IsAdmin)}
+                    {if ($Post.IsTop = False)}
+                            &lt;span class=&quot;layui-btn layui-btn-xs jie-admin&quot; type=&quot;set&quot; field=&quot;stick&quot; rank=&quot;1&quot;&gt;置顶&lt;/span&gt;
+                    {else}			
+                            &lt;span class=&quot;layui-btn layui-btn-xs jie-admin&quot; type=&quot;set&quot; field=&quot;stick&quot; rank=&quot;0&quot; style=&quot;background-color:#ccc;&quot;&gt;取消置顶&lt;/span&gt;
+                    {end}
+                    {if ($Post.IsBoutique = False)}
+                            &lt;span class=&quot;layui-btn layui-btn-xs jie-admin&quot; type=&quot;set&quot; field=&quot;status&quot; rank=&quot;1&quot;&gt;加精&lt;/span&gt;
+                    {else}
+                            &lt;span class=&quot;layui-btn layui-btn-xs jie-admin&quot; type=&quot;set&quot; field=&quot;status&quot; rank=&quot;0&quot; style=&quot;background-color:#ccc;&quot;&gt;取消加精&lt;/span&gt;
+                    {end}
+            {end}
+    &lt;/div&gt;
+    {end}
+</code></pre>
+<h2 id="section代码块">Section代码块</h2>
+<blockquote>
+<p>定义Section代码块</p>
+</blockquote>
+<pre><code>    {@SectionName}
+      该Section代码块的内容
+    {end}
+</code></pre>
+<blockquote>
+<p>引用Section代码块</p>
+</blockquote>
+<pre><code>    {= @SectionName}
+</code></pre>
+<blockquote>
+<p>描述：将某些多次用到的公用代码编写成代码块，在循环或条件判断中使用可以让模板代码简洁直观</p>
+</blockquote>
+<pre><code>    {@TestSection}
+      &lt;span&gt;刚刚&lt;/span&gt;
+    {end}
+    &lt;ul class=&quot;fly-list&quot;&gt; 
+    {for (Post in $Posts)}
+        &lt;li&gt;
+            &lt;a href=&quot;{~ '/account/user/'}{= $Post.Value.User.Id}&quot; class=&quot;fly-avatar&quot;&gt;
+              &lt;img src=&quot;{~ $Post.Value.User.HeadPortrait}&quot; alt=&quot;{= $Post.Value.User.Nickname}&quot;&gt;
+            &lt;/a&gt;
+            &lt;h2&gt;
+              &lt;a class=&quot;layui-badge&quot;&gt;分享&lt;/a&gt;
+              &lt;a href=&quot;{~ '/post/detail/'}{= $Post.Value.Id}&quot;&gt;{= $op.HtmlEncode($Post.Value.Title)}&lt;/a&gt;
+            &lt;/h2&gt;
+            &lt;div class=&quot;fly-list-info&quot;&gt;
+              &lt;a href=&quot;{~ '/account/user/'}{= $Post.Value.User.Id}&quot; link&gt;
+                    &lt;cite&gt;{= $Post.Value.User.Nickname}&lt;/cite&gt;
+                    {if ($Post.Value.User.IsVip = True)}
+                            &lt;i class=&quot;iconfont icon-renzheng&quot; title=&quot;认证信息：{= $Post.Value.User.Title}&quot;&gt;&lt;/i&gt;
+                            &lt;i class=&quot;layui-badge fly-badge-vip&quot;&gt;VIP{= $Post.Value.User.VipLevel}&lt;/i&gt;
+                    {end}
+              &lt;/a&gt;
+              {= @TestSection}
+            &lt;/div&gt;
+        &lt;/li&gt;
+    {end}
+    &lt;/ul&gt;
+</code></pre>
+<h3 id="section代码块-嵌入子模板">嵌入子模板</h3>
+<blockquote>
+<p>语法：{! '子模板' }
+描述：子模板在<code>.\views\或.\areas\[AreaName]\views\</code>下按路径文件名匹配</p>
+</blockquote>
+<pre><code>    &lt;div class=&quot;layui-tab-content&quot;&gt;
+      &lt;div class=&quot;layui-tab-item layui-show&quot;&gt;
+            {! 'Config\site.htm' }
+      &lt;/div&gt;
+      &lt;div class=&quot;layui-tab-item&quot;&gt;
+            {! 'Config\logo.htm' }
+      &lt;/div&gt;
+      &lt;div class=&quot;layui-tab-item&quot;&gt;
+            {! 'Config\upload.htm' }
+      &lt;/div&gt;
+    &lt;/div&gt;
+</code></pre>
+<h3 id="section代码块-强制不解析">强制不解析</h3>
+<blockquote>
+<p>语法：{&lt; 这里面的内容会原样输出，忽略上面的模板控制代码 &gt;}<br>
+描述：内容原样输出，忽略上面的模板控制代码</p>
+</blockquote>
 </div><div class="m-content-container m-paging"><div class="m-paging-prev m-paging-item"><a href="cors.html" class="href"><span class="ui-font-ydoc"></span>CORS 跨域</a></div><div class="m-paging-next m-paging-item"><a href="specification-document.html" class="href">Swagger<span class="ui-font-ydoc"></span></a></div></div></div></div></div><div></div><script>
     var $content = document.getElementById('js-content');
     var $summaryItems = Array.prototype.slice.call(document.querySelectorAll('#js-menu .href'));
     var $menu = document.getElementById('js-menu');
+    if (sessionStorage.prevPathname) {
+      sessionStorage.setItem('prevPrevPathname', sessionStorage.prevPathname);
+      sessionStorage.setItem('prevPrevMenuScrollTop', sessionStorage.prevMenuScrollTop);
+      sessionStorage.setItem('prevPrevContentScrollTop', sessionStorage.prevContentScrollTop);
+    }
+    if (sessionStorage.locationPathname) {
+      sessionStorage.setItem('prevPathname', sessionStorage.locationPathname);
+      sessionStorage.setItem('prevMenuScrollTop', sessionStorage.menuScrollTop);
+      sessionStorage.setItem('prevContentScrollTop', sessionStorage.contentScrollTop);
+    }
     if ($menu && sessionStorage.menuScrollTop) {
-		$menu.scrollTop = sessionStorage.menuScrollTop;
+		  $menu.scrollTop = sessionStorage.menuScrollTop;
     }
     // 刷新页面但不切换 pathname 的时候，内容区恢复到记忆的高度
     if ($content && sessionStorage.contentScrollTop && window.location.pathname == sessionStorage.locationPathname) {
       $content.scrollTop = sessionStorage.contentScrollTop;
+    } else if (sessionStorage.prevPrevPathname && sessionStorage.prevPrevPathname === window.location.pathname) {
+      if ($menu && sessionStorage.prevPrevMenuScrollTop) {
+        $menu.scrollTop = sessionStorage.prevPrevMenuScrollTop;
+      }
+      if ($content && sessionStorage.prevPrevContentScrollTop) {
+        $content.scrollTop = sessionStorage.prevPrevContentScrollTop;
+      }
     }
-    sessionStorage.setItem('locationPathname', window.location.pathname);</script><script src="..\ydoc\scripts\plugins\dollar.min.js"></script><script src="..\ydoc\scripts\plugins\responsive-nav.min.js"></script><script src="..\ydoc\scripts\plugins\slideout.min.js"></script><script src="..\ydoc\scripts\app.js"></script><script src="..\ydoc\ydoc-plugin-search\core.js"></script><script src="..\ydoc\ydoc-plugin-search\search.js"></script><script src="..\search_json.js"></script></body></html>
+    sessionStorage.setItem('locationPathname', window.location.pathname);
+    </script><script src="..\ydoc\scripts\plugins\dollar.min.js"></script><script src="..\ydoc\scripts\plugins\responsive-nav.min.js"></script><script src="..\ydoc\scripts\plugins\slideout.min.js"></script><script src="..\ydoc\scripts\app.js"></script><script src="..\ydoc\ydoc-plugin-search\core.js"></script><script src="..\ydoc\ydoc-plugin-search\search.js"></script><script src="..\search_json.js"></script></body></html>
