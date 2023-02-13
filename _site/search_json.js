@@ -362,6 +362,73 @@ window.ydoc_plugin_search_json = {
       ]
     },
     {
+      "title": "日志记录",
+      "content": "",
+      "url": "\\docs\\logging.html",
+      "children": [
+        {
+          "title": "关于日志",
+          "url": "\\docs\\logging.html#关于日志",
+          "content": "关于日志通常日志指的是系统日志和程序日志。系统日志 是记录系统中硬件、软件和系统问题的信息，同时还可以监视系统中发生的事件。用户可以通过它来检查错误发生的原因，或者寻找受到攻击时攻击者留下的痕迹。系统日志包括系统日志、应用程序日志和安全日志。程序日志 是程序运行中产生的日志，通常由框架运行时或开发者提供的日志。包括请求日志，异常日志、审计日志、行为日志等。"
+        },
+        {
+          "title": "日志作用",
+          "url": "\\docs\\logging.html#日志作用",
+          "content": "日志作用在项目开发中，都不可避免的使用到日志。没有日志虽然不会影响项目的正确运行，但是没有日志的项目可以说是不完整的。日志在调试，错误或者异常定位，数据分析中的作用是不言而喻的。调试\n在项目调试时，查看栈信息可以方便地知道当前程序的运行状态，输出的日志便于记录程序在之前的运行结果。错误定位\n不要以为项目能正确跑起来就可以高枕无忧，项目在运行一段时候后，可能由于数据问题，网络问题，内存问题等出现异常。这时日志可以帮助开发或者运维人员快速定位错误位置，提出解决方案。数据分析\n大数据的兴起，使得大量的日志分析成为可能，ELK 也让日志分析门槛降低了很多。日志中蕴含了大量的用户数据，包括点击行为，兴趣偏好等，用户画像对于公司下一步的战略方向有一定指引作用。"
+        },
+        {
+          "title": "日志级别",
+          "url": "\\docs\\logging.html#日志级别",
+          "content": "日志级别日志级别可以有效的对日志信息进行归类，方便准确的查看特定日志内容。通常日志类别有以下级别：\n\n级别\n值\n方法\n描述\n\n\n\n\nTrace（跟踪）\n0\nTrace\n包含最详细的消息。 这些消息可能包含敏感的应用数据。 这些消息默认情况下处于禁用状态，并且不应在生产中启用。\n\n\nDebug（调试）\n1\nDebug\n用于调试和开发。 由于量大，请在生产中小心使用。\n\n\nInformation（信息）\n2\nInfo\n跟踪应用的常规流。 可能具有长期值。\n\n\nWarning（警告）\n3\nWarn\n对于异常事件或意外事件。 通常包括不会导致应用失败的错误或情况。\n\n\nError（错误）\n4\nError\n表示无法处理的错误和异常。 这些消息表示当前操作或请求失败，而不是整个应用失败。\n\n\nCritical（严重）\n5\nFatal\n需要立即关注的失败。 例如数据丢失、磁盘空间不足。\n\n\n"
+        },
+        {
+          "title": "如何使用",
+          "url": "\\docs\\logging.html#如何使用",
+          "content": "如何使用在MVCXE框架中，已经内置了日志组件，提供了两种日志对象创建方式。"
+        },
+        {
+          "title": "注入ILog方式",
+          "url": "\\docs\\logging.html#如何使用-注入ilog方式",
+          "content": "注入ILog方式使用非常简单，uses MVCXE.Log;，然后通过ILog对象进行注入，如：type  TIndexController = class(TController)\n  private\n    [IOC('MVCXE.Logger.TLoggerPro')]\n    logger: ILog;\n  public\n    function Index: string;\n  end;\nimplementation\nfunction TIndexController.Index: string;\nbegin\n  logger.Info('View Index Page.');\nend;\n"
+        },
+        {
+          "title": "使用BuildLoggerPro(TagName)获取ILog对象",
+          "url": "\\docs\\logging.html#如何使用-使用buildloggerprotagname获取ilog对象",
+          "content": "使用BuildLoggerPro(TagName)获取ILog对象function TIndexController.Index: string;var\n  logger: ILog;  \nbegin\n  logger := BuildLoggerPro('TIndexController');\n  logger.Info('View Index Page.');\nend;\n"
+        },
+        {
+          "title": "ILog",
+          "url": "\\docs\\logging.html#ilog",
+          "content": "ILogILog = interface    ['{53F4555E-FFB0-4806-BDFE-33D62ECB7F99}']\n    procedure Trace(const aMessage: string); overload;\n    procedure Trace(const aMessage: string;\n    const aParams: array of const); overload;\n\n    procedure Debug(const aMessage: string); overload;\n    procedure Debug(const aMessage: string;\n    const aParams: array of const); overload;\n\n    procedure Info(const aMessage: string); overload;\n    procedure Info(const aMessage: string;\n    const aParams: array of const); overload;\n\n    procedure Warn(const aMessage: string); overload;\n    procedure Warn(const aMessage: string;\n    const aParams: array of const); overload;\n\n    procedure Error(const aException: Exception); overload;\n    procedure Error(const aMessage: string;\n    const aException: Exception); overload;\n    procedure Error(const aMessage: string; const aParams: array of const;\n    const aException: Exception); overload;\n    procedure Error(const aMessage: string); overload;\n    procedure Error(const aMessage: string;\n    const aParams: array of const); overload;\n\n    procedure Fatal(const aMessage: string); overload;\n    procedure Fatal(const aMessage: string;\n    const aParams: array of const); overload;\nend;\n"
+        },
+        {
+          "title": "配置日志输出介质",
+          "url": "\\docs\\logging.html#配置日志输出介质",
+          "content": "配置日志输出介质在appsetting.json中配置，根节点是logxe{    \"logxe\": {\n        \"autoReload\": \"\",\n        \"throwExceptions\": \"\",\n        \"internalLogLevel\": \"\",\n        \"internalLogFile\": \"\",\n        \"variable\": [],\n        \"target\": [{\n            \"name\": \"console\",\n            \"type\": \"ColoredConsole\",\n            \"layout\": \"%0:s [TID %1:-8d][%2:-10s] %3:s [%4:s]\"\n            },{\n            \"name\": \"logfile\",\n            \"type\": \"File\",\n            \"layout\": \"%0:s [TID %1:10u][%2:-8s] %3:s [%4:s]\",\n            \"maxFileCount\": 5,\n            \"maxFileSize\": 1000,\n            \"logsFolder\": \"\",\n            \"logFileName\": \"logs\\\\%s.%2.2d.%s_info.log\"\n        }],\n        \"rule\": [{\n            \"name\": \"*\",\n            \"minlevel\": \"Trace\",\n            \"writeTo\": \"console\"\n            },{\n            \"name\": \"*\",\n            \"minlevel\": \"Info\",\n            \"writeTo\": \"logfile\"\n        }]\t\n    }\n}\n"
+        },
+        {
+          "title": "输出到控制台",
+          "url": "\\docs\\logging.html#配置日志输出介质-输出到控制台",
+          "content": "输出到控制台logxe\\target[n]\\type = ColoredConsole"
+        },
+        {
+          "title": "输出到文件",
+          "url": "\\docs\\logging.html#配置日志输出介质-输出到文件",
+          "content": "输出到文件logxe\\target[n]\\type = File"
+        },
+        {
+          "title": "输出过滤",
+          "url": "\\docs\\logging.html#配置日志输出介质-输出过滤",
+          "content": "输出过滤logxe\\rule[n]\\minlevel = Trace|Info|Warn|Error|Fatal当LogLevel符合minlevel的条件，就会writeTo对应的target中"
+        },
+        {
+          "title": "现在使用Logpro日志控件为底层，以后可能会重写Log引擎。",
+          "url": "\\docs\\logging.html#现在使用logpro日志控件为底层，以后可能会重写log引擎。",
+          "content": "现在使用Logpro日志控件为底层，以后可能会重写Log引擎。"
+        }
+      ]
+    },
+    {
       "title": "规范化接口文档",
       "content": "",
       "url": "\\docs\\specification-document.html",

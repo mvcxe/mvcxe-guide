@@ -18,6 +18,7 @@
 * [安全鉴权](auth-control.md)
 * [CORS 跨域](cors.md)
 * [视图引擎](view-engine.md)
+* [日志记录](logging.md)
 
 ### 规范化接口文档
 * [Swagger](specification-document.md)
