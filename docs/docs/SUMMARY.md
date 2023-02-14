@@ -20,6 +20,8 @@
 * [视图引擎](view-engine.md)
 * [日志记录](logging.md)
 * [JSON 序列化](json-serialization.md)
+* [XML 序列化](xml-serialization.md)
+* [分布式 ID 生成](idgenerator.md)
 
 ### 规范化接口文档
 * [Swagger](specification-document.md)

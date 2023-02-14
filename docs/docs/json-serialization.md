@@ -19,6 +19,8 @@ JSON (JavaScript Object Notation, JS 对象标记) 是一种轻量级的数据�
 
 ## 如何使用
 
+        uses MVCXE.Json;
+
 ### 序列化对象
 
     type

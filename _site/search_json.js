@@ -446,7 +446,7 @@ window.ydoc_plugin_search_json = {
         {
           "title": "如何使用",
           "url": "\\docs\\json-serialization.html#如何使用",
-          "content": "如何使用"
+          "content": "如何使用    uses MVCXE.Json;"
         },
         {
           "title": "序列化对象",
@@ -487,6 +487,95 @@ window.ydoc_plugin_search_json = {
           "title": "范例",
           "url": "\\docs\\json-serialization.html#范例",
           "content": "范例我们要从appsettiong.json中读取log的配置信息，我们需要为这个json结构定对应的类结构，这样他们之间才可以正确序列化和反序列化{    \"logxe\": {\n        \"autoReload\": \"\",\n        \"throwExceptions\": \"\",\n        \"internalLogLevel\": \"\",\n        \"internalLogFile\": \"\",\n        \"variable\": [],\n        \"target\": [{\n            \"name\": \"console\",\n            \"type\": \"ColoredConsole\",\n            \"layout\": \"%0:s [TID %1:-8d][%2:-10s] %3:s [%4:s]\"\n            },{\n            \"name\": \"logfile\",\n            \"type\": \"File\",\n            \"layout\": \"%0:s [TID %1:10u][%2:-8s] %3:s [%4:s]\",\n            \"maxFileCount\": 5,\n            \"maxFileSize\": 1000,\n            \"logsFolder\": \"\",\n            \"logFileName\": \"logs\\\\%s.%2.2d.%s_info.log\"\n        }],\n        \"rule\": [{\n            \"name\": \"*\",\n            \"minlevel\": \"Trace\",\n            \"writeTo\": \"console\"\n            },{\n            \"name\": \"*\",\n            \"minlevel\": \"Info\",\n            \"writeTo\": \"logfile\"\n        }]\t\n    }\n}\n对应的类TMVCXEConfigLogerRef = classpublished\n    property ref: string;\nend;\n\nTMVCXEConfigLogParam = class\npublished\n    property Value: string;\nend;\n\nTMVCXEConfigLoger = class\npublished\n    property name: string;\n    property level: TMVCXEConfigLogParam;\n    [AliasName('appender-ref')]\n    property appenders: TArray;\nend;\n\nTMVCXEConfigLogAppenderFilter = class\npublished\n    [AliasName('type')]\n    property _type: string;\n    [AliasName('levelToMatch')]\n    property MatchLevels: TArray;\nend;\n\nTMVCXEConfigLogAppenderLayout = class\npublished\n    [AliasName('type')]\n    property _type: string;\n    property conversionPattern: TMVCXEConfigLogParam;\nend;\n\nTMVCXEConfigLogAppender = class\npublished\n    property name: string;\n    [AliasName('type')]\n    property _type: string;\n    [AliasName('filter')]\n    property filters: TArrays;\n    property layout: TMVCXEConfigLogAppenderLayout;\n    [AliasName('file')]\n    property _file: TMVCXEConfigLogParam;\n    property maximumFileSize: TMVCXEConfigLogParam;\n    property staticLogFileName: TMVCXEConfigLogParam;\n    property datePattern: TMVCXEConfigLogParam;\n    property maxSizeRollBackups: TMVCXEConfigLogParam;\nend;\n\nTMVCXEConfigLog = class\npublished\n    property writer: string;\n    property debug: string;\n    property root: TMVCXEConfigLoger;\n    [AliasName('logger')]\n    property loggers: TArray;\n    [AliasName('appender')]\n    property appenders: TArray;\nend;\n\nTLoggerProConfigTargetHighlightRow = class\npublished\n    property condition: string;\n    property foregroundColor: string;\nend;\n\nTLoggerProConfigTarget = class\npublished\n    [AliasName('type')]\n    property _type: string;\n    property name: string;\n    property layout: string;\n\n    property maxFileCount: string;\n    property maxFileSize: string;\n    property logsFolder: string;\n    property logFileName: string;\n\n    property fileName: string;\n    property keepFileOpen: string;\n    property useDefaultRowHighlightingRules: string;\n    [AliasName('highlight-row')]\n    property highlight_row: TArray;\nend;\n\nTLoggerProConfigRule = class\npublished\n    property name: string;\n    property minlevel: string;\n    property maxlevel: string;\n    property writeTo: string;\n    property targetIndex: Integer;\nend;\n\nTLoggerProConfigVariable = class\npublished\n    property name: string;\n    property Value: string;\nend;\n\nTLoggerProConfig = class\npublished\n    property autoReload: string;\n    property throwExceptions: string;\n    property internalLogLevel: string;\n    property internalLogFile: string;\n    [AliasName('variable')]\n    property variable: TArray;\n    [AliasName('target')]\n    property targets: TArray;\n    [AliasName('rule')]\n    property rules: TArray;\nend;\n反序列\nJsonSerializer.Deserialize(ConfigurationManager.Configuration.GetValue('logxe').ToJSON)   "
+        }
+      ]
+    },
+    {
+      "title": "XML 序列化",
+      "content": "",
+      "url": "\\docs\\xml-serialization.html",
+      "children": [
+        {
+          "title": "什么是 XML",
+          "url": "\\docs\\xml-serialization.html#什么是-xml",
+          "content": "什么是 XMLXML（Extensible Markup Language），中文是可扩展标记语言，是标准通用标记语言的子集。它是一种标记语言，用于标记电子文档，使其结构化。XML可以用来标记数据，定义数据类型，并允许用户定义自己的标记语言。对于人和机器来说，这是一种友好的数据传输方式。它提供了一种独立于应用程序或供应商的描述和交换结构化数据的统一方法，非常适合万维网传输。它是互联网环境下跨平台、内容依赖的技术，也是当今处理分布式结构化信息的有效工具。在Web开发中，XML，是一种数据格式，在与后端或其它系统的数据交互中有较为广泛的应用。"
+        },
+        {
+          "title": "关于序列化库",
+          "url": "\\docs\\xml-serialization.html#关于序列化库",
+          "content": "关于序列化库目前在Delphi提供了XML序列化操作库：Xml.XMLDocMVCXE框架为了解决Xml.XMLDoc序列化操作不友好的问题，在Xml.XMLDoc的基础上包装成XmlSerializer类，并提供类方法进行XML序列化操作XmlSerializer = classpublic\n    class procedure Deserialize(const AXml: string; var R: T); overload;\n    class function Serialize(const R: T): string;\n    class function Deserialize(const AXml: string): T; overload;\nend;\n"
+        },
+        {
+          "title": "如何使用",
+          "url": "\\docs\\xml-serialization.html#如何使用",
+          "content": "如何使用    uses MVCXE.xml;"
+        },
+        {
+          "title": "序列化对象",
+          "url": "\\docs\\xml-serialization.html#如何使用-序列化对象",
+          "content": "序列化对象type  TMyNode = class\n  published\n    property Id: Integer;\n    [XmlAttribute('@NODE_NAME')]\n    property Name : string;\n    [XmlAttribute('@NODE_TEXT')]\n    property Content : string;\n  end;\n  TRootElement = class\n  published\n    [XmlElement('MyNode')]\n    property MyNode: TMyNode;\n  end;\n  TMyObj = class\n  published\n    [XmlElement('RootElement')]\n    property RootElement: TMyNode;\n  end;\n  \n\nfunction GetText: string;\nvar\n    node: TMyNode;\n    root: TRootElement;\n    obj: TMyObj;\nbegin\n    node := TMyNode.Create;\n    node.Id := 1;\n    node.Content := 'MVCXE';\n    root := TRootElement.Create;\n    root.MyNode := node;\n    obj := TMyObj.Create;\n    obj.RootElement := root;\n    Result := XmlSerializer.Serialize(obj);\nend;\n"
+        },
+        {
+          "title": "反序列化字符串",
+          "url": "\\docs\\xml-serialization.html#如何使用-反序列化字符串",
+          "content": "反序列化字符串function GetObject: TMyObj;var\n    json: string;\nbegin\n    json := 'MVCXE';\n    Result := XmlSerializer.Deserialize(json);\nend;\n"
+        },
+        {
+          "title": "定义为节点",
+          "url": "\\docs\\xml-serialization.html#如何使用-定义为节点",
+          "content": "定义为节点使用[XmlElement('节点名')]注解，如果为节点名为*号，表示匹配任何节点，一般为数组时用。"
+        },
+        {
+          "title": "定义为属性",
+          "url": "\\docs\\xml-serialization.html#如何使用-定义为属性",
+          "content": "定义为属性使用[XmlAttribute('属性名')]注解，属性名有两个特例：@NODE_NAME表示获取节点名，@NODE_TEXT表示获取节点的内容"
+        },
+        {
+          "title": "定义为CDATA值",
+          "url": "\\docs\\xml-serialization.html#如何使用-定义为cdata值",
+          "content": "定义为CDATA值使用[XmlCDATA]注解"
+        },
+        {
+          "title": "范例",
+          "url": "\\docs\\xml-serialization.html#范例",
+          "content": "范例我们要从sqlMap.xml中读取某个表节点的配置信息，我们需要为这个xml结构定对应的类结构，这样他们之间才可以正确序列化和反序列化        \n            SELECT A.*, \n            B.Id _TUsers_Id, B.Email _TUsers_Email, B.Nickname _TUsers_Nickname, B.Title _TUsers_Title, \n            B.Gender _TUsers_Gender, B.HeadPortrait _TUsers_HeadPortrait, B.IsVip _TUsers_IsVip, B.VipLevel _TUsers_VipLevel \n            FROM posts A\n            LEFT JOIN users B ON B.Id = A.UserId\n            WHERE A.IsTop=0 \n            ORDER BY A.UpdateTime DESC\n            LIMIT {Count}\n        \n        \n            SELECT A.*\n            FROM posts A\n            WHERE A.UserId=:UserId \n            ORDER BY A.CreateTime DESC\n            LIMIT {Count}\n        \n\n对应的类TSqlMapSelectCountEntity = record    [XmlAttribute('@NODE_TEXT')]\n    Sql: string;\nend;\n\nTSqlMapSelectEntity = record\n    Id: string;\n    [XmlAttribute('@NODE_TEXT')]\n    Sql: string;\n    Skip: string;\n    Take: string;\n    Count: TSqlMapSelectCountEntity;\n    Entity: TORMEntity;\n    class function Empty: TSqlMapSelectEntity; static;\nend;\n\nTSqlMapUpdateEntity = record\n    Id: string;\n    [XmlAttribute('@NODE_TEXT')]\n    Sql: string;\n    Entity: TORMEntity;\n    class function Empty: TSqlMapUpdateEntity; static;\nend;\n\nTSqlMapDeleteEntity = record\n    Id: string;\n    [XmlAttribute('@NODE_TEXT')]\n    Sql: string;\n    Entity: TORMEntity;\n    class function Empty: TSqlMapDeleteEntity; static;\nend;\n\nTSqlMapInsertEntity = record\n    Id: string;\n    [XmlAttribute('@NODE_TEXT')]\n    Sql: string;\n    Entity: TORMEntity;\n    class function Empty: TSqlMapInsertEntity; static;\nend;\n\nTSqlMapEntity = record\n    [XmlElement('select')]\n    select: TArray;\n    [XmlElement('update')]\n    update: TArray;\n    [XmlElement('delete')]\n    delete: TArray;\n    [XmlElement('insert')]\n    insert: TArray;\nend;\n反序列\nSqlMapEntity := XmlSerializer.Deserialize(Xml);  "
+        }
+      ]
+    },
+    {
+      "title": "分布式 ID 生成",
+      "content": "",
+      "url": "\\docs\\idgenerator.html",
+      "children": [
+        {
+          "title": "为什么需要分布式 ID",
+          "url": "\\docs\\idgenerator.html#为什么需要分布式-id",
+          "content": "为什么需要分布式 ID全局唯一性: 不能出现重复的 ID 号, 既然是唯一标识, 这是最基本的要求。趋势递增: 在 MySQL InnoDB 引擎中使用的是聚集索引, 由于多数 RDBMS 使用 B-tree 的数据结构来存储索引数据, 在主键的选择上面我们应该尽量使用有序的主键保证写入性能。单调递增: 保证下一个 ID 一定大于上一个 ID, 例如事务版本号, IM 增量消息, 排序等特殊需求。信息安全: 如果 ID 是连续的, 恶意用户的扒取工作就非常容易做了, 直接按照顺序下载指定 URL 即可; 如果是订单号就更危险了, 竞对可以直接知道我们一天的单量。 所以在一些应用场景下, 会需要 ID 无规则, 不规则。"
+        },
+        {
+          "title": "分布式 ID 有哪些",
+          "url": "\\docs\\idgenerator.html#分布式-id-有哪些",
+          "content": "分布式 ID 有哪些常见的分布式 ID 有 连续 GUID、短 ID、雪花算法 ID。"
+        },
+        {
+          "title": "如何使用",
+          "url": "\\docs\\idgenerator.html#如何使用",
+          "content": "如何使用"
+        },
+        {
+          "title": "连续 GUID 方式",
+          "url": "\\docs\\idgenerator.html#如何使用-连续-guid-方式",
+          "content": "连续 GUID 方式Guid 是混乱无序的，想要一种产生顺序 Guid 的算法来保证数据库的高效运行。(计划中)"
+        },
+        {
+          "title": "短 ID",
+          "url": "\\docs\\idgenerator.html#短-id",
+          "content": "短 ID短 ID 按道理不应该放在分布式 ID 生成这个章节，它的作用用途常用于并发不强的内部系统中，比如 任务ID，Issue 编号 等等。(会大改)uses MVCXE.CAPTCHA;type\nTAccountController = class(BaseController)\nprivate\n    [IOC('MVCXE.Captcha.XE.TCaptchaXE')]\n    Captcha: ICaptcha;\npublic\n    function CaptchaCode: string;\nend;\nimplementation\nfunction TAccountController.CaptchaCode: string;\nbegin\n  Captcha.Generate;\n  Result := Captcha.Code;\nend;\n"
+        },
+        {
+          "title": "雪花算法 ID",
+          "url": "\\docs\\idgenerator.html#短-id-雪花算法-id",
+          "content": "雪花算法 ID雪花算法：使用一个 64 bit 的 long 型的数字作为全局唯一 ID。在分布式系统中的应用十分广泛，且 ID 引入了时间戳，基本上保持自增的。(会大改)uses MVCXE.IdWorker;function GenerateSnowflakeId: Int64;\n"
         }
       ]
     },
