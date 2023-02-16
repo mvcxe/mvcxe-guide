@@ -1132,6 +1132,68 @@ window.ydoc_plugin_search_json = {
           "content": "自定义映射规则"
         }
       ]
+    },
+    {
+      "title": "模块化开发",
+      "content": "模块化配置必须在launchSettings.json下配置才有效，原因是启动的时候launchSettings.json已经加载，自定义配置文件还未加载。",
+      "url": "\\docs\\module-dev.html",
+      "children": [
+        {
+          "title": "关于模块化开发",
+          "url": "\\docs\\module-dev.html#关于模块化开发",
+          "content": "关于模块化开发模块化是代码的组成的一种方式，模块化系统就像乐高玩具一样，一块一块零散积木堆积起一个精彩的世界。每种积木的形状各不相同，功能各不相同，积木与积木直接互相依赖，互相支撑。"
+        },
+        {
+          "title": "模块化开发好处",
+          "url": "\\docs\\module-dev.html#关于模块化开发-模块化开发好处",
+          "content": "模块化开发好处模块化开发能够将不同的功能组装在一起，实现功能的累加，诸多功能组装在一起，最终形成项目。"
+        },
+        {
+          "title": "模块分类",
+          "url": "\\docs\\module-dev.html#模块分类",
+          "content": "模块分类应用程序模块：通常这类模块是完整的应用程序，可以独立运行，有自己的实体、服务、API 及 UI 组件等。框架级模块：这类通常是解决某个业务功能进行开发的模块，比如上传文件、分布式缓存、数据验证等。"
+        },
+        {
+          "title": "如何进行模块化开发",
+          "url": "\\docs\\module-dev.html#如何进行模块化开发",
+          "content": "如何进行模块化开发MVCXE框架设计之初就是模块化的，启用MVCXE模块化支持非常简单。"
+        },
+        {
+          "title": "启用模块化支持",
+          "url": "\\docs\\module-dev.html#如何进行模块化开发-启用模块化支持",
+          "content": "启用模块化支持launchSettings.json{\"packages\": {\n    \"EnabledPackageScan\": true, // 启用模块化程序集扫描, 自动扫描当前目录所有扩展名是.bpl的模块，按日期由旧到新加载。如果false只加载在ExternalPackages列出来的模块。\n    \"IgnorePackageFiles\": [\"MVCXE.Core\",\"inet\",\"rtl\",\"vcl\",\"xmlrtl\",\"IndyCore\",\"IndyProtocols\",\"IndySystem\",\"dbrtl\"],//这些模块系统会自动加载，列出来防止重复加载偶发错误的情况。\n    \"ExternalPackages\": [{\n    \"Name\": \"FireDACCommon\"//系统的bpl或第三方的bpl，可以不写扩展名和版本号\n    },{\n    \"Name\": \"FireDACCommonDriver\"\n    },{\n    \"Name\": \"FireDAC\"\n    },{\n    \"Name\": \"FireDACSqliteDriver\"\n    },{\n    \"Name\": \"FireDACCommonOdbc\"\n    },{\n    \"Name\": \"FireDACMSSQLDriver\"\n    },{\n    \"Name\": \"FireDACMySQLDriver\"\n    },{\n    \"Name\": \"FireDACOracleDriver\"\n    },{\n    \"Name\": \"MVCXE.Web\"//mvcxe的模块bpl\n    },{\n    \"Name\": \"MVCXE.LoggerPro\"\n    },{\n    \"Name\": \"MVCXE.Cache\"\n    },{\n    \"Name\": \"MVCXE.ORM\"\n    },{\n    \"Name\": \"MVCXE.TPL\"\n    },{\n    \"Name\": \"MVCXE.Quartz\"\n    },{\n    \"Name\": \"MVCXE.Captcha\"\n    },{\n    \"Name\": \"Fly.BLL\"//你写的模块bpl\n    },{\n    \"Name\": \"Fly.Web\",\n    \"IOC\": [\n        {\n            \"interface\": \"IPostService\",\n            \"implement\": \"Fly.Service.Post.TPostService\"\n        },\n        {\n            \"interface\": \"ICategorieService\",\n            \"implement\": \"Fly.Service.Categorie.TCategorieService\"\n        }\n    ]\n    },{\n    \"Name\": \"DelphiAdmin.Backend.BLL\"\n    },{\n    \"Name\": \"DelphiAdmin.Backend\",\n    \"Area\": \"backend\",\n    \"RoutePrefix\": \"backend\"\n    },{\n    \"Name\": \"DelphiAdmin.Backend.Api\",\n    \"Area\": \"backend\",\n    \"RoutePrefix\": \"backend/api\"\n    },{\n    \"Name\": \"DelphiAdmin.Backend.Mall\",\n    \"Area\": \"mall\",\n    \"RoutePrefix\": \"backend/mall\"\n    },{\n    \"Name\": \"ferry.bll\"\n    },{\n    \"Name\": \"ferry.api\",\n    \"Area\": \"ferry\",\n    \"RoutePrefix\": \"api\",\n    \"IOC\": [\n        {\n            \"interface\": \"ISysService\",\n            \"implement\": \"Service.Sys.Impl.TSysService\"\n        }\n    ]\n    }]\n}\n}\n"
+        },
+        {
+          "title": "模块化开发注意事项",
+          "url": "\\docs\\module-dev.html#模块化开发注意事项",
+          "content": "模块化开发注意事项尽可能保证每个模块都有独立的路由地址格式：/RoutePrefix/路由地址，这样才能保证不会和现有的系统出现冲突。\n开发模块化是尽可能设计为完全独立的引用，如果需要包含不同的配置和视图视图应设置独立的Area，有html/cs/javascript的话应放于wwwroot里独立的Area目录里。\n模块化开发如果需要引用其它模块，该被引用的模块应先加载。\n模块不能循环引用，A模块引用B模块则B模块不能引用A模块\n模块如果要引用其它.dll文件，dll应与模块bpl同级目录\n"
+        },
+        {
+          "title": "举例",
+          "url": "\\docs\\module-dev.html#举例",
+          "content": "举例"
+        },
+        {
+          "title": "经典MVC",
+          "url": "\\docs\\module-dev.html#举例-经典mvc",
+          "content": "经典MVCController控制器写在一个模块bpl中，如MyApp.Web.bpl\n业务逻辑代码写在一个模块bpl中，如MyApp.Service.bpl\n数据实体及关系写一个模块bpl中，如MyApp.Model.bpl\nMyApp.Web引用MyApp.Service和MyApp.Model，MyApp.Service引用MyApp.Model\n"
+        },
+        {
+          "title": "经典WebAPI",
+          "url": "\\docs\\module-dev.html#举例-经典webapi",
+          "content": "经典WebAPI动态WebApi写在一个模块bpl中，如MyApp.Application.bpl\n业务逻辑代码写在一个模块bpl中，如MyApp.Service.bpl\n数据实体及关系写一个模块bpl中，如MyApp.Model.bpl\nMyApp.Application引用MyApp.Service和MyApp.Model，MyApp.Service引用MyApp.Model\n当WebApi有新版本时，可以创建MyApp.Application.V2，没有变化的Api直接继承或引用，删除没用的Api，增加新的，设置新的RoutePrefix_V2，MyApp.Application.V2引用MyApp.Application,MyApp.Service和MyApp.Model\n"
+        },
+        {
+          "title": "混合模式",
+          "url": "\\docs\\module-dev.html#举例-混合模式",
+          "content": "混合模式Controller控制器写在一个模块bpl中，如MyApp.Web.bpl\n动态WebApi写在一个模块bpl中，如MyApp.Application.bpl\n业务逻辑代码写在一个模块bpl中，如MyApp.Service.bpl\n数据实体及关系写一个模块bpl中，如MyApp.Model.bpl\nMyApp.Web引用MyApp.Service和MyApp.Model，MyApp.Service引用MyApp.Model\nMyApp.Application引用MyApp.Service和MyApp.Model，MyApp.Service引用MyApp.Model\n"
+        },
+        {
+          "title": "常见问题",
+          "url": "\\docs\\module-dev.html#常见问题",
+          "content": "常见问题修改了代码，需要编译对应的bpl，直接编译运行Webborker.Console是不会自动编译相关的bpl的\n被引用的代码修改了，引用该代码的bpl也要重新编译，如MyApp.Model的一个实体类改了，编译MyApp.Model.bpl后，要继续编译受修改代码影响的其它bpl，如MyApp.Web或MyApp.Service\n"
+        }
+      ]
     }
   ]
 }

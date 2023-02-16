@@ -44,6 +44,7 @@
 * [函数操作](dbcontext-function.md)
 * [事务](tran.md)
 
-### 对象容器
+### 对象容器模块
 * [依赖注入/控制反转](dependency-injection.md)
 * [对象数据映射](object-mapper.md)
+* [模块化开发](module-dev.md)
