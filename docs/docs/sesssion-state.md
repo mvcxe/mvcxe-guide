@@ -6,6 +6,7 @@ HTTP 是无状态的协议。 默认情况下，HTTP 请求是不保留用户值
 - Cookie：通常存储在客户端的数据，请求时带回服务端
 - Session：存储在服务端的数据（可以在存储在内存、进程等介质中）
 - Query Strings：通过 Http 请求地址参数共享
+- Http Header：通过 Http 请求头参数共享
 - Cache：服务端缓存，包括内存缓存、分布式内存缓存、IO 缓存、序列化缓存以及数据库缓存
 
 ## 如何使用
@@ -64,6 +65,8 @@ Cookies类型是：`TDictionary<string, string>`
 
     app.UseSession('MVCXE.Session.Inproc.TInprocSession');
 
+注入`IHttpContextAccessor`使用[HttpContext](httpcontext.md)里定义的`Session`属性获取Session对象。
+
 - 读取 Session
 
         uses MVCXE.HttpContext;
@@ -88,9 +91,9 @@ Cookies类型是：`TDictionary<string, string>`
 
         function TMyController.Home: string;
         begin
-        accessor.HttpContext.Session.Put<Integer>('UserId', 1);
-        accessor.HttpContext.Session.Put<string>('UserName', 'MVCXE');
-        Result := View;
+          accessor.HttpContext.Session.Put<Integer>('UserId', 1);
+          accessor.HttpContext.Session.Put<string>('UserName', 'MVCXE');
+          Result := View;
         end;
 
 - 删除 Session
@@ -119,6 +122,34 @@ Cookies类型是：`TDictionary<string, string>`
         if accessor.HttpContext.Request.Params.ContainsKey('QueryKey') then
             Result := 'Hello '+accessor.HttpContext.Request.Params['QueryKey'];
     end;
+
+## Http Header 使用
+
+- 读取 Header
+
+      uses MVCXE.HttpContext;
+      type
+        TMyWebApi = class(TWebApi)
+        protected
+          [IOC('MVCXE.HttpContext.THttpContextAccessor')]
+          accessor: IHttpContextAccessor;
+        public
+          function GET: string;
+        end;
+      implementation
+      function TMyWebApi.GET: string;
+      begin
+          if accessor.HttpContext.Request.Params.ContainsKey('Authorization') then
+              Result := 'Hello '+accessor.HttpContext.Request.Headers['Authorization'];
+      end;
+
+- 设置 Header
+
+        function TMyWebApi.GET: string;
+        begin
+          Response.AddHeader('Authorization', 'Breaer {Token}');
+          Result := View;
+        end;
 
 ### Cache 方式
 参见 [分布式缓存](cache.md) 文档

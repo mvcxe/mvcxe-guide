@@ -3,36 +3,92 @@
       <input type="text" class="input js-input" placeholder="搜索" />
       <div class="m-search-result js-search-result"></div>
     </div></div><nav class="m-header-nav js-nav"><ul class="m-header-items"><li class="item active"><a class="href" href="index.html">文档</a></li><li class="item "><a class="href" href="..\about\index.html">关于</a></li></ul></nav><div id="js-nav-btn" class="m-header-btn ui-font-ydoc"></div></header><div class="m-content" id="js-content"><div id="markdown-body" class="m-content-container markdown-body"><h1>HttpContext</h1>
-<h2 id="获取-httpcontext">获取 HttpContext</h2>
-<blockquote>
-<p>引入MVCXE.HttpContext单元</p>
-</blockquote>
-<pre><code>uses MVCXE.HttpContext;
+<h2 id="request">Request</h2>
+<p>注入<code>IHttpContextAccessor</code>，里面定义了<code>HttpContext.Request</code>对象。</p>
+<pre><code>TMVCXERequest = class
+published
+	property PathInfo: string;
+	property FileName: string;
+	property ControllerName: string;
+	property ActionName: string;
+	property Method: string;
+	property Body: string;
+	property Host: string;
+	property RemoteIP: string;
+	property RemoteHost: string;
+	property RemoteAddr: string;
+	property ProtocolVersion: string;
+	property URL: string;
+	property Query: string;
+	property From: string;
+	property Referer: string;
+	property UserAgent: string;
+	property ServerPort: Integer;
+	property RawPathInfo: string;
+	property DerivedFrom: string;
+	property SubDir: string;
+public
+	Params: TDictionary&lt;string, string&gt;;
+	Headers: TDictionary&lt;string, string&gt;;
+	Cookies: TDictionary&lt;string, string&gt;;
+end;
 </code></pre>
-<blockquote>
-<p>注入 IHttpContextAccessor</p>
-</blockquote>
-<pre><code>type
+<h3 id="request-如何使用">如何使用</h3>
+<pre><code>uses MVCXE.HttpContext, MVCXE.HTTPApp;
+type
   TMyWebApi = class(TWebApi)
   protected
     [IOC('MVCXE.HttpContext.THttpContextAccessor')]
     accessor: IHttpContextAccessor;
   public
-	function GET: string;
+    function GET: string;
   end;
 implementation
 function TMyWebApi.GET: string;
 begin
-  Result := 'Hello '+accessor.HttpContext.User.Identity.name;
+  Result := 'Hello '+accessor.HttpContext.Request.URL;
 end;
 </code></pre>
-<blockquote>
-<p>在 TController或TWebApi 派生类中使用属性Response</p>
-</blockquote>
-<pre><code>type
+<h3 id="request-获取ip地址">获取IP地址</h3>
+<pre><code>function getIpAddress: string;
+begin
+  if accessor.HttpContext.Request.Headers.ContainsKey('HTTP_X_FORWARDED_FOR') then
+	Result := accessor.HttpContext.Request.Headers['HTTP_X_FORWARDED_FOR']
+  else
+	Result := accessor.HttpContext.Request.RemoteIP;
+end;
+</code></pre>
+<h2 id="response对象">Response对象</h2>
+<p>在<code>TController或TWebApi</code>定义了Response对象，可以自定义Http返回内容。</p>
+<pre><code>TMVCXEResponse = class
+published
+	property ContentType: string;
+	property Content: string;
+	property StatusCode: Integer;
+	property ContentEncoding: string;
+	property IsRawData: Boolean;
+	property ContentStream: TStream;
+	property Location: string;
+	property Server: string;
+	property RedirectURI: string;
+	property RawData: AnsiString;
+public
+	procedure Abort;
+	procedure Write(AContent: string); overload;
+	procedure Write(AContent: AnsiString); overload;
+	procedure Redirect(URI: string);
+	procedure AddCookie(Name, Value: string; Expires: TDateTime = 0;
+	Domain: string = ''; Path: string = '/'; Secure: Boolean = False;
+	HttpOnly: Boolean = False);
+	procedure AddHeader(Name, Value: string);
+end;
+</code></pre>
+<h3 id="response对象-如何使用">如何使用</h3>
+<pre><code>uses MVCXE.HTTPApp;
+type
   TMyController = class(TController)
   public
-	function Export: TMemoryStream;
+    function Export: TMemoryStream;
   end;
 implementation
 function TMyController.Export: TMemoryStream;
@@ -42,33 +98,30 @@ begin
   Result := TMemoryStream.Create;
 end;
 </code></pre>
+<h3 id="response对象-redirect">Redirect</h3>
+<pre><code>function TPostController.Add: string;
+begin
+  if not IsLogin then
+  begin
+	Response.Redirect(RouteData['Root']+'/account/login');
+	Response.Abort;
+	Exit;
+  end
+  else
+  begin
+	Response.Location := RouteData['Root']+'/';
+	Response.Abort;
+  end;
+end;</code></pre>
 </div><div class="m-content-container m-paging"><div class="m-paging-prev m-paging-item"><a href="dynamic-api-controller.html" class="href"><span class="ui-font-ydoc"></span>动态 WebAPI</a></div><div class="m-paging-next m-paging-item"><a href="sesssion-state.html" class="href">会话和状态管理<span class="ui-font-ydoc"></span></a></div></div></div></div></div><div></div><script>
     var $content = document.getElementById('js-content');
     var $summaryItems = Array.prototype.slice.call(document.querySelectorAll('#js-menu .href'));
     var $menu = document.getElementById('js-menu');
-    if (sessionStorage.prevPathname) {
-      sessionStorage.setItem('prevPrevPathname', sessionStorage.prevPathname);
-      sessionStorage.setItem('prevPrevMenuScrollTop', sessionStorage.prevMenuScrollTop);
-      sessionStorage.setItem('prevPrevContentScrollTop', sessionStorage.prevContentScrollTop);
-    }
-    if (sessionStorage.locationPathname) {
-      sessionStorage.setItem('prevPathname', sessionStorage.locationPathname);
-      sessionStorage.setItem('prevMenuScrollTop', sessionStorage.menuScrollTop);
-      sessionStorage.setItem('prevContentScrollTop', sessionStorage.contentScrollTop);
-    }
     if ($menu && sessionStorage.menuScrollTop) {
-		  $menu.scrollTop = sessionStorage.menuScrollTop;
+		$menu.scrollTop = sessionStorage.menuScrollTop;
     }
     // 刷新页面但不切换 pathname 的时候，内容区恢复到记忆的高度
     if ($content && sessionStorage.contentScrollTop && window.location.pathname == sessionStorage.locationPathname) {
       $content.scrollTop = sessionStorage.contentScrollTop;
-    } else if (sessionStorage.prevPrevPathname && sessionStorage.prevPrevPathname === window.location.pathname) {
-      if ($menu && sessionStorage.prevPrevMenuScrollTop) {
-        $menu.scrollTop = sessionStorage.prevPrevMenuScrollTop;
-      }
-      if ($content && sessionStorage.prevPrevContentScrollTop) {
-        $content.scrollTop = sessionStorage.prevPrevContentScrollTop;
-      }
     }
-    sessionStorage.setItem('locationPathname', window.location.pathname);
-    </script><script src="..\ydoc\scripts\plugins\dollar.min.js"></script><script src="..\ydoc\scripts\plugins\responsive-nav.min.js"></script><script src="..\ydoc\scripts\plugins\slideout.min.js"></script><script src="..\ydoc\scripts\app.js"></script><script src="..\ydoc\ydoc-plugin-search\core.js"></script><script src="..\ydoc\ydoc-plugin-search\search.js"></script><script src="..\search_json.js"></script></body></html>
+    sessionStorage.setItem('locationPathname', window.location.pathname);</script><script src="..\ydoc\scripts\plugins\dollar.min.js"></script><script src="..\ydoc\scripts\plugins\responsive-nav.min.js"></script><script src="..\ydoc\scripts\plugins\slideout.min.js"></script><script src="..\ydoc\scripts\app.js"></script><script src="..\ydoc\ydoc-plugin-search\core.js"></script><script src="..\ydoc\ydoc-plugin-search\search.js"></script><script src="..\search_json.js"></script></body></html>

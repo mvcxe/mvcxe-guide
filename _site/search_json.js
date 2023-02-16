@@ -19,7 +19,7 @@ window.ydoc_plugin_search_json = {
         {
           "title": "创建工程",
           "url": "\\docs\\installation.html#创建工程",
-          "content": "创建工程先将Dcp目录的文件Copy到Delphi 11的Dcp公共目录，如：C:\\Users\\Public\\Documents\\Embarcadero\\Studio\\22.0\\Dcp\n在Delphi IDE中打开mvcxe.groupproj，运行Project:Webborker.Console\n在控制台窗口中输入create回车，创建工程\n输入工程名，例MyApp\n选择工程模板，选1是只有WebApi，选3是只有Mvc，选2是混合\n输入空间名，例MyCompany，可以为空\n最后用Delphi IDE打开工程MyApp.groupproj并编译\n运行Webborker.Console,自动打开浏览器，并访问默认的地址\n切换地址/swagger/index.html访问Swagger查看现有的WebApi\n"
+          "content": "创建工程在Delphi IDE中打开mvcxe.groupproj，运行Project:Webborker.Console\n在控制台窗口中输入create回车，创建工程\n输入工程名，例MyApp\n选择工程模板，选1是只有WebApi，选3是只有Mvc，选2是混合\n输入空间名，例MyCompany，可以为空\n最后用Delphi IDE打开工程MyApp.groupproj并编译\n运行Webborker.Console,自动打开浏览器，并访问默认的地址\n切换地址/swagger/index.html访问Swagger查看现有的WebApi\n"
         },
         {
           "title": "将创建好的工程移到你常用的目录，添加到源码管理器git或svn，就可以进行Delphi Web开发的神奇之旅。",
@@ -162,9 +162,34 @@ window.ydoc_plugin_search_json = {
       "url": "\\docs\\httpcontext.html",
       "children": [
         {
-          "title": "获取 HttpContext",
-          "url": "\\docs\\httpcontext.html#获取-httpcontext",
-          "content": "获取 HttpContext引入MVCXE.HttpContext单元\nuses MVCXE.HttpContext;注入 IHttpContextAccessor\ntype  TMyWebApi = class(TWebApi)\n  protected\n    [IOC('MVCXE.HttpContext.THttpContextAccessor')]\n    accessor: IHttpContextAccessor;\n  public\n\tfunction GET: string;\n  end;\nimplementation\nfunction TMyWebApi.GET: string;\nbegin\n  Result := 'Hello '+accessor.HttpContext.User.Identity.name;\nend;\n在 TController或TWebApi 派生类中使用属性Response\ntype  TMyController = class(TController)\n  public\n\tfunction Export: TMemoryStream;\n  end;\nimplementation\nfunction TMyController.Export: TMemoryStream;\nbegin\n  Response.ContentType := 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';\n  Response.AddHeader('Content-Disposition', 'attachment;Filename=Goods_'+FormatDateTime('yyyyMMddHHmmss', Now)+'.xlsx');\n  Result := TMemoryStream.Create;\nend;\n"
+          "title": "Request",
+          "url": "\\docs\\httpcontext.html#request",
+          "content": "Request注入IHttpContextAccessor，里面定义了HttpContext.Request对象。TMVCXERequest = classpublished\n\tproperty PathInfo: string;\n\tproperty FileName: string;\n\tproperty ControllerName: string;\n\tproperty ActionName: string;\n\tproperty Method: string;\n\tproperty Body: string;\n\tproperty Host: string;\n\tproperty RemoteIP: string;\n\tproperty RemoteHost: string;\n\tproperty RemoteAddr: string;\n\tproperty ProtocolVersion: string;\n\tproperty URL: string;\n\tproperty Query: string;\n\tproperty From: string;\n\tproperty Referer: string;\n\tproperty UserAgent: string;\n\tproperty ServerPort: Integer;\n\tproperty RawPathInfo: string;\n\tproperty DerivedFrom: string;\n\tproperty SubDir: string;\npublic\n\tParams: TDictionary;\n\tHeaders: TDictionary;\n\tCookies: TDictionary;\nend;\n"
+        },
+        {
+          "title": "如何使用",
+          "url": "\\docs\\httpcontext.html#request-如何使用",
+          "content": "如何使用uses MVCXE.HttpContext, MVCXE.HTTPApp;type\n  TMyWebApi = class(TWebApi)\n  protected\n    [IOC('MVCXE.HttpContext.THttpContextAccessor')]\n    accessor: IHttpContextAccessor;\n  public\n    function GET: string;\n  end;\nimplementation\nfunction TMyWebApi.GET: string;\nbegin\n  Result := 'Hello '+accessor.HttpContext.Request.URL;\nend;\n"
+        },
+        {
+          "title": "获取IP地址",
+          "url": "\\docs\\httpcontext.html#request-获取ip地址",
+          "content": "获取IP地址function getIpAddress: string;begin\n  if accessor.HttpContext.Request.Headers.ContainsKey('HTTP_X_FORWARDED_FOR') then\n\tResult := accessor.HttpContext.Request.Headers['HTTP_X_FORWARDED_FOR']\n  else\n\tResult := accessor.HttpContext.Request.RemoteIP;\nend;\n"
+        },
+        {
+          "title": "Response对象",
+          "url": "\\docs\\httpcontext.html#response对象",
+          "content": "Response对象在TController或TWebApi定义了Response对象，可以自定义Http返回内容。TMVCXEResponse = classpublished\n\tproperty ContentType: string;\n\tproperty Content: string;\n\tproperty StatusCode: Integer;\n\tproperty ContentEncoding: string;\n\tproperty IsRawData: Boolean;\n\tproperty ContentStream: TStream;\n\tproperty Location: string;\n\tproperty Server: string;\n\tproperty RedirectURI: string;\n\tproperty RawData: AnsiString;\npublic\n\tprocedure Abort;\n\tprocedure Write(AContent: string); overload;\n\tprocedure Write(AContent: AnsiString); overload;\n\tprocedure Redirect(URI: string);\n\tprocedure AddCookie(Name, Value: string; Expires: TDateTime = 0;\n\tDomain: string = ''; Path: string = '/'; Secure: Boolean = False;\n\tHttpOnly: Boolean = False);\n\tprocedure AddHeader(Name, Value: string);\nend;\n"
+        },
+        {
+          "title": "如何使用",
+          "url": "\\docs\\httpcontext.html#response对象-如何使用",
+          "content": "如何使用uses MVCXE.HTTPApp;type\n  TMyController = class(TController)\n  public\n    function Export: TMemoryStream;\n  end;\nimplementation\nfunction TMyController.Export: TMemoryStream;\nbegin\n  Response.ContentType := 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';\n  Response.AddHeader('Content-Disposition', 'attachment;Filename=Goods_'+FormatDateTime('yyyyMMddHHmmss', Now)+'.xlsx');\n  Result := TMemoryStream.Create;\nend;\n"
+        },
+        {
+          "title": "Redirect",
+          "url": "\\docs\\httpcontext.html#response对象-redirect",
+          "content": "Redirectfunction TPostController.Add: string;begin\n  if not IsLogin then\n  begin\n\tResponse.Redirect(RouteData['Root']+'/account/login');\n\tResponse.Abort;\n\tExit;\n  end\n  else\n  begin\n\tResponse.Location := RouteData['Root']+'/';\n\tResponse.Abort;\n  end;\nend;"
         }
       ]
     },
@@ -176,7 +201,7 @@ window.ydoc_plugin_search_json = {
         {
           "title": "关于会话和状态管理",
           "url": "\\docs\\sesssion-state.html#关于会话和状态管理",
-          "content": "关于会话和状态管理HTTP 是无状态的协议。 默认情况下，HTTP 请求是不保留用户值的独立消息。但是我们可以通过以下几种方式保留请求用户数据：Cookie：通常存储在客户端的数据，请求时带回服务端\nSession：存储在服务端的数据（可以在存储在内存、进程等介质中）\nQuery Strings：通过 Http 请求地址参数共享\nCache：服务端缓存，包括内存缓存、分布式内存缓存、IO 缓存、序列化缓存以及数据库缓存\n"
+          "content": "关于会话和状态管理HTTP 是无状态的协议。 默认情况下，HTTP 请求是不保留用户值的独立消息。但是我们可以通过以下几种方式保留请求用户数据：Cookie：通常存储在客户端的数据，请求时带回服务端\nSession：存储在服务端的数据（可以在存储在内存、进程等介质中）\nQuery Strings：通过 Http 请求地址参数共享\nHttp Header：通过 Http 请求头参数共享\nCache：服务端缓存，包括内存缓存、分布式内存缓存、IO 缓存、序列化缓存以及数据库缓存\n"
         },
         {
           "title": "如何使用",
@@ -191,7 +216,7 @@ window.ydoc_plugin_search_json = {
         {
           "title": "Session 使用",
           "url": "\\docs\\sesssion-state.html#如何使用-session-使用",
-          "content": "Session 使用在使用 Session 之前，必须注册Session服务，当前实现了Inproc的服务，以后会增加数据库，redis等的实现。app.UseSession('MVCXE.Session.Inproc.TInprocSession');\n读取 Session\n  uses MVCXE.HttpContext;\n  type\n  TMyController = class(TController)\n  protected\n      [IOC('MVCXE.HttpContext.THttpContextAccessor')]\n      accessor: IHttpContextAccessor;\n  public\n      function Home: string;\n  end;\n  implementation\n  function TMyController.Home: string;\n  begin\n  if accessor.HttpContext.Session.Contains('UserId') then\n      ViewBag.Add('UserId', accessor.HttpContext.Session.Get('UserId'));\n  ViewBag.Add('UserName', accessor.HttpContext.Session.Get('UserName'));\n  Result := View;\n  end;\n\n\n\n设置 Session\n  function TMyController.Home: string;\n  begin\n  accessor.HttpContext.Session.Put('UserId', 1);\n  accessor.HttpContext.Session.Put('UserName', 'MVCXE');\n  Result := View;\n  end;\n\n\n\n删除 Session\n  function TMyController.Home: string;\n  begin\n  accessor.HttpContext.Session.Remove('UserId');\n  accessor.HttpContext.Session.Clear;\n  Result := View;\n  end;\n\n\n"
+          "content": "Session 使用在使用 Session 之前，必须注册Session服务，当前实现了Inproc的服务，以后会增加数据库，redis等的实现。app.UseSession('MVCXE.Session.Inproc.TInprocSession');注入IHttpContextAccessor使用HttpContext里定义的Session属性获取Session对象。\n读取 Session\n  uses MVCXE.HttpContext;\n  type\n  TMyController = class(TController)\n  protected\n      [IOC('MVCXE.HttpContext.THttpContextAccessor')]\n      accessor: IHttpContextAccessor;\n  public\n      function Home: string;\n  end;\n  implementation\n  function TMyController.Home: string;\n  begin\n  if accessor.HttpContext.Session.Contains('UserId') then\n      ViewBag.Add('UserId', accessor.HttpContext.Session.Get('UserId'));\n  ViewBag.Add('UserName', accessor.HttpContext.Session.Get('UserName'));\n  Result := View;\n  end;\n\n\n\n设置 Session\n  function TMyController.Home: string;\n  begin\n    accessor.HttpContext.Session.Put('UserId', 1);\n    accessor.HttpContext.Session.Put('UserName', 'MVCXE');\n    Result := View;\n  end;\n\n\n\n删除 Session\n  function TMyController.Home: string;\n  begin\n  accessor.HttpContext.Session.Remove('UserId');\n  accessor.HttpContext.Session.Clear;\n  Result := View;\n  end;\n\n\n"
         },
         {
           "title": "Query Strings 使用",
@@ -199,8 +224,13 @@ window.ydoc_plugin_search_json = {
           "content": "Query Strings 使用uses MVCXE.HttpContext;type\n  TMyWebApi = class(TWebApi)\n  protected\n    [IOC('MVCXE.HttpContext.THttpContextAccessor')]\n    accessor: IHttpContextAccessor;\n  public\n    function GET: string;\n  end;\nimplementation\nfunction TMyWebApi.GET: string;\nbegin\n    if accessor.HttpContext.Request.Params.ContainsKey('QueryKey') then\n        Result := 'Hello '+accessor.HttpContext.Request.Params['QueryKey'];\nend;\n"
         },
         {
+          "title": "Http Header 使用",
+          "url": "\\docs\\sesssion-state.html#http-header-使用",
+          "content": "Http Header 使用\n读取 Header\nuses MVCXE.HttpContext;\ntype\n  TMyWebApi = class(TWebApi)\n  protected\n    [IOC('MVCXE.HttpContext.THttpContextAccessor')]\n    accessor: IHttpContextAccessor;\n  public\n    function GET: string;\n  end;\nimplementation\nfunction TMyWebApi.GET: string;\nbegin\n    if accessor.HttpContext.Request.Params.ContainsKey('Authorization') then\n        Result := 'Hello '+accessor.HttpContext.Request.Headers['Authorization'];\nend;\n\n\n\n设置 Header\n  function TMyWebApi.GET: string;\n  begin\n    Response.AddHeader('Authorization', 'Breaer {Token}');\n    Result := View;\n  end;\n\n\n"
+        },
+        {
           "title": "Cache 方式",
-          "url": "\\docs\\sesssion-state.html#query-strings-使用-cache-方式",
+          "url": "\\docs\\sesssion-state.html#http-header-使用-cache-方式",
           "content": "Cache 方式参见 分布式缓存 文档"
         }
       ]
@@ -255,7 +285,7 @@ window.ydoc_plugin_search_json = {
         {
           "title": "如何使用",
           "url": "\\docs\\auth-control.html#如何使用",
-          "content": "如何使用uses  MVCXE.Authorization;\n默认的身份结构包括名字字符串，是否已认证通过，角色字符串，认证类型。\nTIdentity = record    Name: string;\n    IsAuthenticated: Boolean;\n    Roles: string;\n    AuthenticationType: string;\nend;\n使用accessor.HttpContext.User获取包含TIdentity的接口IPrincipal\nIPrincipal = interface  ['{952A2782-CE55-41C0-A155-35080914FEAA}']\n  function GetIdentity: TIdentity;\n  procedure SetIdentity(Value: TIdentity);\n  property Identity: TIdentity read GetIdentity write SetIdentity;\n  function IsInRole(const role: string): Boolean;\n  procedure UpdateFormsAuthenticationTicket(Response: TMVCXEResponse; const Expires: TDateTime);\n  procedure RemoveFormsAuthenticationTicket(Response: TMVCXEResponse);\nend;\n\nTHttpContext = class\npublic\n  function User: IPrincipal; overload;\nend;\n例子, 我们将登陆信息存储在TIdentity.Name中，格式是：用户名$用户id$用户Email$是否登陆\ntype  BaseController = class(TController)\n  private\n  protected\n    [IOC('MVCXE.HttpContext.THttpContextAccessor')]\n    accessor: IHttpContextAccessor;\n    function IsLogin: Boolean;\n    function CurrentAccount: String;\n    function CurrentUserId: Integer;\n    function EmailConfirmed: Boolean;\n    function IsAdmin: Boolean;\n  public\n  end;\n\nimplementation\n\nuses\n  Fly.Authorization;\n\n{ BaseController }\n\nfunction BaseController.CurrentAccount: String;\nvar\n  name: string;\nbegin\n  if not IsLogin then\n    Result := nil\n  else\n  begin\n    name := accessor.HttpContext.User.Identity.name;\n    Result := name.Split(['$'])[0];\n  end;\nend;\n\nfunction BaseController.CurrentUserId: Integer;\nvar\n  name: string;\nbegin\n  if not IsLogin then\n    Result := -1\n  else\n  begin\n    name := accessor.HttpContext.User.Identity.name;\n    Result := StrToInt(name.Split(['$'])[1]);\n  end;\nend;\n\nfunction BaseController.EmailConfirmed: Boolean;\nvar\n  name: string;\nbegin\n  if not IsLogin then\n    Result := False\n  else\n  begin\n    name := accessor.HttpContext.User.Identity.name;\n    Result := StrToBool(name.Split(['$'])[2]);\n  end;\nend;\n\nfunction BaseController.IsAdmin: Boolean;\nbegin\n  Result := accessor.HttpContext.User.IsInRole('admin');\nend;\n\nfunction BaseController.IsLogin: Boolean;\nbegin\n  Result := accessor.HttpContext.User.Identity.IsAuthenticated;\nend;\n登陆代码\nfunction TAccountController.check(const email, pass, vercode: string)  : TAccountFormResult;\nvar\n  User: TUsers;\n  HashMD5: THashMD5;\n  s: string;\n  Membership: TIdentity;\nbegin\n  Response.ContentType := 'application/json';\n  Result.success := False;\n  s := accessor.HttpContext.Session.Get('ValidationCode');\n  if not SameText(vercode, s) then\n  begin\n    Result.msg := '验证码不正确.';\n    Exit;\n  end;\n  User := UserService.GetUser(email);\n  if User = nil then\n  begin\n    Result.msg := '找不到用户.';\n    Exit;\n  end;\n  HashMD5 := THashMD5.Create;\n  s := HashMD5.GetHashString(pass);\n  if not SameText(User.Password, s) then\n  begin\n    Result.msg := '密码不正确.';\n    Exit;\n  end;\n  Membership.Name := User.Email + '$' + IntToStr(User.Id) + '$' + BoolToStr(User.EmailConfirmed) + '$' + BoolToStr(User.IsAdmin);\n  Membership.IsAuthenticated := True;\n  if User.IsAdmin then\n    Membership.Roles := 'admin,';\n  accessor.HttpContext.User.Identity := Membership;\n  accessor.HttpContext.User.UpdateFormsAuthenticationTicket(Response, Now+30);\n\n  Result.msg := '登陆成功.';\n  User.Password := '';\n  Result.user := User;\n  Result.success := True;\nend;\n"
+          "content": "如何使用uses  MVCXE.Authorization;\n默认的身份结构包括名字字符串，是否已认证通过，角色字符串，认证类型。\nTIdentity = record    Name: string;\n    IsAuthenticated: Boolean;\n    Roles: string;\n    AuthenticationType: string;\nend;\n注入IHttpContextAccessor使用HttpContext里定义的User方法获取包含TIdentity的接口IPrincipal\nIPrincipal = interface  ['{952A2782-CE55-41C0-A155-35080914FEAA}']\n  function GetIdentity: TIdentity;\n  procedure SetIdentity(Value: TIdentity);\n  property Identity: TIdentity read GetIdentity write SetIdentity;\n  function IsInRole(const role: string): Boolean;\n  procedure UpdateFormsAuthenticationTicket(Response: TMVCXEResponse; const Expires: TDateTime);\n  procedure RemoveFormsAuthenticationTicket(Response: TMVCXEResponse);\nend;\n\nTHttpContext = class\npublic\n  function User: IPrincipal; overload;\nend;\n例子, 我们将登陆信息存储在TIdentity.Name中，格式是：用户名$用户id$用户Email$是否登陆\ntype  BaseController = class(TController)\n  private\n  protected\n    [IOC('MVCXE.HttpContext.THttpContextAccessor')]\n    accessor: IHttpContextAccessor;\n    function IsLogin: Boolean;\n    function CurrentAccount: String;\n    function CurrentUserId: Integer;\n    function EmailConfirmed: Boolean;\n    function IsAdmin: Boolean;\n  public\n  end;\n\nimplementation\n\nuses\n  Fly.Authorization;\n\n{ BaseController }\n\nfunction BaseController.CurrentAccount: String;\nvar\n  name: string;\nbegin\n  if not IsLogin then\n    Result := nil\n  else\n  begin\n    name := accessor.HttpContext.User.Identity.name;\n    Result := name.Split(['$'])[0];\n  end;\nend;\n\nfunction BaseController.CurrentUserId: Integer;\nvar\n  name: string;\nbegin\n  if not IsLogin then\n    Result := -1\n  else\n  begin\n    name := accessor.HttpContext.User.Identity.name;\n    Result := StrToInt(name.Split(['$'])[1]);\n  end;\nend;\n\nfunction BaseController.EmailConfirmed: Boolean;\nvar\n  name: string;\nbegin\n  if not IsLogin then\n    Result := False\n  else\n  begin\n    name := accessor.HttpContext.User.Identity.name;\n    Result := StrToBool(name.Split(['$'])[2]);\n  end;\nend;\n\nfunction BaseController.IsAdmin: Boolean;\nbegin\n  Result := accessor.HttpContext.User.IsInRole('admin');\nend;\n\nfunction BaseController.IsLogin: Boolean;\nbegin\n  Result := accessor.HttpContext.User.Identity.IsAuthenticated;\nend;\n登陆代码\nfunction TAccountController.check(const email, pass, vercode: string)  : TAccountFormResult;\nvar\n  User: TUsers;\n  HashMD5: THashMD5;\n  s: string;\n  Membership: TIdentity;\nbegin\n  Response.ContentType := 'application/json';\n  Result.success := False;\n  s := accessor.HttpContext.Session.Get('ValidationCode');\n  if not SameText(vercode, s) then\n  begin\n    Result.msg := '验证码不正确.';\n    Exit;\n  end;\n  User := UserService.GetUser(email);\n  if User = nil then\n  begin\n    Result.msg := '找不到用户.';\n    Exit;\n  end;\n  HashMD5 := THashMD5.Create;\n  s := HashMD5.GetHashString(pass);\n  if not SameText(User.Password, s) then\n  begin\n    Result.msg := '密码不正确.';\n    Exit;\n  end;\n  Membership.Name := User.Email + '$' + IntToStr(User.Id) + '$' + BoolToStr(User.EmailConfirmed) + '$' + BoolToStr(User.IsAdmin);\n  Membership.IsAuthenticated := True;\n  if User.IsAdmin then\n    Membership.Roles := 'admin,';\n  accessor.HttpContext.User.Identity := Membership;\n  accessor.HttpContext.User.UpdateFormsAuthenticationTicket(Response, Now+30);\n\n  Result.msg := '登陆成功.';\n  User.Password := '';\n  Result.user := User;\n  Result.success := True;\nend;\n"
         },
         {
           "title": "自定身份验证类",

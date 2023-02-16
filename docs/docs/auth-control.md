@@ -41,7 +41,7 @@ OAuth 协议又有 1.0 和 2.0 两个版本。相比较 1.0 版，2.0 版整个�
         AuthenticationType: string;
     end;
 
-> 使用`accessor.HttpContext.User`获取包含TIdentity的接口`IPrincipal`
+> 注入`IHttpContextAccessor`使用[HttpContext](httpcontext.md)里定义的`User`方法获取包含TIdentity的接口`IPrincipal`
 
     IPrincipal = interface
       ['{952A2782-CE55-41C0-A155-35080914FEAA}']
