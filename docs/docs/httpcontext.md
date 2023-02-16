@@ -18,7 +18,7 @@
 	implementation
 	function TMyWebApi.GET: string;
 	begin
-	  'Hello '+accessor.HttpContext.User.Identity.name;
+	  Result := 'Hello '+accessor.HttpContext.User.Identity.name;
 	end;
 
 > 在 TController或TWebApi 派生类中使用属性Response

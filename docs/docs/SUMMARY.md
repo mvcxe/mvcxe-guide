@@ -14,6 +14,7 @@
 ### Web应用开发
 * [动态 WebAPI](dynamic-api-controller.md)
 * [HttpContext](httpcontext.md)
+* [会话和状态管理](sesssion-state.md)
 * [缓存](cache.md)
 * [安全鉴权](auth-control.md)
 * [CORS 跨域](cors.md)

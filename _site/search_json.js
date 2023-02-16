@@ -164,7 +164,44 @@ window.ydoc_plugin_search_json = {
         {
           "title": "获取 HttpContext",
           "url": "\\docs\\httpcontext.html#获取-httpcontext",
-          "content": "获取 HttpContext引入MVCXE.HttpContext单元\nuses MVCXE.HttpContext;注入 IHttpContextAccessor\ntype  TMyWebApi = class(TWebApi)\n  protected\n    [IOC('MVCXE.HttpContext.THttpContextAccessor')]\n    accessor: IHttpContextAccessor;\n  public\n\tfunction GET: string;\n  end;\nimplementation\nfunction TMyWebApi.GET: string;\nbegin\n  'Hello '+accessor.HttpContext.User.Identity.name;\nend;\n在 TController或TWebApi 派生类中使用属性Response\ntype  TMyController = class(TController)\n  public\n\tfunction Export: TMemoryStream;\n  end;\nimplementation\nfunction TMyController.Export: TMemoryStream;\nbegin\n  Response.ContentType := 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';\n  Response.AddHeader('Content-Disposition', 'attachment;Filename=Goods_'+FormatDateTime('yyyyMMddHHmmss', Now)+'.xlsx');\n  Result := TMemoryStream.Create;\nend;\n"
+          "content": "获取 HttpContext引入MVCXE.HttpContext单元\nuses MVCXE.HttpContext;注入 IHttpContextAccessor\ntype  TMyWebApi = class(TWebApi)\n  protected\n    [IOC('MVCXE.HttpContext.THttpContextAccessor')]\n    accessor: IHttpContextAccessor;\n  public\n\tfunction GET: string;\n  end;\nimplementation\nfunction TMyWebApi.GET: string;\nbegin\n  Result := 'Hello '+accessor.HttpContext.User.Identity.name;\nend;\n在 TController或TWebApi 派生类中使用属性Response\ntype  TMyController = class(TController)\n  public\n\tfunction Export: TMemoryStream;\n  end;\nimplementation\nfunction TMyController.Export: TMemoryStream;\nbegin\n  Response.ContentType := 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';\n  Response.AddHeader('Content-Disposition', 'attachment;Filename=Goods_'+FormatDateTime('yyyyMMddHHmmss', Now)+'.xlsx');\n  Result := TMemoryStream.Create;\nend;\n"
+        }
+      ]
+    },
+    {
+      "title": "会话和状态管理",
+      "content": "",
+      "url": "\\docs\\sesssion-state.html",
+      "children": [
+        {
+          "title": "关于会话和状态管理",
+          "url": "\\docs\\sesssion-state.html#关于会话和状态管理",
+          "content": "关于会话和状态管理HTTP 是无状态的协议。 默认情况下，HTTP 请求是不保留用户值的独立消息。但是我们可以通过以下几种方式保留请求用户数据：Cookie：通常存储在客户端的数据，请求时带回服务端\nSession：存储在服务端的数据（可以在存储在内存、进程等介质中）\nQuery Strings：通过 Http 请求地址参数共享\nCache：服务端缓存，包括内存缓存、分布式内存缓存、IO 缓存、序列化缓存以及数据库缓存\n"
+        },
+        {
+          "title": "如何使用",
+          "url": "\\docs\\sesssion-state.html#如何使用",
+          "content": "如何使用"
+        },
+        {
+          "title": "Cookie 使用",
+          "url": "\\docs\\sesssion-state.html#如何使用-cookie-使用",
+          "content": "Cookie 使用读取Cookies\nCookies类型是：TDictionaryuses MVCXE.HttpContext;type\n  TMyWebApi = class(TWebApi)\n  protected\n    [IOC('MVCXE.HttpContext.THttpContextAccessor')]\n    accessor: IHttpContextAccessor;\n  public\n    function GET: string;\n  end;\nimplementation\nfunction TMyWebApi.GET: string;\nbegin\n    if accessor.HttpContext.Request.Cookies.ContainsKey('CookieKey') then\n        Result := 'Hello '+accessor.HttpContext.Request.Cookies['CookieKey'];\nend;\n设置Cookies\n在WebApi/Controller中，定义了Response对象，使用Response的AddCookie设置Cookiesprocedure AddCookie(Name, Value: string; Expires: TDateTime = 0;    Domain: string = ''; Path: string = '/'; Secure: Boolean = False;\n    HttpOnly: Boolean = False);\n例type  TMyWebApi = class(TWebApi)\n  protected\n  public\n    function GET: string;\n  end;\nimplementation\nfunction TMyWebApi.GET: string;\nbegin\n    Response.AddCookie('CookieKey', 'CookieValue');\n    Response.AddCookie('CookieKey1', 'CookieValue', Now+1);\n    Response.AddCookie('CookieKey1', 'CookieValue', 0, 'mvcxe.com', '/');\nend;\n\n删除Cookies\n  Response.AddCookie('CookieKey', '');\n\n\n"
+        },
+        {
+          "title": "Session 使用",
+          "url": "\\docs\\sesssion-state.html#如何使用-session-使用",
+          "content": "Session 使用在使用 Session 之前，必须注册Session服务，当前实现了Inproc的服务，以后会增加数据库，redis等的实现。app.UseSession('MVCXE.Session.Inproc.TInprocSession');\n读取 Session\n  uses MVCXE.HttpContext;\n  type\n  TMyController = class(TController)\n  protected\n      [IOC('MVCXE.HttpContext.THttpContextAccessor')]\n      accessor: IHttpContextAccessor;\n  public\n      function Home: string;\n  end;\n  implementation\n  function TMyController.Home: string;\n  begin\n  if accessor.HttpContext.Session.Contains('UserId') then\n      ViewBag.Add('UserId', accessor.HttpContext.Session.Get('UserId'));\n  ViewBag.Add('UserName', accessor.HttpContext.Session.Get('UserName'));\n  Result := View;\n  end;\n\n\n\n设置 Session\n  function TMyController.Home: string;\n  begin\n  accessor.HttpContext.Session.Put('UserId', 1);\n  accessor.HttpContext.Session.Put('UserName', 'MVCXE');\n  Result := View;\n  end;\n\n\n\n删除 Session\n  function TMyController.Home: string;\n  begin\n  accessor.HttpContext.Session.Remove('UserId');\n  accessor.HttpContext.Session.Clear;\n  Result := View;\n  end;\n\n\n"
+        },
+        {
+          "title": "Query Strings 使用",
+          "url": "\\docs\\sesssion-state.html#query-strings-使用",
+          "content": "Query Strings 使用uses MVCXE.HttpContext;type\n  TMyWebApi = class(TWebApi)\n  protected\n    [IOC('MVCXE.HttpContext.THttpContextAccessor')]\n    accessor: IHttpContextAccessor;\n  public\n    function GET: string;\n  end;\nimplementation\nfunction TMyWebApi.GET: string;\nbegin\n    if accessor.HttpContext.Request.Params.ContainsKey('QueryKey') then\n        Result := 'Hello '+accessor.HttpContext.Request.Params['QueryKey'];\nend;\n"
+        },
+        {
+          "title": "Cache 方式",
+          "url": "\\docs\\sesssion-state.html#query-strings-使用-cache-方式",
+          "content": "Cache 方式参见 分布式缓存 文档"
         }
       ]
     },
