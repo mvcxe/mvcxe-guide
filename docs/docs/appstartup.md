@@ -8,9 +8,9 @@ MVCXE框架是基于Webborker开发，一般情况下生成工程后直接关注
 	initialization
 	  h := LoadPackage('MVCXE.Core.bpl');
 	  if h = 0 then
-		WriteLn('Loading Package MVCXE.Core.bpl ...... failure!')
+		WriteLn('Loading package MVCXE.Core.bpl ...... failed!')
 	  else
-		WriteLn('Loading Package MVCXE.Core.bpl ...... success!');
+		WriteLn('Loading package MVCXE.Core.bpl ...... successfully!');
 
 # 用Rtti创建Startup类的对象
 创建IApplicationBuilder接口的实例app
