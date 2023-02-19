@@ -6,10 +6,10 @@
 	type
 	  THomeController = class(TController)
 	  private
-		[IOC]
-		PostService: IPostService;
+	    [IOC]
+	    PostService: IPostService;
 	  public
-		function Index: string;
+	    function Index: string;
 	  end;
 	implementation
 	function THomeController.Index: string;
@@ -24,11 +24,11 @@
 	  [Route('user/profile')]
 	  TUserWebApi = class(TWebApi)
 	  private
-		[IOC('Your.Service.UserService')]
-		UserService: IUserService;
+	    [IOC('Your.Service.UserService')]
+	    UserService: IUserService;
 	  public
-		[Authorize('Your.Authorization.YourAuthorization', 'your_role_str')]
-		function GET: TUser;
+	    [Authorize('Your.Authorization.YourAuthorization', 'your_role_str')]
+	    function GET: TUser;
 	  end;
 	implementation
 	function TUserProfileWebApi.GET: TUser;
@@ -46,7 +46,7 @@
 	end;
 	
 ## 创建工程
-> 在Delphi IDE中打开mvcxe.groupproj，运行Project:Webborker.Console
+> 解压MVCXE软件压缩包，用Delphi IDE打开工程组mvcxe.groupproj，编译运行Project:Webborker.Console.exe
 
 - 在控制台窗口中输入create回车，创建工程
 
@@ -57,20 +57,20 @@
 ![ProjectName](../images/ProjectName.png)
 
 - 选择工程模板，选1是只有WebApi，选3是只有Mvc，选2是混合
-- 输入空间名，例MyCompany，可以为空
+- 输入SpaceName，例:`MyCompany.MyApp`，默认用工程名作为SpaceName
 
 ![SpaceName](../images/SpaceName.png)
 
-- 最后用Delphi IDE打开工程MyApp.groupproj并编译
+- 生成的工程在DefaultProjectsDirectory下，用Delphi IDE打开工程MyApp.groupproj并编译全部工程
 
 ![OpenProject](../images/OpenProject.png)
 
-- 运行Webborker.Console,自动打开浏览器，并访问默认的地址
+- 运行Webborker.Console.exe,程序会自动打开浏览器，并访问默认的地址
 
 ![DemoHome](../images/demo_home.png)
 
-- 切换地址/swagger/index.html访问Swagger查看现有的WebApi
+- 手动切换地址/swagger/index.html访问Swagger查看现有的WebApi
 
 ![DemoSwagger](../images/demo_swagger.png)
 
-## 将创建好的工程移到你常用的目录，添加到源码管理器git或svn，就可以进行Delphi Web开发的神奇之旅。
+## 添加到源码管理器git或svn，就可以进行Delphi Web开发的神奇之旅。

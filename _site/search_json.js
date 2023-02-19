@@ -14,17 +14,17 @@ window.ydoc_plugin_search_json = {
         {
           "title": "先欣赏两段常见代码",
           "url": "\\docs\\installation.html#先欣赏两段常见代码",
-          "content": "先欣赏两段常见代码MVC\ntype  THomeController = class(TController)\n  private\n\t[IOC]\n\tPostService: IPostService;\n  public\n\tfunction Index: string;\n  end;\nimplementation\nfunction THomeController.Index: string;\nbegin\n  ViewBag.Add('TopPosts', PostService.GetTopPosts(5));\n  Result := View;\nend;\nWebapi\ntype  [Route('user/profile')]\n  TUserWebApi = class(TWebApi)\n  private\n\t[IOC('Your.Service.UserService')]\n\tUserService: IUserService;\n  public\n\t[Authorize('Your.Authorization.YourAuthorization', 'your_role_str')]\n\tfunction GET: TUser;\n  end;\nimplementation\nfunction TUserProfileWebApi.GET: TUser;\nbegin\n  Result.code := 200;\n  Result.data := current_user;\n  Result.dept := SysService.DeptById(current_user.dept_id);\n  SetLength(Result.postIds, 1);\n  Result.postIds[0] := current_user.post_id;\n  Result.posts := SysService.Posts;\n  SetLength(Result.roleIds, 1);\n  Result.roleIds[0] := current_user.role_id;\n  Result.roles := SysService.Roles;\n  Result.msg := '';\nend;\n"
+          "content": "先欣赏两段常见代码MVC\ntype  THomeController = class(TController)\n  private\n    [IOC]\n    PostService: IPostService;\n  public\n    function Index: string;\n  end;\nimplementation\nfunction THomeController.Index: string;\nbegin\n  ViewBag.Add('TopPosts', PostService.GetTopPosts(5));\n  Result := View;\nend;\nWebapi\ntype  [Route('user/profile')]\n  TUserWebApi = class(TWebApi)\n  private\n    [IOC('Your.Service.UserService')]\n    UserService: IUserService;\n  public\n    [Authorize('Your.Authorization.YourAuthorization', 'your_role_str')]\n    function GET: TUser;\n  end;\nimplementation\nfunction TUserProfileWebApi.GET: TUser;\nbegin\n  Result.code := 200;\n  Result.data := current_user;\n  Result.dept := SysService.DeptById(current_user.dept_id);\n  SetLength(Result.postIds, 1);\n  Result.postIds[0] := current_user.post_id;\n  Result.posts := SysService.Posts;\n  SetLength(Result.roleIds, 1);\n  Result.roleIds[0] := current_user.role_id;\n  Result.roles := SysService.Roles;\n  Result.msg := '';\nend;\n"
         },
         {
           "title": "创建工程",
           "url": "\\docs\\installation.html#创建工程",
-          "content": "创建工程在Delphi IDE中打开mvcxe.groupproj，运行Project:Webborker.Console\n在控制台窗口中输入create回车，创建工程\n输入工程名，例MyApp\n选择工程模板，选1是只有WebApi，选3是只有Mvc，选2是混合\n输入空间名，例MyCompany，可以为空\n最后用Delphi IDE打开工程MyApp.groupproj并编译\n运行Webborker.Console,自动打开浏览器，并访问默认的地址\n切换地址/swagger/index.html访问Swagger查看现有的WebApi\n"
+          "content": "创建工程解压MVCXE软件压缩包，用Delphi IDE打开工程组mvcxe.groupproj，编译运行Project:Webborker.Console.exe\n在控制台窗口中输入create回车，创建工程\n输入工程名，例MyApp\n选择工程模板，选1是只有WebApi，选3是只有Mvc，选2是混合\n输入SpaceName，例:MyCompany.MyApp，默认用工程名作为SpaceName\n生成的工程在DefaultProjectsDirectory下，用Delphi IDE打开工程MyApp.groupproj并编译全部工程\n运行Webborker.Console.exe,程序会自动打开浏览器，并访问默认的地址\n手动切换地址/swagger/index.html访问Swagger查看现有的WebApi\n"
         },
         {
-          "title": "将创建好的工程移到你常用的目录，添加到源码管理器git或svn，就可以进行Delphi Web开发的神奇之旅。",
-          "url": "\\docs\\installation.html#将创建好的工程移到你常用的目录，添加到源码管理器git或svn，就可以进行delphi-web开发的神奇之旅。",
-          "content": "将创建好的工程移到你常用的目录，添加到源码管理器git或svn，就可以进行Delphi Web开发的神奇之旅。"
+          "title": "添加到源码管理器git或svn，就可以进行Delphi Web开发的神奇之旅。",
+          "url": "\\docs\\installation.html#添加到源码管理器git或svn，就可以进行delphi-web开发的神奇之旅。",
+          "content": "添加到源码管理器git或svn，就可以进行Delphi Web开发的神奇之旅。"
         }
       ]
     },

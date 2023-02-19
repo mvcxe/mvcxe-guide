@@ -10,10 +10,10 @@
 <pre><code>type
   THomeController = class(TController)
   private
-	[IOC]
-	PostService: IPostService;
+    [IOC]
+    PostService: IPostService;
   public
-	function Index: string;
+    function Index: string;
   end;
 implementation
 function THomeController.Index: string;
@@ -29,11 +29,11 @@ end;
   [Route('user/profile')]
   TUserWebApi = class(TWebApi)
   private
-	[IOC('Your.Service.UserService')]
-	UserService: IUserService;
+    [IOC('Your.Service.UserService')]
+    UserService: IUserService;
   public
-	[Authorize('Your.Authorization.YourAuthorization', 'your_role_str')]
-	function GET: TUser;
+    [Authorize('Your.Authorization.YourAuthorization', 'your_role_str')]
+    function GET: TUser;
   end;
 implementation
 function TUserProfileWebApi.GET: TUser;
@@ -52,7 +52,7 @@ end;
 </code></pre>
 <h2 id="创建工程">创建工程</h2>
 <blockquote>
-<p>在Delphi IDE中打开mvcxe.groupproj，运行Project:Webborker.Console</p>
+<p>解压MVCXE软件压缩包，用Delphi IDE打开工程组mvcxe.groupproj，编译运行Project:Webborker.Console.exe</p>
 </blockquote>
 <ul>
 <li>在控制台窗口中输入create回车，创建工程</li>
@@ -64,22 +64,22 @@ end;
 <p><img src="../images/ProjectName.png" alt="ProjectName"></p>
 <ul>
 <li>选择工程模板，选1是只有WebApi，选3是只有Mvc，选2是混合</li>
-<li>输入空间名，例MyCompany，可以为空</li>
+<li>输入SpaceName，例:<code>MyCompany.MyApp</code>，默认用工程名作为SpaceName</li>
 </ul>
 <p><img src="../images/SpaceName.png" alt="SpaceName"></p>
 <ul>
-<li>最后用Delphi IDE打开工程MyApp.groupproj并编译</li>
+<li>生成的工程在DefaultProjectsDirectory下，用Delphi IDE打开工程MyApp.groupproj并编译全部工程</li>
 </ul>
 <p><img src="../images/OpenProject.png" alt="OpenProject"></p>
 <ul>
-<li>运行Webborker.Console,自动打开浏览器，并访问默认的地址</li>
+<li>运行Webborker.Console.exe,程序会自动打开浏览器，并访问默认的地址</li>
 </ul>
 <p><img src="../images/demo_home.png" alt="DemoHome"></p>
 <ul>
-<li>切换地址/swagger/index.html访问Swagger查看现有的WebApi</li>
+<li>手动切换地址/swagger/index.html访问Swagger查看现有的WebApi</li>
 </ul>
 <p><img src="../images/demo_swagger.png" alt="DemoSwagger"></p>
-<h2 id="将创建好的工程移到你常用的目录，添加到源码管理器git或svn，就可以进行delphi-web开发的神奇之旅。">将创建好的工程移到你常用的目录，添加到源码管理器git或svn，就可以进行Delphi Web开发的神奇之旅。</h2>
+<h2 id="添加到源码管理器git或svn，就可以进行delphi-web开发的神奇之旅。">添加到源码管理器git或svn，就可以进行Delphi Web开发的神奇之旅。</h2>
 </div><div class="m-content-container m-paging"><div class="m-paging-prev m-paging-item"><a href="index.html" class="href"><span class="ui-font-ydoc"></span>文档</a></div><div class="m-paging-next m-paging-item"><a href="intro.html" class="href">介绍<span class="ui-font-ydoc"></span></a></div></div></div></div></div><div></div><script>
     var $content = document.getElementById('js-content');
     var $summaryItems = Array.prototype.slice.call(document.querySelectorAll('#js-menu .href'));
