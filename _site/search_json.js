@@ -444,9 +444,9 @@ window.ydoc_plugin_search_json = {
           "content": "如何使用type  TRestResult = record\n    statusCode: Integer;\n    data: TValue;\n    succeeded: Boolean;\n    errors: string;\n    extras: string;\n    timestamp: Int64;\n  end;\n  TMyRec = record\n    name: string;\n    age: Integer;\n  end;\n  TMyWebApi = class(TWebApi)\n  public\n    function GET: TMyRec;\n    function OnActionResult(const context: TValue): TRestResult;\n  end;\nimplementation\nfunction TMyWebApi.GET: TMyRec;\nbegin\n  Result.name := 'mvcxe';\n  Result.age := 6;\nend;\n\nfunction TMyWebApi.OnActionResult(const context: TValue): TRestResult;\nbegin\n  if string(context.TypeInfo.Name).IndexOf('TBahException')-1 then\n  begin\n    Result.statusCode := context.AsType.StatusCode;\n    Result.data := '';\n    Result.succeeded := False;\n    Result.errors := context.AsType.Message;\n    Result.extras := '';\n    Result.timestamp := DateTimeToUnix(Now, True);\n  end\n  else if string(context.TypeInfo.Name).IndexOf('Exception')-1 then\n  begin\n    Result.statusCode := 500;\n    Result.data := '';\n    Result.succeeded := False;\n    Result.errors := context.AsType.Message;\n    Result.extras := '';\n    Result.timestamp := DateTimeToUnix(Now, True);\n  end\n  else\n  begin\n    Result.statusCode := 0;\n    Result.data := context;\n    Result.succeeded := True;\n    Result.errors := '';\n    Result.extras := '';\n    Result.timestamp := DateTimeToUnix(Now, True);\n  end;\nend;\n"
         },
         {
-          "title": "可以将含OnActionResult定义为基类，所在继承该基类的Controller和WebApi也会统一由基类的OnActionResult返回内容",
-          "url": "\\docs\\action-result.html#可以将含onactionresult定义为基类，所在继承该基类的controller和webapi也会统一由基类的onactionresult返回内容",
-          "content": "可以将含OnActionResult定义为基类，所在继承该基类的Controller和WebApi也会统一由基类的OnActionResult返回内容TRestWebApi = class(TWebApi)Protected\n    function OnActionResult(const context: TValue): TRestResult;\nend;\nTMyWebApi = class(TRestWebApi)\npublic\n    function GET: TMyRec;\nend;"
+          "title": "可以将含OnActionResult定义为基类，所有继承该基类的Controller和WebApi也会统一由基类的OnActionResult返回内容",
+          "url": "\\docs\\action-result.html#可以将含onactionresult定义为基类，所有继承该基类的controller和webapi也会统一由基类的onactionresult返回内容",
+          "content": "可以将含OnActionResult定义为基类，所有继承该基类的Controller和WebApi也会统一由基类的OnActionResult返回内容TRestWebApi = class(TWebApi)Protected\n    function OnActionResult(const context: TValue): TRestResult;\nend;\nTMyWebApi = class(TRestWebApi)\npublic\n    function GET: TMyRec;\nend;"
         }
       ]
     },
@@ -1313,6 +1313,50 @@ window.ydoc_plugin_search_json = {
           "title": "范例",
           "url": "\\docs\\tran.html#范例",
           "content": "范例procedure TPostService.DeletePost(const Id: Integer);begin\n  orm.StartTransaction;\n  try\n    orm.DB.Execute('DELETE FROM likes WHERE CommentId in (SELECT Id FROM comments WHERE PostId=?)',[Id]);\n    orm.DB.Execute('DELETE FROM comments WHERE PostId=?',[Id]);\n    orm.DB.Execute('DELETE FROM posts WHERE Id='+IntToStr(Id));\n    orm.Commit;\n  except\n    on e: Exception do\n    begin\n      orm.Rollback;\n    end;\n  end;\nend;\n\nfunction TPostService.ReplyPost(const comment: TComments): Integer;\nbegin\n  Result := 0;\n\n  orm.StartTransaction;\n  try\n    Result := orm.Repository.Insert\n        .SetSource(comment)\n        .ExecuteAffrows;\n    orm.DB.Execute('UPDATE posts SET CommentCount=CommentCount+1 WHERE Id=?',[comment.PostId]);\n    orm.Commit;\n  except\n    on ex: Exception do\n    begin\n      orm.Rollback;\n      raise ex;\n    end;\n  end;\nend;"
+        }
+      ]
+    },
+    {
+      "title": "调度作业",
+      "content": "",
+      "url": "\\docs\\job.html",
+      "children": [
+        {
+          "title": "关于调度作业",
+          "url": "\\docs\\job.html#关于调度作业",
+          "content": "关于调度作业调度作业又称定时任务，顾名思义，定时任务就是在特定的时间或符合某种时间规律自动触发并执行任务。"
+        },
+        {
+          "title": "使用场景",
+          "url": "\\docs\\job.html#关于调度作业-使用场景",
+          "content": "使用场景定时任务的应用场景非常广，几乎是每一个软件系统必备功能：叫你起床的闹钟\n日历日程提醒\n生日纪念日提醒\n定时备份数据库\n定时清理垃圾数据\n定时发送营销信息，邮件\n定时上线产品，比如预售产品，双十一活动\n定时发送优惠券\n定时发布，实现 Devops 功能，如 Jenkins\n定时爬虫抓数据\n定时导出报表，历史统计，考勤统计\n...\n"
+        },
+        {
+          "title": "快速入门",
+          "url": "\\docs\\job.html#关于调度作业-快速入门",
+          "content": "快速入门定义作业处理类 TMyJob：\nuses MVCXE.Quartz;type\n  TMyJob = class(TInterfacedObject,IJob)\n  public\n    procedure Execute;\n  end;\nimplementation\n{ TMyJob }\nprocedure TMyJob.Execute;\nbegin\n  WriteLn('--------'+DateTimeToStr(Now)+'---------');\nend;\n在appsetting.json中设定任务执行计划\n{    \"schedule\": {\n        \"job\": [{\n            \"name\": \"UpdateInventoryJob\",\n            \"group\": \"Update\",\n            \"description\": \"定时更新\",\n            \"job-type\": \"uJob.TMyJob\",\n            \"durable\": true,\n            \"recover\": true\n        }],\n        \"trigger\": [{\n            \"cron\": [{\n                \"name\": \"UpdateInventoryTrigger\",\n                \"group\": \"Update\",\n                \"job-name\": \"UpdateInventoryJob\",\n                \"job-group\": \"Update\",\n                \"start-time\": \"2017-12-01 00:00:00\",\n                \"start-runonce\": true,\n                \"cron-expression\": \"* 0/1 * * * ?\"\n            }]\n        },{\n            \"simple\": [{\n                \"name\": \"UpdateInventoryTrigger\",\n                \"group\": \"Update\",\n                \"job-name\": \"UpdateInventoryJob\",\n                \"job-group\": \"Update\",\n                \"start-time\": \"2017-12-01 00:00:00\",\n                \"start-runonce\": true,\n                \"repeat-count\": 10,\n                \"repeat-interval\": 1000\n            }]\n        }]\t\n    }\n}\nschedule\\job是jobs列表，可定义多个job\nschedule\\job[n]\\job-type是作业处理类的引用全写，UnitName.ClassName\nschedule\\job[n]\\name和schedule\\job\\group用于trigger中匹配\nschedule\\job[n]\\recover是作业是否等待上一次完成再继续，true不等待，false等待\nschedule\\trigger是触发器列表，可定义多个触发器\nschedule\\trigger[n]\\cron是cron表达式触发器列表，可定义多个cron触发器\nschedule\\trigger[n]\\cron[n]\\job-name和schedule\\trigger[n]\\cron[n]\\job-group用于匹配job\nschedule\\trigger[n]\\cron[n]\\start-time是job可触发的开始时间\nschedule\\trigger[n]\\cron[n]\\start-runoncejob是否只触发一次\nschedule\\trigger[n]\\cron[n]\\cron-expression是cron表达式\nschedule\\trigger[n]\\simple是按时间间隔触发器\nschedule\\trigger[n]\\simple[n]\\job-name和schedule\\trigger[n]\\simple[n]\\job-group用于匹配job\nschedule\\trigger[n]\\simple[n]\\start-time是job可触发的开始时间\nschedule\\trigger[n]\\simple[n]\\start-runoncejob是否只触发一次\nschedule\\trigger[n]\\simple[n]\\repeat-count是job总共可触发次数，小于等于0表示不限制\nschedule\\trigger[n]\\simple[n]\\repeat-interval每间隔多少毫秒触发一次\n"
+        }
+      ]
+    },
+    {
+      "title": "Cron 表达式默认情况下，Cron 表达式不支持 秒 和 年 的。",
+      "content": "",
+      "url": "\\docs\\cron.html",
+      "children": [
+        {
+          "title": "关于 Cron 表达式",
+          "url": "\\docs\\cron.html#关于-cron-表达式",
+          "content": "关于 Cron 表达式Cron 表达式是一个字符串，字符串以 5 或 6 个空格隔开，分为 6 或 7 个域，每一个域代表一个含义，Cron 表达式通常是作为实现定时任务的基石。"
+        },
+        {
+          "title": "Cron 各字段说明",
+          "url": "\\docs\\cron.html#cron-各字段说明",
+          "content": "Cron 各字段说明\n\n字段\n允许值\n允许特别符号\n格式化\n\n\n\n\n秒\n0-59\n* , - /\nCronStringFormat.WithSeconds 或 CronStringFormat.WithSecondsAndYears\n\n\n分钟\n0-59\n* , - /\nALL\n\n\n小时\n0-23\n* , - /\nALL\n\n\n天\n1-31\n* , - / ? L W\nALL\n\n\n月份\n1-12 or JAN-DEC\n* , - /\nALL\n\n\n星期\n0-6 or SUN-SAT\n* , - / ? L #\nALL\n\n\n年份\n0001–9999\n* , - /\nCronStringFormat.WithYears 或 CronStringFormat.WithSecondsAndYears\n\n\n*：表示匹配该域的任意值，假如在 分钟 域使用 *，即表示每分钟都会触发事件。\n?：只能用在 天 和 星期 两个域。它也匹配域的任意值，但实际不会。因为 天 和 星期 会相互影响。例如想在 每月的20日 触发调度，不管 20 日到底是星期几，则只能使用如下写法：13 13 15 20 * ?, 其中最后一位只能用 ?，而不能使用 *，如果使用 * 表示不管星期几都会触发，实际上并不是这样。\n-：表示范围，例如在 分钟 域使用 5-20，表示从 5分 到20分钟 每分钟触发一次。\n/：表示起始时间开始触发，然后每隔固定时间触发一次，例如在 分钟 域使用 5/20，则意味着 5分钟 触发一次，而 25，45 等分别触发一次。\n,：表示列出枚举值。例如：在 分钟 域使用 5,20，则意味着在 第5 和 第20分钟 分别触发一次。\nL：表示最后，只能出现在 星期 和 月份 域，如果在 星期 域使用 5L，意味着在 最后的一个星期四 触发。\nW：表示有效工作日(周一到周五),只能出现在 天 域，系统将在离指定日期的最近的有效工作日触发事件。例如：在 天 使用 5W，如果 5日是星期六，则将在最近的工作日：星期五，即 4日 触发。如果 5日是星期天，则在6日(周一)触发；如果 5日在星期一到星期五中的一天，则就在 5日 触发。另外一点，W 的最近寻找不会跨过月份。\nLW：这两个字符可以连用，表示在某个月最后一个工作日，即最后一个非周六周末的日期。\n#：用于确定每个月第几个星期几，只能出现在 星期 域。例如在 4#2，表示某月的第二个星期三。\n"
+        },
+        {
+          "title": "在线生成 Cron 表达式",
+          "url": "\\docs\\cron.html#在线生成-cron-表达式",
+          "content": "在线生成 Cron 表达式对于大多数开发者来说，编写 Cron 表达式是有难度的，所以推荐使用在线 Cron 表达式生成器。https://cron.qqe2.com/"
         }
       ]
     }

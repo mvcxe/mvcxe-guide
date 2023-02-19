@@ -62,7 +62,7 @@
       end;
     end;
 
-## 可以将含OnActionResult定义为基类，所在继承该基类的Controller和WebApi也会统一由基类的OnActionResult返回内容
+## 可以将含OnActionResult定义为基类，所有继承该基类的Controller和WebApi也会统一由基类的OnActionResult返回内容
 
     TRestWebApi = class(TWebApi)
     Protected
