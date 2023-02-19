@@ -402,28 +402,38 @@ window.ydoc_plugin_search_json = {
           "content": "输出Url，语法：{~ '/urlpath'} 或 {~ $简单变量} 或 {~ $对象变量.属性} 或 {~ $对象变量.方法(参数)}\n描述：输出的url可自动加上[RootPath]\n    var    loginpage: string;\n    begin\n    loginpage = '/account/login';\n    ViewBag.Add('loginpage', loginpage);\n    end;\n\n    Login\n    Login\n"
         },
         {
+          "title": "流程控制语句",
+          "url": "\\docs\\view-engine.html#流程控制语句",
+          "content": "流程控制语句"
+        },
+        {
           "title": "循环",
-          "url": "\\docs\\view-engine.html#输出内容-循环",
+          "url": "\\docs\\view-engine.html#流程控制语句-循环",
           "content": "循环语法：\n    {for (循环变量 in $循环对象.属性)}      循环区块的内容\n    {end}\n描述：按服务器端的数组类型变量顺序循环一遍\n循环值:$循环变量.index表示当前循环序号，由0开始。\n支持{break}\n$循环变量.value表示循环值，可以是一个简单变量，也可以是一个对象\n    posts := PostService.GetMyPosts(CurrentUserId, CurrentPage, PageSize, TotalCount, PageCount);    ViewBag.Add('Posts', posts);\n\n     \n    {for (Post in $Posts)}\n        \n            \n              \n            \n            \n              分享\n              {= $op.HtmlEncode($Post.Value.Title)}\n            \n        \n    {end}\n    \n"
         },
         {
           "title": "条件判断",
-          "url": "\\docs\\view-engine.html#输出内容-条件判断",
+          "url": "\\docs\\view-engine.html#流程控制语句-条件判断",
           "content": "条件判断语法：\n    {if (条件表达式)}      条件表达式为真时输出这块内容\n    {else}\n      条件表达式为假时输出这块内容\n    {end}\n描述：条件表达式支持=  = \n    {if ($IsLogin)}    \n            {if ($op.Logical_or($CurrentAccount.IsAdmin, ($Post.UserId = $CurrentAccount.Id)))}\n            删除\n            {end}\n            {if ($CurrentAccount.IsAdmin)}\n                    {if ($Post.IsTop = False)}\n                            置顶\n                    {else}\t\t\t\n                            取消置顶\n                    {end}\n                    {if ($Post.IsBoutique = False)}\n                            加精\n                    {else}\n                            取消加精\n                    {end}\n            {end}\n    \n    {end}\n"
         },
         {
-          "title": "Section代码块",
-          "url": "\\docs\\view-engine.html#section代码块",
-          "content": "Section代码块定义Section代码块\n    {@SectionName}      该Section代码块的内容\n    {end}\n引用Section代码块\n    {= @SectionName}描述：将某些多次用到的公用代码编写成代码块，在循环或条件判断中使用可以让模板代码简洁直观\n    {@TestSection}      刚刚\n    {end}\n     \n    {for (Post in $Posts)}\n        \n            \n              \n            \n            \n              分享\n              {= $op.HtmlEncode($Post.Value.Title)}\n            \n            \n              \n                    {= $Post.Value.User.Nickname}\n                    {if ($Post.Value.User.IsVip = True)}\n                            \n                            VIP{= $Post.Value.User.VipLevel}\n                    {end}\n              \n              {= @TestSection}\n            \n        \n    {end}\n    \n"
+          "title": "代码块",
+          "url": "\\docs\\view-engine.html#代码块",
+          "content": "代码块"
+        },
+        {
+          "title": "Section",
+          "url": "\\docs\\view-engine.html#代码块-section",
+          "content": "Section定义Section代码块\n    {@SectionName}      该Section代码块的内容\n    {end}\n引用Section代码块\n    {= @SectionName}描述：将某些多次用到的公用代码编写成代码块，在循环或条件判断中使用可以让模板代码简洁直观\n    {@TestSection}      刚刚\n    {end}\n     \n    {for (Post in $Posts)}\n        \n            \n              \n            \n            \n              分享\n              {= $op.HtmlEncode($Post.Value.Title)}\n            \n            \n              \n                    {= $Post.Value.User.Nickname}\n                    {if ($Post.Value.User.IsVip = True)}\n                            \n                            VIP{= $Post.Value.User.VipLevel}\n                    {end}\n              \n              {= @TestSection}\n            \n        \n    {end}\n    \n"
         },
         {
           "title": "嵌入子模板",
-          "url": "\\docs\\view-engine.html#section代码块-嵌入子模板",
+          "url": "\\docs\\view-engine.html#代码块-嵌入子模板",
           "content": "嵌入子模板语法：{! '子模板' }\n描述：子模板在.\\views\\或.\\areas\\[AreaName]\\views\\下按路径文件名匹配\n          \n            {! 'Config\\site.htm' }\n      \n      \n            {! 'Config\\logo.htm' }\n      \n      \n            {! 'Config\\upload.htm' }\n      \n    \n"
         },
         {
           "title": "强制不解析",
-          "url": "\\docs\\view-engine.html#section代码块-强制不解析",
+          "url": "\\docs\\view-engine.html#代码块-强制不解析",
           "content": "强制不解析语法：{}\n描述：内容原样输出，忽略上面的模板控制代码\n"
         }
       ]

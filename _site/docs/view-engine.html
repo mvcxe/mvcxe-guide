@@ -170,7 +170,8 @@ end;
     &lt;a href=&quot;{~ $loginpage}&quot;&gt;Login&lt;/a&gt;
     &lt;a href=&quot;{~ '/account/login'}&quot;&gt;Login&lt;/a&gt;
 </code></pre>
-<h3 id="输出内容-循环">循环</h3>
+<h2 id="流程控制语句">流程控制语句</h2>
+<h3 id="流程控制语句-循环">循环</h3>
 <blockquote>
 <p>语法：</p>
 </blockquote>
@@ -201,7 +202,7 @@ $循环变量.value表示循环值，可以是一个简单变量，也可以是�
     {end}
     &lt;/ul&gt;
 </code></pre>
-<h3 id="输出内容-条件判断">条件判断</h3>
+<h3 id="流程控制语句-条件判断">条件判断</h3>
 <blockquote>
 <p>语法：</p>
 </blockquote>
@@ -234,7 +235,8 @@ $循环变量.value表示循环值，可以是一个简单变量，也可以是�
     &lt;/div&gt;
     {end}
 </code></pre>
-<h2 id="section代码块">Section代码块</h2>
+<h2 id="代码块">代码块</h2>
+<h3 id="代码块-section">Section</h3>
 <blockquote>
 <p>定义Section代码块</p>
 </blockquote>
@@ -277,7 +279,7 @@ $循环变量.value表示循环值，可以是一个简单变量，也可以是�
     {end}
     &lt;/ul&gt;
 </code></pre>
-<h3 id="section代码块-嵌入子模板">嵌入子模板</h3>
+<h3 id="代码块-嵌入子模板">嵌入子模板</h3>
 <blockquote>
 <p>语法：{! '子模板' }
 描述：子模板在<code>.\views\或.\areas\[AreaName]\views\</code>下按路径文件名匹配</p>
@@ -294,7 +296,7 @@ $循环变量.value表示循环值，可以是一个简单变量，也可以是�
       &lt;/div&gt;
     &lt;/div&gt;
 </code></pre>
-<h3 id="section代码块-强制不解析">强制不解析</h3>
+<h3 id="代码块-强制不解析">强制不解析</h3>
 <blockquote>
 <p>语法：{&lt; 这里面的内容会原样输出，忽略上面的模板控制代码 &gt;}<br>
 描述：内容原样输出，忽略上面的模板控制代码</p>

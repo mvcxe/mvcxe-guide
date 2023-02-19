@@ -166,6 +166,7 @@ View方法会自动查找默认的模板文件解析后返回内容。
         <a href="{~ $loginpage}">Login</a>
         <a href="{~ '/account/login'}">Login</a>
 
+## 流程控制语句
 ### 循环
 > 语法：
 
@@ -226,7 +227,8 @@ View方法会自动查找默认的模板文件解析后返回内容。
         </div>
         {end}
 
-## Section代码块
+## 代码块
+### Section
 > 定义Section代码块
 
         {@SectionName}
