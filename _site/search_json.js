@@ -429,6 +429,28 @@ window.ydoc_plugin_search_json = {
       ]
     },
     {
+      "title": "统一返回",
+      "content": "",
+      "url": "\\docs\\action-result.html",
+      "children": [
+        {
+          "title": "什么是统一返回",
+          "url": "\\docs\\action-result.html#什么是统一返回",
+          "content": "什么是统一返回有时候我们需要在返回的内容里面统一加减一些内容，就需要用到OnActionResult。在Controller或WebApi中定义函数OnActionResult，它有一个TValue类型参数，返回类型可自定义。"
+        },
+        {
+          "title": "如何使用",
+          "url": "\\docs\\action-result.html#如何使用",
+          "content": "如何使用type  TRestResult = record\n    statusCode: Integer;\n    data: TValue;\n    succeeded: Boolean;\n    errors: string;\n    extras: string;\n    timestamp: Int64;\n  end;\n  TMyRec = record\n    name: string;\n    age: Integer;\n  end;\n  TMyWebApi = class(TWebApi)\n  public\n    function GET: TMyRec;\n    function OnActionResult(const context: TValue): TRestResult;\n  end;\nimplementation\nfunction TMyWebApi.GET: TMyRec;\nbegin\n  Result.name := 'mvcxe';\n  Result.age := 6;\nend;\n\nfunction TMyWebApi.OnActionResult(const context: TValue): TRestResult;\nbegin\n  if string(context.TypeInfo.Name).IndexOf('TBahException')-1 then\n  begin\n    Result.statusCode := context.AsType.StatusCode;\n    Result.data := '';\n    Result.succeeded := False;\n    Result.errors := context.AsType.Message;\n    Result.extras := '';\n    Result.timestamp := DateTimeToUnix(Now, True);\n  end\n  else if string(context.TypeInfo.Name).IndexOf('Exception')-1 then\n  begin\n    Result.statusCode := 500;\n    Result.data := '';\n    Result.succeeded := False;\n    Result.errors := context.AsType.Message;\n    Result.extras := '';\n    Result.timestamp := DateTimeToUnix(Now, True);\n  end\n  else\n  begin\n    Result.statusCode := 0;\n    Result.data := context;\n    Result.succeeded := True;\n    Result.errors := '';\n    Result.extras := '';\n    Result.timestamp := DateTimeToUnix(Now, True);\n  end;\nend;\n"
+        },
+        {
+          "title": "可以将含OnActionResult定义为基类，所在继承该基类的Controller和WebApi也会统一由基类的OnActionResult返回内容",
+          "url": "\\docs\\action-result.html#可以将含onactionresult定义为基类，所在继承该基类的controller和webapi也会统一由基类的onactionresult返回内容",
+          "content": "可以将含OnActionResult定义为基类，所在继承该基类的Controller和WebApi也会统一由基类的OnActionResult返回内容TRestWebApi = class(TWebApi)Protected\n    function OnActionResult(const context: TValue): TRestResult;\nend;\nTMyWebApi = class(TRestWebApi)\npublic\n    function GET: TMyRec;\nend;"
+        }
+      ]
+    },
+    {
       "title": "日志记录",
       "content": "",
       "url": "\\docs\\logging.html",

@@ -19,6 +19,7 @@
 * [安全鉴权](auth-control.md)
 * [CORS 跨域](cors.md)
 * [视图引擎](view-engine.md)
+* [统一返回](action-result.md)
 * [日志记录](logging.md)
 * [JSON 序列化](json-serialization.md)
 * [XML 序列化](xml-serialization.md)

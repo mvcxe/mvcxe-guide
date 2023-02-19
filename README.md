@@ -19,8 +19,6 @@ ydoc build
 ## 浏览访问文档
 _site目录是编译后的文档根目录，浏览器打开index.html。
 
-# Summary
-
 * [关于MVCXE](./docs/docs/index.md)
 * [介绍](./docs/docs/intro.md#)
 
@@ -41,6 +39,7 @@ _site目录是编译后的文档根目录，浏览器打开index.html。
 * [安全鉴权](./docs/docs/auth-control.md)
 * [CORS 跨域](./docs/docs/cors.md)
 * [视图引擎](./docs/docs/view-engine.md)
+* [统一返回](./docs/docs/action-result.md)
 * [日志记录](./docs/docs/logging.md)
 * [JSON 序列化](./docs/docs/json-serialization.md)
 * [XML 序列化](./docs/docs/xml-serialization.md)
