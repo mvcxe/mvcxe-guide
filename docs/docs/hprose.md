@@ -114,13 +114,13 @@ Hprose 目前基于 HTTP 传输的实现支持众多种类的 Web 服务器。�
 
     IHproseClient = interface
     ['{A8F5114F-9995-40FB-B346-F3507AABC8B2}']
-    function GetCustomHeader: TDictionary<string, string>;
-    property Header: TDictionary<string, string> read GetCustomHeader;
-    function Call(const AName: string): THproseInvoke; overload;
-    function Call(const AName: string; const Args: array of const)
-      : THproseInvoke; overload;
-    procedure CustomHeader(const name: string; const Value: string);
-  end;
+        function GetCustomHeader: TDictionary<string, string>;
+        property Header: TDictionary<string, string> read GetCustomHeader;
+        function Call(const AName: string): THproseInvoke; overload;
+        function Call(const AName: string; const Args: array of const)
+        : THproseInvoke; overload;
+        procedure CustomHeader(const name: string; const Value: string);
+    end;
 
 ### 静态类`HproseClient`
 

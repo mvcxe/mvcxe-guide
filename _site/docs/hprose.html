@@ -100,14 +100,14 @@ end;
 <h3 id="调用hprose服务-ihproseclient">IHproseClient</h3>
 <pre><code>IHproseClient = interface
 ['{A8F5114F-9995-40FB-B346-F3507AABC8B2}']
-function GetCustomHeader: TDictionary&lt;string, string&gt;;
-property Header: TDictionary&lt;string, string&gt; read GetCustomHeader;
-function Call(const AName: string): THproseInvoke; overload;
-function Call(const AName: string; const Args: array of const)
-  : THproseInvoke; overload;
-procedure CustomHeader(const name: string; const Value: string);
+    function GetCustomHeader: TDictionary&lt;string, string&gt;;
+    property Header: TDictionary&lt;string, string&gt; read GetCustomHeader;
+    function Call(const AName: string): THproseInvoke; overload;
+    function Call(const AName: string; const Args: array of const)
+    : THproseInvoke; overload;
+    procedure CustomHeader(const name: string; const Value: string);
+end;
 </code></pre>
-<p>end;</p>
 <h3 id="调用hprose服务-静态类hproseclient">静态类<code>HproseClient</code></h3>
 <pre><code>function CallHprose: string;
 begin

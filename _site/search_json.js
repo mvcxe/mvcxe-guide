@@ -1418,7 +1418,7 @@ window.ydoc_plugin_search_json = {
         {
           "title": "IHproseClient",
           "url": "\\docs\\hprose.html#调用hprose服务-ihproseclient",
-          "content": "IHproseClientIHproseClient = interface['{A8F5114F-9995-40FB-B346-F3507AABC8B2}']\nfunction GetCustomHeader: TDictionary;\nproperty Header: TDictionary read GetCustomHeader;\nfunction Call(const AName: string): THproseInvoke; overload;\nfunction Call(const AName: string; const Args: array of const)\n  : THproseInvoke; overload;\nprocedure CustomHeader(const name: string; const Value: string);\nend;"
+          "content": "IHproseClientIHproseClient = interface['{A8F5114F-9995-40FB-B346-F3507AABC8B2}']\n    function GetCustomHeader: TDictionary;\n    property Header: TDictionary read GetCustomHeader;\n    function Call(const AName: string): THproseInvoke; overload;\n    function Call(const AName: string; const Args: array of const)\n    : THproseInvoke; overload;\n    procedure CustomHeader(const name: string; const Value: string);\nend;\n"
         },
         {
           "title": "静态类HproseClient",
