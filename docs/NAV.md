@@ -2,4 +2,4 @@
 ![logo](images/logo.png)
 
 * [文档](/docs/index.md)
-* [关于](/about/index.html)
+* [授权](/licence/index.md)

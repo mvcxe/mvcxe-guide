@@ -5,7 +5,7 @@ banner:
   btns: 
     - { name: '开 始', href: './docs/index.html', primary: true }
     - { name: 'Gitee >', href: 'https://gitee.com/mvcxe/mvcxe-guide' }
-  caption: '当前版本: v3.0 rc1'
+  caption: '当前版本: v3.0 rc2'
 features: 
   - { name: '为WEB开发而生', desc: '编译为高性能二进制Web服务器和BPL库，内置强大出色的HTML模板引擎，可快速构建界面出色、体验优秀的页面和应用。' }
   - { name: '模块化，轻量级，高性能', desc: '先进的 MVC 分层理念，具有低耦合性、高重用性、可维护性和可适用性，利于软件工程化管理，大幅度提升你的开发效率。' }

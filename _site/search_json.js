@@ -2,7 +2,7 @@ window.ydoc_plugin_search_json = {
   "文档": [
     {
       "title": "MVCXE环境要求支持平台",
-      "content": "中国首个DELPHI MVC WEB框架Delphi 10\nDelphi 11\n运行环境\nWindows\nLinux(计划中)\n数据库\nSqlServer\nSqlite\nMySQL\nOracle\nPgSQL(计划中)\n应用部署\nIIS\nApache\nHttpSys\nLibUv\nIndy\nNginx(计划中)\n",
+      "content": "中国首个DELPHI MVC WEB框架Delphi 10\nDelphi 11\n运行环境\nWindows\nLinux(计划中)\n数据库\nSqlServer\nSqlite\nMySQL\nOracle\nPgSQL\n应用部署\nIIS\nApache\nHttpSys\nLibUv\nIndy\nNginx(计划中)\n",
       "url": "\\docs\\index.html",
       "children": []
     },
@@ -1429,6 +1429,52 @@ window.ydoc_plugin_search_json = {
           "title": "Hprose序列化与反序列化",
           "url": "\\docs\\hprose.html#hprose序列化与反序列化",
           "content": "Hprose序列化与反序列化与Json和Xml序列化使用方法类似。uses MVCXE.Hprose;type\n  HproseSerializer = class\n  public\n    class function Serialize(const R: T): string; overload;\n    class function Serialize(const V: TValue): string; overload;\n    class function Deserialize(const AContent: string): T; overload;\n  end;"
+        }
+      ]
+    },
+    {
+      "title": "发电子邮件",
+      "content": "",
+      "url": "\\docs\\email.html",
+      "children": [
+        {
+          "title": "关于电子邮件",
+          "url": "\\docs\\email.html#关于电子邮件",
+          "content": "关于电子邮件电子邮件是一种用电子手段提供信息交换的通信方式，是互联网应用最广的服务。通过网络的电子邮件系统，用户可以以非常低廉的价格（不管发送到哪里，都只需负担网费）、非常快速的方式（几秒钟之内可以发送到世界上任何指定的目的地），与世界上任何一个角落的网络用户联系。"
+        },
+        {
+          "title": "ISendMail接口",
+          "url": "\\docs\\email.html#isendmail接口",
+          "content": "ISendMail接口MVCXE 框架提供了ISendMail接口来发邮件uses MVCXE.SendMail;ISendMail = interface\n    ['{1D92CAAC-8C34-4A9E-AAE5-C03F8A8C6C3B}']\n    procedure SendMail(const ToList, Subject, Body: string; const AttachmentList: TStrings=nil); overload;\n    procedure SendMail(const ToList, CCList, Subject, Body: string; const AttachmentList: TStrings=nil); overload;\n    procedure SendMail(const ToList, CCList, BCCList, Subject, Body: string; const AttachmentList: TStrings=nil); overload;\n\n    procedure SendHtmlEmail(const ToList, Subject, Body: string; const AttachmentList: TStrings=nil); overload;\n    procedure SendHtmlEmail(const ToList, CCList, Subject, Body: string; const AttachmentList: TStrings=nil); overload;\n    procedure SendHtmlEmail(const ToList, CCList, BCCList, Subject, Body: string; const AttachmentList: TStrings=nil); overload;\nend;\n"
+        },
+        {
+          "title": "配置SMTP服务",
+          "url": "\\docs\\email.html#配置smtp服务",
+          "content": "配置SMTP服务appsettings.json 中配置{  \"AppSettings\": {\n\t\"MAIL.SENDERNAME\": \"MvcXE\",\n\t\"MAIL.SENDEREMAIL\": \"MvcXE@gmail.com\",\n\t\"SMTP.HOST\": \"mail.google.com\",\n\t\"SMTP.USER\": \"\",\n\t\"SMTP.PASS\": \"\",\n\t\"SMTP.PORT\": \"25\",\n\t\"SMTP.TLS\": \"False\"\n  }\n}\n"
+        },
+        {
+          "title": "电子邮件使用",
+          "url": "\\docs\\email.html#电子邮件使用",
+          "content": "电子邮件使用通过注入[IOC('MVCXE.Mail.TSendMail')] ISendMail方式注入即可。基本使用\ntype    TAccountController = class(BaseController)\n    private\n        [IOC('MVCXE.Mail.TSendMail')]\n        mail: ISendMail;\n    public\n        function new(const form: TRegForm): TAccountFormResult;\n    end;\n\nimplementation\n\nfunction TAccountController.new(const form: TRegForm): TAccountFormResult;\nvar\n    User: TUsers;\n    HashMD5: THashMD5;\n    s: string;\n    Membership: TIdentity;\nbegin\n    Response.ContentType := 'application/json';\n    Result.success := False;\n    s := accessor.HttpContext.Session.Get('ValidationCode');\n    if not SameText(form.vercode, s) then\n    begin\n        Result.msg := '验证码不正确.';\n        Exit;\n    end;\n    if not SameText(form.pass, form.repass) then\n    begin\n        Result.msg := '两次密码不相同.';\n        Exit;\n    end;\n    if UserService.UserExists(form.email, form.username) then\n    begin\n        Result.msg := '邮箱地址已存在.';\n        Exit;\n    end;\n    User := TUsers.Create;\n    HashMD5 := THashMD5.Create;\n    s := HashMD5.GetHashString(form.pass);\n    with User do\n    begin\n        Email := TNetEncoding.HTML.Encode(form.email);\n        EmailConfirmed := True;\n        Password := s;\n        Nickname := TNetEncoding.HTML.Encode(form.username);\n        Title := '';\n        Gender := 1;\n        City := '';\n        Sign := '';\n        HeadPortrait := '/res/images/avatar/default.png';\n        Integral := 200;\n        IsVip := False;\n        VipLevel := 0;\n        CreateTime := Now;\n        IsDisabled := False;\n        EmailIsUpdate := True;\n        EmailConfirmToken := '';\n        IsAdmin := False;\n    end;\n    UserService.CreateUser(User);\n    mail.SendMail(form.email,'注册成功','注册成功');\n    Result.msg := '注册成功.';\n    Result.success := True;\nend;\n\nend."
+        }
+      ]
+    }
+  ],
+  "授权": [
+    {
+      "title": "授权",
+      "content": "您可以添加微信好友:kylixfans，咨询产品购买、开发服务、技术支持等事宜。 也可以通过邮件联系我们。",
+      "url": "\\licence\\index.html",
+      "children": [
+        {
+          "title": "开发许可（Developer License）",
+          "url": "\\licence\\index.html#开发许可（developer-license）",
+          "content": "开发许可（Developer License）99元人民币\n每个使用MVCXE的开发者需要购买一个developer license\n此授权方式只对开发者数量限制，对发布的产品没有限制。\n"
+        },
+        {
+          "title": "企业许可（Enterprise License）",
+          "url": "\\licence\\index.html#企业许可（enterprise-license）",
+          "content": "企业许可（Enterprise License）9999元人民币\n许可用户在同一公司范围内供任意数量的开发人员使用本产品。提供全部源码\n提供2人天现场培训服务\n"
         }
       ]
     }

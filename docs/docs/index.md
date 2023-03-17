@@ -12,7 +12,7 @@
 - Sqlite
 - MySQL
 - Oracle
-- PgSQL(计划中)
+- PgSQL
 > 应用部署
 - IIS
 - Apache
