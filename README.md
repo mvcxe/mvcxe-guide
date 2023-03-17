@@ -78,3 +78,6 @@ _site目录是编译后的文档根目录，浏览器打开index.html。
 
 ### 微服务
 * [RPC (Hprose)](./docs/docs/hprose.md)
+
+### 客户端应用
+* [发邮件](./docs/docs/email.md)
