@@ -128,7 +128,7 @@ Mvc 控制器和 WebAPI 控制器最大的区别是 `WebAPI` 控制器不带 **�
 > 前缀
 
 如果在`launchSettings.json`设置了该动态WebAPI所在bpl的`RoutePrefix`，**以该设定为前缀**<br/>
-否则 `MVC` **没有前缀**，`WebAPI` 的**前缀是api**
+否则**没有前缀**
 
 > 模块名
 
