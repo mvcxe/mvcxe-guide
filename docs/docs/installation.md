@@ -76,7 +76,7 @@
 - MVCXE.Template.Ferry创建的是范例：开源项目Ferry的后端Delphi实现。
 
 ### 打开创建好的工程
-![myapp](../images/myapp.png)
+![MyApp](../images/MyApp.png)
 > 目录结构
 - output是编译输出目录，也就是Web站点最终发布目录
 - server是Web服务器程序源码目录
