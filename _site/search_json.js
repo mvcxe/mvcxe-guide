@@ -19,12 +19,32 @@ window.ydoc_plugin_search_json = {
         {
           "title": "创建工程",
           "url": "\\docs\\installation.html#创建工程",
-          "content": "创建工程解压MVCXE软件压缩包，用Delphi IDE打开工程组mvcxe.groupproj，编译运行Project:Webborker.Console.exe\n在控制台窗口中输入create回车，创建工程\n输入工程名，例MyApp\n选择工程模板，选1是只有WebApi，选3是只有Mvc，选2是混合\n输入SpaceName，例:MyCompany.MyApp，默认用工程名作为SpaceName\n生成的工程在DefaultProjectsDirectory下，用Delphi IDE打开工程MyApp.groupproj并编译全部工程\n运行Webborker.Console.exe,程序会自动打开浏览器，并访问默认的地址\n手动切换地址/swagger/index.html访问Swagger查看现有的WebApi\n"
+          "content": "创建工程在Delphi IDE中打开工程组mvcxe3_install.groupproj，并编译运行InstallTools\n"
         },
         {
-          "title": "添加到源码管理器git或svn，就可以进行Delphi Web开发的神奇之旅。",
-          "url": "\\docs\\installation.html#添加到源码管理器git或svn，就可以进行delphi-web开发的神奇之旅。",
-          "content": "添加到源码管理器git或svn，就可以进行Delphi Web开发的神奇之旅。"
+          "title": "点击\"Install MVCXE Dcp\"安装MVCXE所需要的编译单元文件",
+          "url": "\\docs\\installation.html#创建工程-点击\"install-mvcxe-dcp\"安装mvcxe所需要的编译单元文件",
+          "content": "点击\"Install MVCXE Dcp\"安装MVCXE所需要的编译单元文件"
+        },
+        {
+          "title": "点击\"Create MVCXE Project\"",
+          "url": "\\docs\\installation.html#创建工程-点击\"create-mvcxe-project\"",
+          "content": "点击\"Create MVCXE Project\"按你的需求填好：工程名，命名空间等信息，然后点“Create”创建一个MVCXE工程。\nWeb服务器选项\nWebborker.Console是用Indy实现的WebServer，默认必选。\nISAPI是ISAPI模块(Apache安装方法参考源码里的注释,IIS安装方法参考网上教程，另需要将output目录下非wwwroot目录的文件剪贴到wwwroot里的App_Data目录内)\nApache是Apache DSO模块(安装方法参考源码里的注释)\nPnServer是用Http.Sys实现的WebServer（有些系统需要管理员权限运行）\nNode.Pas是用LibUV实现的WebServer\n工程模板选项\nMVCXE.Template.Api创建的是WebApi工程,只输出Api,不输出网页内容,自带Swagger。\nMVCXE.Template.Mvc创建的是Mvc工程，可以使用模板生成网页内容。\nMVCXE.Template.App创建的是WebApi/Mvc混合工程，包括Api也有网页内容。\nMVCXE.Template.Fly创建的是范例：Fly社区。\nMVCXE.Template.DelphiAdmin创建的是范例：后台管理脚手架。\nMVCXE.Template.Ferry创建的是范例：开源项目Ferry的后端Delphi实现。\n"
+        },
+        {
+          "title": "打开创建好的工程",
+          "url": "\\docs\\installation.html#创建工程-打开创建好的工程",
+          "content": "打开创建好的工程目录结构\noutput是编译输出目录，也就是Web站点最终发布目录\nserver是Web服务器程序源码目录\nProjectName(Test1)是MVCXE程序目录\nProjectName\\Controller存放MVC的控制器工程\nProjectName\\Webapi存放存WebApi工程\nProjectName\\BLL存放数据逻辑层的工程\noutput\\views存放模板文件\nFly/DelphiAdmin/Ferry需要数据库配合才能跑起来\n在mysql中新建立三个数据库(字符集用utf8),使用db目录下的fly_mysql.sql还原数据库fly,da_mysql.sql还原数据库da，ferry_mysql.sql还原数据库ferry\n\n并修改output\\appsettion.json中ConnectionString内的数据库连接信息。\n\n用模板创建的工程，默认使用8080端口，可launchSettings.json里修改。\nFly社区：http://localhost:8080/，管理员帐号admin，密码123456\nDelphiAdmin后台管理脚手架：http://localhost:8080/backend/，管理员帐号admin，密码123456\nFerry后台Api：http://localhost:8080/swagger/index.html\nFerry前端安装可参考：https://www.fdevops.com/docs/ferry-tutorial-document/install\n"
+        },
+        {
+          "title": "编译并运行Webborker.Console.exe",
+          "url": "\\docs\\installation.html#创建工程-编译并运行webborker.console.exe",
+          "content": "编译并运行Webborker.Console.exe程序会自动打开浏览器，并访问默认的地址\n访问Swagger查看现有的WebApi\nhttp://localhost:8080/swagger/index.html"
+        },
+        {
+          "title": "现在你可以进行Delphi Web开发的神奇之旅了",
+          "url": "\\docs\\installation.html#现在你可以进行delphi-web开发的神奇之旅了",
+          "content": "现在你可以进行Delphi Web开发的神奇之旅了"
         }
       ]
     },
@@ -1456,6 +1476,18 @@ window.ydoc_plugin_search_json = {
           "title": "电子邮件使用",
           "url": "\\docs\\email.html#电子邮件使用",
           "content": "电子邮件使用通过注入[IOC('MVCXE.Mail.TSendMail')] ISendMail方式注入即可。基本使用\ntype    TAccountController = class(BaseController)\n    private\n        [IOC('MVCXE.Mail.TSendMail')]\n        mail: ISendMail;\n    public\n        function new(const form: TRegForm): TAccountFormResult;\n    end;\n\nimplementation\n\nfunction TAccountController.new(const form: TRegForm): TAccountFormResult;\nvar\n    User: TUsers;\n    HashMD5: THashMD5;\n    s: string;\n    Membership: TIdentity;\nbegin\n    Response.ContentType := 'application/json';\n    Result.success := False;\n    s := accessor.HttpContext.Session.Get('ValidationCode');\n    if not SameText(form.vercode, s) then\n    begin\n        Result.msg := '验证码不正确.';\n        Exit;\n    end;\n    if not SameText(form.pass, form.repass) then\n    begin\n        Result.msg := '两次密码不相同.';\n        Exit;\n    end;\n    if UserService.UserExists(form.email, form.username) then\n    begin\n        Result.msg := '邮箱地址已存在.';\n        Exit;\n    end;\n    User := TUsers.Create;\n    HashMD5 := THashMD5.Create;\n    s := HashMD5.GetHashString(form.pass);\n    with User do\n    begin\n        Email := TNetEncoding.HTML.Encode(form.email);\n        EmailConfirmed := True;\n        Password := s;\n        Nickname := TNetEncoding.HTML.Encode(form.username);\n        Title := '';\n        Gender := 1;\n        City := '';\n        Sign := '';\n        HeadPortrait := '/res/images/avatar/default.png';\n        Integral := 200;\n        IsVip := False;\n        VipLevel := 0;\n        CreateTime := Now;\n        IsDisabled := False;\n        EmailIsUpdate := True;\n        EmailConfirmToken := '';\n        IsAdmin := False;\n    end;\n    UserService.CreateUser(User);\n    mail.SendMail(form.email,'注册成功','注册成功');\n    Result.msg := '注册成功.';\n    Result.success := True;\nend;\n\nend."
+        }
+      ]
+    },
+    {
+      "title": "在 IIS 部署",
+      "content": "",
+      "url": "\\docs\\deploy-iis.html",
+      "children": [
+        {
+          "title": "",
+          "url": "\\docs\\deploy-iis.html#",
+          "content": ""
         }
       ]
     }

@@ -56,5 +56,11 @@
 * [调度作业](job.md)
 * [Cron 表达式](cron.md)
 
+### 微服务
+* [RPC (Hprose)](hprose.md)
+
+### 客户端应用
+* [发邮件](email.md)
+
 ### 托管/部署/发布
 * [在 IIS 部署](deploy-iis.md)
