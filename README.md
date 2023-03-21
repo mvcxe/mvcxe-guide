@@ -84,3 +84,4 @@ _site目录是编译后的文档根目录，浏览器打开index.html。
 
 ### 托管/部署/发布
 * [在 IIS 部署](./docs/docs/deploy-iis.md)
+* [在 Apache 部署](./docs/docs/deploy-apache.md)

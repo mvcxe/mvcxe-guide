@@ -154,6 +154,7 @@
         }
 
 - 需要在IIS部署运行的程序，代码里向控制台写Debug信息的代码Write/WriteLn会出错，需要你用try/catch处理
+- 第三方Dll(如db client dll)一般情况下放在调用它的bpl文件所在目录即可，但有时有的需要放在bpl的宿主程序所在目录，iis在C:\Windows\System32\inetsrv或C:\Windows\SysWOW64\inetsrv，可以多试试不同的位置即可。
 
 ## IIS常见问题
 ### 状态码，不支持 PUT，DELETE 请求

@@ -1424,7 +1424,7 @@ window.ydoc_plugin_search_json = {
         {
           "title": "RPC",
           "url": "\\docs\\hprose.html#rpc",
-          "content": "RPC微服务组件间的互通一般依托于RPC，MVCXE框架当前实出了Hprose RPC协议。"
+          "content": "RPC微服务组件间的互通一般依托于RPC，MVCXE框架当前实现了Hprose RPC协议。"
         },
         {
           "title": "关于Hprose",
@@ -1533,7 +1533,7 @@ window.ydoc_plugin_search_json = {
         {
           "title": "一些额外需要注意的地方",
           "url": "\\docs\\deploy-iis.html#一些额外需要注意的地方",
-          "content": "一些额外需要注意的地方\n因为安全特性，launchSettings.json中EnabledPackageScan需要设置为false,同时你要加载的bpl都需要写在ExternalPackages中\n  {\n  \"packages\": {\n      \"EnabledPackageScan\": false,\n      \"IgnorePackageFiles\": [\"MVCXE.Core\",\"inet\",\"rtl\",\"vcl\",\"xmlrtl\",\"IndyCore\",\"IndyProtocols\",\"IndySystem\",\"CustomIPTransport\",\"IndyIPCommon\",\"IndyIPServer\",\"dbrtl\"],\n      \"ExternalPackages\": [{\n          \"Name\": \"FireDACCommon\"\n          },{\n          \"Name\": \"FireDACCommonDriver\"\n          },{\n          \"Name\": \"FireDAC\"\n          },{\n          \"Name\": \"FireDACSqliteDriver\"\n          },{\n          \"Name\": \"FireDACCommonOdbc\"\n          },{\n          \"Name\": \"FireDACMSSQLDriver\"\n          },{\n          \"Name\": \"FireDACMySQLDriver\"\n          },{\n          \"Name\": \"FireDACOracleDriver\"\n          },{\n          \"Name\": \"FireDACPgDriver\"\n          },{\n          \"Name\": \"MVCXE.Core\"\n          },{\n          \"Name\": \"MVCXE.Web\"\n          },{\n          \"Name\": \"MVCXE.LoggerPro\"\n          },{\n          \"Name\": \"MVCXE.Cache\"\n          },{\n          \"Name\": \"MVCXE.ORM\"\n          },{\n          \"Name\": \"MVCXE.TPL\"\n          },{\n          \"Name\": \"MVCXE.Quartz\"\n          },{\n          \"Name\": \"MVCXE.Captcha\"\n          },{\n          \"Name\": \"MVCXE.Swagger\"\n          },{\n          \"Name\": \"_NameSpace_BLL\"\n          },{\n          \"Name\": \"_NameSpace_Web\",\n          \"Area\": \"\",\n          \"RoutePrefix\": \"\",\n          \"IOC\": [\n              {\n                  \"interface\": \"IPostService\",\n                  \"implement\": \"_NameSpace_Service.Post.TPostService\"\n              },\n              {\n                  \"interface\": \"ICategorieService\",\n                  \"implement\": \"_NameSpace_Service.Categorie.TCategorieService\"\n              }\n          ]\n          }]\n      }\n  }\n\n\n\n需要在IIS部署运行的程序，代码里向控制台写Debug信息的代码Write/WriteLn会出错，需要你用try/catch处理\n\n"
+          "content": "一些额外需要注意的地方\n因为安全特性，launchSettings.json中EnabledPackageScan需要设置为false,同时你要加载的bpl都需要写在ExternalPackages中\n  {\n  \"packages\": {\n      \"EnabledPackageScan\": false,\n      \"IgnorePackageFiles\": [\"MVCXE.Core\",\"inet\",\"rtl\",\"vcl\",\"xmlrtl\",\"IndyCore\",\"IndyProtocols\",\"IndySystem\",\"CustomIPTransport\",\"IndyIPCommon\",\"IndyIPServer\",\"dbrtl\"],\n      \"ExternalPackages\": [{\n          \"Name\": \"FireDACCommon\"\n          },{\n          \"Name\": \"FireDACCommonDriver\"\n          },{\n          \"Name\": \"FireDAC\"\n          },{\n          \"Name\": \"FireDACSqliteDriver\"\n          },{\n          \"Name\": \"FireDACCommonOdbc\"\n          },{\n          \"Name\": \"FireDACMSSQLDriver\"\n          },{\n          \"Name\": \"FireDACMySQLDriver\"\n          },{\n          \"Name\": \"FireDACOracleDriver\"\n          },{\n          \"Name\": \"FireDACPgDriver\"\n          },{\n          \"Name\": \"MVCXE.Core\"\n          },{\n          \"Name\": \"MVCXE.Web\"\n          },{\n          \"Name\": \"MVCXE.LoggerPro\"\n          },{\n          \"Name\": \"MVCXE.Cache\"\n          },{\n          \"Name\": \"MVCXE.ORM\"\n          },{\n          \"Name\": \"MVCXE.TPL\"\n          },{\n          \"Name\": \"MVCXE.Quartz\"\n          },{\n          \"Name\": \"MVCXE.Captcha\"\n          },{\n          \"Name\": \"MVCXE.Swagger\"\n          },{\n          \"Name\": \"_NameSpace_BLL\"\n          },{\n          \"Name\": \"_NameSpace_Web\",\n          \"Area\": \"\",\n          \"RoutePrefix\": \"\",\n          \"IOC\": [\n              {\n                  \"interface\": \"IPostService\",\n                  \"implement\": \"_NameSpace_Service.Post.TPostService\"\n              },\n              {\n                  \"interface\": \"ICategorieService\",\n                  \"implement\": \"_NameSpace_Service.Categorie.TCategorieService\"\n              }\n          ]\n          }]\n      }\n  }\n\n\n\n需要在IIS部署运行的程序，代码里向控制台写Debug信息的代码Write/WriteLn会出错，需要你用try/catch处理\n\n\n第三方Dll(如db client dll)一般情况下放在调用它的bpl文件所在目录即可，但有时有的需要放在bpl的宿主程序所在目录，iis在C:\\Windows\\System32\\inetsrv或C:\\Windows\\SysWOW64\\inetsrv，可以多试试不同的位置即可。\n\n"
         },
         {
           "title": "IIS常见问题",
@@ -1549,6 +1549,58 @@ window.ydoc_plugin_search_json = {
           "title": "IIS 回收问题和配置",
           "url": "\\docs\\deploy-iis.html#iis常见问题-iis-回收问题和配置",
           "content": "IIS 回收问题和配置通过 IIS 部署MVCXE应用程序，如果启动了系统日志，就会发现经常出现Application is shutting down...的日志，代表 IIS 回收了应用程序池。对于一个长期在线的网站来说，这是非常不合理的，所以我们可以通过以下配置让 IIS 进行长时间不访问便回收的机制。配置步骤如下：打开 IIS 并点击左侧树根节点（计算机名称）并点击右侧的 Configuration Editor（配置编辑器）\n\n在 Section（节）选择 system.applicationHost/applicationPools 并设置 startMode 为 AlwaysRunning，之后点击 Apply 保存。\n\n点击左侧树根节点（计算机名称）下的 Application Pools 并点击最右侧的 Set Appliation Pool Defaults...（设置应用程序池默认配置...）\n\n设置 Idle Time-out (minutes)（闲置超时（分钟）为 0\n\n"
+        }
+      ]
+    },
+    {
+      "title": "在 Apache 部署",
+      "content": "",
+      "url": "\\docs\\deploy-apache.html",
+      "children": [
+        {
+          "title": "下载Windows版本的Apache",
+          "url": "\\docs\\deploy-apache.html#下载windows版本的apache",
+          "content": "下载Windows版本的Apache2.2版本\nhttp://archive.apache.org/dist/httpd/binaries/win32/\n2.4版本\nhttps://downloads.apache.org/httpd/binaries/win32/\n"
+        },
+        {
+          "title": "编辑httpd.conf",
+          "url": "\\docs\\deploy-apache.html#编辑httpd.conf",
+          "content": "编辑httpd.conf"
+        },
+        {
+          "title": "加载UrlRewrite功能",
+          "url": "\\docs\\deploy-apache.html#编辑httpd.conf-加载urlrewrite功能",
+          "content": "加载UrlRewrite功能    LoadModule rewrite_module modules/mod_rewrite.so    LoadModule proxy_module modules/mod_proxy.so\n    LoadModule proxy_http_module modules/mod_proxy_http.so\n如果使用SetHandler mod_webbroker-handler来加载你的应用，可以不使用UrlRewrite，但根目录/就不能由mvcxe接管了，launchSettings.json中RoutePrefix需要与之一致。"
+        },
+        {
+          "title": "加载mvcxe module",
+          "url": "\\docs\\deploy-apache.html#编辑httpd.conf-加载mvcxe-module",
+          "content": "加载mvcxe module\n加载你的mvcxe dso 2.2\n  LoadModule webbroker_module \"{mvcxe_output_path}/mod_webbroker_22.dll\"\n  #访问扩展名为.d的文件即调用\n  AddHandler mod_webbroker_22-handler .d\n  #访问地址/xyz即调用\n  #SetHandler mod_webbroker_22-handler\n\n\n\n加载你的mvcxe dso 2.4\n  LoadModule webbroker_module \"{mvcxe_output_path}/mod_webbroker_24.dll\"\n  #访问扩展名为.d的文件即调用\n  AddHandler mod_webbroker_24-handler .d\n  #访问地址/xyz即调用\n  #SetHandler mod_webbroker_22-handler\n\n\n\n如果不想用dso，用isapi\n  LoadModule isapi_module modules/mod_isapi.so\n  AddHandler isapi-handler .dll\n  ISAPICacheFile {mvcxe_output_path}/wwwroot/isapi_webbroker.dll\n\n\n"
+        },
+        {
+          "title": "设置wwwroot",
+          "url": "\\docs\\deploy-apache.html#编辑httpd.conf-设置wwwroot",
+          "content": "设置wwwroot    DocumentRoot \"{mvcxe_output_path}/wwwroot\"    \n\n    \n    DirectoryIndex index.d index.html\n    Listen 8080\n"
+        },
+        {
+          "title": "编辑.htaccess",
+          "url": "\\docs\\deploy-apache.html#编辑.htaccess",
+          "content": "编辑.htaccessmvcxe会在wwwroot下建了一个.htaccess文件，内容是：    Options All -Indexes    #设为On打开UrlRewrite功能\n    RewriteEngine On\n    RewriteBase /\n    #文件存在时不执行Rewrite\n    RewriteCond %{REQUEST_FILENAME} !-f\n    #目录存在时不执行Rewrite\n    #RewriteCond %{REQUEST_FILENAME} !-d\n    #使用DSO用下面这条\n    RewriteRule ^(.*)$ /index.d/$1 [L,P,QSA]\n    #使用ISAPI用下面这条\n    #RewriteRule ^(.*)$ /isapi_webbroker.dll/$1 [L,P,QSA]\n"
+        },
+        {
+          "title": "*.d引导文件",
+          "url": "\\docs\\deploy-apache.html#*.d引导文件",
+          "content": "*.d引导文件mvcxe会在wwwroot下建了一个空白的index.d文件作为mvcxe dso模块引导文件，如果不使用dso或urlrewrite可以删除"
+        },
+        {
+          "title": "使用isapi还需要注意的事项",
+          "url": "\\docs\\deploy-apache.html#使用isapi还需要注意的事项",
+          "content": "使用isapi还需要注意的事项参考在 IIS 部署将相关文件移动到App_data后，App_data目录中需要放置一个.htaccess文件，内容中加上Deny from all防止用户非法访问配置文件里的敏感信息"
+        },
+        {
+          "title": "第三方Dll(如db client dll)",
+          "url": "\\docs\\deploy-apache.html#第三方dll如db-client-dll",
+          "content": "第三方Dll(如db client dll)一般情况下放在调用它的bpl文件所在目录即可，但有时有的需要放在bpl的宿主程序所在目录，apache安装目录\\bin中。"
         }
       ]
     }
