@@ -3,7 +3,191 @@
       <input type="text" class="input js-input" placeholder="搜索" />
       <div class="m-search-result js-search-result"></div>
     </div></div><nav class="m-header-nav js-nav"><ul class="m-header-items"><li class="item active"><a class="href" href="index.html">文档</a></li><li class="item "><a class="href" href="..\licence\index.html">授权</a></li></ul></nav><div id="js-nav-btn" class="m-header-btn ui-font-ydoc"></div></header><div class="m-content" id="js-content"><div id="markdown-body" class="m-content-container markdown-body"><h1>在 IIS 部署</h1>
-<h2 id></h2>
+<h2 id="开启cgi和isapi扩展">开启CGI和ISAPI扩展</h2>
+<ul>
+<li>
+<p>MVCXE提供了Webborker.ISAP服务程序，要加载该程序需要开启IIS的CGI和ISAPI扩展
+<img src="../images/hascgiisapi.png" alt="hascgiisapi">
+否则你需要在控制面板-&gt;启动或关闭Windows功能，安装CGI和ISAPI扩展
+<img src="../images/installisapmodule.png" alt="installisapmodule"></p>
+</li>
+<li>
+<p>打开ISAPI限制
+<img src="../images/setisapimoudle1.png" alt="setisapimoudle1">
+<img src="../images/setisapimoudle2.png" alt="setisapimoudle1">
+<img src="../images/setisapimoudle3.png" alt="setisapimoudle1"></p>
+</li>
+</ul>
+<h2 id="开启url-rewrite模块">开启URL Rewrite模块</h2>
+<p><img src="../images/hasurlrewrite.png" alt="hasurlrewrite"></p>
+<p>否则你需要到iis.net网站<a href="http://www.iis.net/downloads/microsoft/url-rewrite" target="_blank">下载URL Rewrite Module 2.1</a></p>
+<p>也可以<a href="http://www.iis.net/downloads/microsoft/application-request-routing" target="_blank">安装Application Request Routing（如果要实现站外重写需要安装这个模块）</a></p>
+<h2 id="添加新网站">添加新网站</h2>
+<p><img src="../images/ds1.png" alt="ds1"></p>
+<ul>
+<li>配置网站信息
+<img src="../images/ds2.png" alt="ds2"></li>
+<li>配置应用程序池
+<img src="../images/ds3.png" alt="ds3"></li>
+<li>设置为 非托管
+<img src="../images/ds4.png" alt="ds4"></li>
+<li>配置应用高级选项
+<img src="../images/ds5.png" alt="ds5"></li>
+<li>32位MVCXE应用程序池要启用32位应用程序
+<img src="../images/ds6.png" alt="ds6"></li>
+</ul>
+<h2 id="设置文件系统权限">设置文件系统权限</h2>
+<ul>
+<li>wwwroot目录需要设置用户IUSR/IIS_IUSRS读取权限</li>
+<li>wwwroot\App_Data\Log和wwwroot\App_Data目录需要设置用户IUSR/IIS_IUSRS读取执行权限</li>
+<li>你的程序需要上传文件的目录（如wwwroot\uploads）需要设置用户IUSR/IIS_IUSRS读写（不能执行）权限
+<img src="../images/perm1.png" alt="perm1"></li>
+</ul>
+<p><img src="../images/perm2.png" alt="perm2"></p>
+<p><img src="../images/perm3.png" alt="perm3"></p>
+<h2 id="设置mvcxe程序目录结构">设置MVCXE程序目录结构</h2>
+<p>正常情况下MVCXE的网站目录如下：</p>
+<pre><code>├── output
+│   ├── bds bpl files
+│   ├── mvcxe bpl files
+│   ├── mvcxe server exe/dll files
+│   ├── other dll files
+│   ├── areas
+│   │   ├── area1
+│   │   ├── area2
+│   │   └── area3
+│   ├── views
+│   │   ├── view1
+│   │   ├── view1
+│   │   └── Shared
+│   ├── wwwroot
+│   │   ├── App_data
+│   │   ├── files
+│   │   ├── folders
+│   │   ├── isapi_webborker.dll
+│   │   └── web.config
+│   ├── appsettings.json
+│   ├── launchSettings.json
+│   ├── sqlMap.xml
+</code></pre>
+<p>但因为IIS特性，我们需要设置wwwwroot目录为网站根目，iis是不允许执行根目录外的程序，所以需要将mvcxe程序放于较安全的App_data目录中，你需要将output目录下除了wwwroot外的所以文件/目录拷贝到wwwroot\App_data下，如下：</p>
+<pre><code>├── wwwroot
+│   ├── html files
+│   ├── folders
+│   ├── isapi_webborker.dll
+│   ├── App_data
+│   │   ├── areas
+│   │   │   ├── area1
+│   │   │   ├── area2
+│   │   │   └── area3
+│   │   ├── views
+│   │   │   ├── view1
+│   │   │   ├── view1
+│   │   │   └── Shared
+│   │   ├── bds bpl files
+│   │   ├── mvcxe bpl files
+│   │   ├── other dll files
+│   │   ├── appsettings.json
+│   │   ├── launchSettings.json
+│   │   └── sqlMap.xml
+│   ├── web.config
+</code></pre>
+<h2 id="一些额外需要注意的地方">一些额外需要注意的地方</h2>
+<ul>
+<li>
+<p>因为安全特性，launchSettings.json中<code>EnabledPackageScan</code>需要设置为<code>false</code>,同时你要加载的bpl都需要写在<code>ExternalPackages</code>中</p>
+<pre><code>  {
+  &quot;packages&quot;: {
+      &quot;EnabledPackageScan&quot;: false,
+      &quot;IgnorePackageFiles&quot;: [&quot;MVCXE.Core&quot;,&quot;inet&quot;,&quot;rtl&quot;,&quot;vcl&quot;,&quot;xmlrtl&quot;,&quot;IndyCore&quot;,&quot;IndyProtocols&quot;,&quot;IndySystem&quot;,&quot;CustomIPTransport&quot;,&quot;IndyIPCommon&quot;,&quot;IndyIPServer&quot;,&quot;dbrtl&quot;],
+      &quot;ExternalPackages&quot;: [{
+          &quot;Name&quot;: &quot;FireDACCommon&quot;
+          },{
+          &quot;Name&quot;: &quot;FireDACCommonDriver&quot;
+          },{
+          &quot;Name&quot;: &quot;FireDAC&quot;
+          },{
+          &quot;Name&quot;: &quot;FireDACSqliteDriver&quot;
+          },{
+          &quot;Name&quot;: &quot;FireDACCommonOdbc&quot;
+          },{
+          &quot;Name&quot;: &quot;FireDACMSSQLDriver&quot;
+          },{
+          &quot;Name&quot;: &quot;FireDACMySQLDriver&quot;
+          },{
+          &quot;Name&quot;: &quot;FireDACOracleDriver&quot;
+          },{
+          &quot;Name&quot;: &quot;FireDACPgDriver&quot;
+          },{
+          &quot;Name&quot;: &quot;MVCXE.Core&quot;
+          },{
+          &quot;Name&quot;: &quot;MVCXE.Web&quot;
+          },{
+          &quot;Name&quot;: &quot;MVCXE.LoggerPro&quot;
+          },{
+          &quot;Name&quot;: &quot;MVCXE.Cache&quot;
+          },{
+          &quot;Name&quot;: &quot;MVCXE.ORM&quot;
+          },{
+          &quot;Name&quot;: &quot;MVCXE.TPL&quot;
+          },{
+          &quot;Name&quot;: &quot;MVCXE.Quartz&quot;
+          },{
+          &quot;Name&quot;: &quot;MVCXE.Captcha&quot;
+          },{
+          &quot;Name&quot;: &quot;MVCXE.Swagger&quot;
+          },{
+          &quot;Name&quot;: &quot;_NameSpace_BLL&quot;
+          },{
+          &quot;Name&quot;: &quot;_NameSpace_Web&quot;,
+          &quot;Area&quot;: &quot;&quot;,
+          &quot;RoutePrefix&quot;: &quot;&quot;,
+          &quot;IOC&quot;: [
+              {
+                  &quot;interface&quot;: &quot;IPostService&quot;,
+                  &quot;implement&quot;: &quot;_NameSpace_Service.Post.TPostService&quot;
+              },
+              {
+                  &quot;interface&quot;: &quot;ICategorieService&quot;,
+                  &quot;implement&quot;: &quot;_NameSpace_Service.Categorie.TCategorieService&quot;
+              }
+          ]
+          }]
+      }
+  }
+</code></pre>
+</li>
+<li>
+<p>需要在IIS部署运行的程序，代码里向控制台写Debug信息的代码Write/WriteLn会出错，需要你用try/catch处理</p>
+</li>
+</ul>
+<h2 id="iis常见问题">IIS常见问题</h2>
+<h3 id="iis常见问题-状态码，不支持-put，delete-请求">状态码，不支持 PUT，DELETE 请求</h3>
+<p>默认情况下，IIS拒绝 PUT和 DELETE 请求，原因为 IIS 默认注册了一个名为 WebDAVModule 的自定义 HttpModule 导致的。</p>
+<p>解决该问题，只需要在 web.config 移除即可：</p>
+<pre><code>    &lt;configuration&gt;
+    &lt;system.webServer&gt;
+    &lt;modules runAllManagedModulesForAllRequests=&quot;true&quot;&gt;
+        &lt;remove name=&quot;webDAVModule&quot;/&gt;
+    &lt;/modules&gt;
+    &lt;/system.webServer&gt;
+    &lt;/configuration&gt;
+</code></pre>
+<p>微软官方文档：<a href="https://docs.microsoft.com/zh-cn/troubleshoot/developer/webapps/iis/health-diagnostic-performance/http-error-405-website" target="_blank">https://docs.microsoft.com/zh-cn/troubleshoot/developer/webapps/iis/health-diagnostic-performance/http-error-405-website</a></p>
+<h3 id="iis常见问题-iis-回收问题和配置">IIS 回收问题和配置</h3>
+<p>通过 IIS 部署<code>MVCXE</code>应用程序，如果启动了系统日志，就会发现经常出现<code>Application is shutting down...</code>的日志，代表 IIS 回收了应用程序池。</p>
+<p>对于一个长期在线的网站来说，这是非常不合理的，所以我们可以通过以下配置让 IIS 进行长时间不访问便回收的机制。</p>
+<p>配置步骤如下：</p>
+<ul>
+<li>打开 IIS 并点击左侧树根节点（计算机名称）并点击右侧的 Configuration Editor（配置编辑器）
+<img src="../images/idle1.png" alt="idle1"></li>
+<li>在 Section（节）选择 system.applicationHost/applicationPools 并设置 startMode 为 AlwaysRunning，之后点击 Apply 保存。
+<img src="../images/idle2.png" alt="idle2"></li>
+<li>点击左侧树根节点（计算机名称）下的 Application Pools 并点击最右侧的 Set Appliation Pool Defaults...（设置应用程序池默认配置...）
+<img src="../images/idle3.png" alt="idle3"></li>
+<li>设置 Idle Time-out (minutes)（闲置超时（分钟）为 0
+<img src="../images/idle4.png" alt="idle4"></li>
+</ul>
 </div><div class="m-content-container m-paging"><div class="m-paging-prev m-paging-item"><a href="email.html" class="href"><span class="ui-font-ydoc"></span>发邮件</a></div></div></div></div></div><div></div><script>
     var $content = document.getElementById('js-content');
     var $summaryItems = Array.prototype.slice.call(document.querySelectorAll('#js-menu .href'));

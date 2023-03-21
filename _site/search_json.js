@@ -1506,9 +1506,49 @@ window.ydoc_plugin_search_json = {
       "url": "\\docs\\deploy-iis.html",
       "children": [
         {
-          "title": "",
-          "url": "\\docs\\deploy-iis.html#",
-          "content": ""
+          "title": "开启CGI和ISAPI扩展",
+          "url": "\\docs\\deploy-iis.html#开启cgi和isapi扩展",
+          "content": "开启CGI和ISAPI扩展\nMVCXE提供了Webborker.ISAP服务程序，要加载该程序需要开启IIS的CGI和ISAPI扩展\n\n否则你需要在控制面板->启动或关闭Windows功能，安装CGI和ISAPI扩展\n\n\n\n打开ISAPI限制\n\n\n\n\n"
+        },
+        {
+          "title": "开启URL Rewrite模块",
+          "url": "\\docs\\deploy-iis.html#开启url-rewrite模块",
+          "content": "开启URL Rewrite模块否则你需要到iis.net网站下载URL Rewrite Module 2.1也可以安装Application Request Routing（如果要实现站外重写需要安装这个模块）"
+        },
+        {
+          "title": "添加新网站",
+          "url": "\\docs\\deploy-iis.html#添加新网站",
+          "content": "添加新网站配置网站信息\n\n配置应用程序池\n\n设置为 非托管\n\n配置应用高级选项\n\n32位MVCXE应用程序池要启用32位应用程序\n\n"
+        },
+        {
+          "title": "设置文件系统权限",
+          "url": "\\docs\\deploy-iis.html#设置文件系统权限",
+          "content": "设置文件系统权限wwwroot目录需要设置用户IUSR/IIS_IUSRS读取权限\nwwwroot\\App_Data\\Log和wwwroot\\App_Data目录需要设置用户IUSR/IIS_IUSRS读取执行权限\n你的程序需要上传文件的目录（如wwwroot\\uploads）需要设置用户IUSR/IIS_IUSRS读写（不能执行）权限\n\n"
+        },
+        {
+          "title": "设置MVCXE程序目录结构",
+          "url": "\\docs\\deploy-iis.html#设置mvcxe程序目录结构",
+          "content": "设置MVCXE程序目录结构正常情况下MVCXE的网站目录如下：├── output│   ├── bds bpl files\n│   ├── mvcxe bpl files\n│   ├── mvcxe server exe/dll files\n│   ├── other dll files\n│   ├── areas\n│   │   ├── area1\n│   │   ├── area2\n│   │   └── area3\n│   ├── views\n│   │   ├── view1\n│   │   ├── view1\n│   │   └── Shared\n│   ├── wwwroot\n│   │   ├── App_data\n│   │   ├── files\n│   │   ├── folders\n│   │   ├── isapi_webborker.dll\n│   │   └── web.config\n│   ├── appsettings.json\n│   ├── launchSettings.json\n│   ├── sqlMap.xml\n但因为IIS特性，我们需要设置wwwwroot目录为网站根目，iis是不允许执行根目录外的程序，所以需要将mvcxe程序放于较安全的App_data目录中，你需要将output目录下除了wwwroot外的所以文件/目录拷贝到wwwroot\\App_data下，如下：├── wwwroot│   ├── html files\n│   ├── folders\n│   ├── isapi_webborker.dll\n│   ├── App_data\n│   │   ├── areas\n│   │   │   ├── area1\n│   │   │   ├── area2\n│   │   │   └── area3\n│   │   ├── views\n│   │   │   ├── view1\n│   │   │   ├── view1\n│   │   │   └── Shared\n│   │   ├── bds bpl files\n│   │   ├── mvcxe bpl files\n│   │   ├── other dll files\n│   │   ├── appsettings.json\n│   │   ├── launchSettings.json\n│   │   └── sqlMap.xml\n│   ├── web.config\n"
+        },
+        {
+          "title": "一些额外需要注意的地方",
+          "url": "\\docs\\deploy-iis.html#一些额外需要注意的地方",
+          "content": "一些额外需要注意的地方\n因为安全特性，launchSettings.json中EnabledPackageScan需要设置为false,同时你要加载的bpl都需要写在ExternalPackages中\n  {\n  \"packages\": {\n      \"EnabledPackageScan\": false,\n      \"IgnorePackageFiles\": [\"MVCXE.Core\",\"inet\",\"rtl\",\"vcl\",\"xmlrtl\",\"IndyCore\",\"IndyProtocols\",\"IndySystem\",\"CustomIPTransport\",\"IndyIPCommon\",\"IndyIPServer\",\"dbrtl\"],\n      \"ExternalPackages\": [{\n          \"Name\": \"FireDACCommon\"\n          },{\n          \"Name\": \"FireDACCommonDriver\"\n          },{\n          \"Name\": \"FireDAC\"\n          },{\n          \"Name\": \"FireDACSqliteDriver\"\n          },{\n          \"Name\": \"FireDACCommonOdbc\"\n          },{\n          \"Name\": \"FireDACMSSQLDriver\"\n          },{\n          \"Name\": \"FireDACMySQLDriver\"\n          },{\n          \"Name\": \"FireDACOracleDriver\"\n          },{\n          \"Name\": \"FireDACPgDriver\"\n          },{\n          \"Name\": \"MVCXE.Core\"\n          },{\n          \"Name\": \"MVCXE.Web\"\n          },{\n          \"Name\": \"MVCXE.LoggerPro\"\n          },{\n          \"Name\": \"MVCXE.Cache\"\n          },{\n          \"Name\": \"MVCXE.ORM\"\n          },{\n          \"Name\": \"MVCXE.TPL\"\n          },{\n          \"Name\": \"MVCXE.Quartz\"\n          },{\n          \"Name\": \"MVCXE.Captcha\"\n          },{\n          \"Name\": \"MVCXE.Swagger\"\n          },{\n          \"Name\": \"_NameSpace_BLL\"\n          },{\n          \"Name\": \"_NameSpace_Web\",\n          \"Area\": \"\",\n          \"RoutePrefix\": \"\",\n          \"IOC\": [\n              {\n                  \"interface\": \"IPostService\",\n                  \"implement\": \"_NameSpace_Service.Post.TPostService\"\n              },\n              {\n                  \"interface\": \"ICategorieService\",\n                  \"implement\": \"_NameSpace_Service.Categorie.TCategorieService\"\n              }\n          ]\n          }]\n      }\n  }\n\n\n\n需要在IIS部署运行的程序，代码里向控制台写Debug信息的代码Write/WriteLn会出错，需要你用try/catch处理\n\n"
+        },
+        {
+          "title": "IIS常见问题",
+          "url": "\\docs\\deploy-iis.html#iis常见问题",
+          "content": "IIS常见问题"
+        },
+        {
+          "title": "状态码，不支持 PUT，DELETE 请求",
+          "url": "\\docs\\deploy-iis.html#iis常见问题-状态码，不支持-put，delete-请求",
+          "content": "状态码，不支持 PUT，DELETE 请求默认情况下，IIS拒绝 PUT和 DELETE 请求，原因为 IIS 默认注册了一个名为 WebDAVModule 的自定义 HttpModule 导致的。解决该问题，只需要在 web.config 移除即可：        \n    \n        \n    \n    \n    \n微软官方文档：https://docs.microsoft.com/zh-cn/troubleshoot/developer/webapps/iis/health-diagnostic-performance/http-error-405-website"
+        },
+        {
+          "title": "IIS 回收问题和配置",
+          "url": "\\docs\\deploy-iis.html#iis常见问题-iis-回收问题和配置",
+          "content": "IIS 回收问题和配置通过 IIS 部署MVCXE应用程序，如果启动了系统日志，就会发现经常出现Application is shutting down...的日志，代表 IIS 回收了应用程序池。对于一个长期在线的网站来说，这是非常不合理的，所以我们可以通过以下配置让 IIS 进行长时间不访问便回收的机制。配置步骤如下：打开 IIS 并点击左侧树根节点（计算机名称）并点击右侧的 Configuration Editor（配置编辑器）\n\n在 Section（节）选择 system.applicationHost/applicationPools 并设置 startMode 为 AlwaysRunning，之后点击 Apply 保存。\n\n点击左侧树根节点（计算机名称）下的 Application Pools 并点击最右侧的 Set Appliation Pool Defaults...（设置应用程序池默认配置...）\n\n设置 Idle Time-out (minutes)（闲置超时（分钟）为 0\n\n"
         }
       ]
     }
