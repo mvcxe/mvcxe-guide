@@ -55,10 +55,31 @@ window.ydoc_plugin_search_json = {
       "children": []
     },
     {
-      "title": "StartupWebborker程序加载MVCXE框架条件用Rtti创建Startup类的对象拦截应用请求特殊场景配置",
-      "content": "MVCXE框架是基于Webborker开发，一般情况下生成工程后直接关注Controller/Webapi等业务代码即可。这里描述一下MVCXE框架是怎样加载工作的，用户可更全面了解MVCXE框架。在工程属性中勾选Link with runtime packages，并用代码加载MVCXE.Core.bpl。initialization  h := LoadPackage('MVCXE.Core.bpl');\n  if h = 0 then\n\tWriteLn('Loading package MVCXE.Core.bpl ...... failed!')\n  else\n\tWriteLn('Loading package MVCXE.Core.bpl ...... successfully!');\n创建IApplicationBuilder接口的实例appprocedure TWebModule1.WebModuleCreate(Sender: TObject);var\n instanceType: TRttiInstanceType;\nbegin\n instanceType := TRttiContext.Create.FindType\n   ('MVCXE.Builder.Webborker.Startup').AsInstance;\n app := instanceType.GetMethod('Create').Invoke(instanceType.MetaclassType, [])\n   .AsType;\nend;\n调用IApplicationBuilder接口的实现方法Actionprocedure TWebModule1.WebModule1DefaultHandlerAction(Sender: TObject; Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);\nbegin\n Handled := app.Action(Request, Response);\nend;\n当有下列情况，需要在WebModuleCreate中加入相关的处理代码用于区分不同的运行环境\napp.UseEnvironment('Development');app.UseEnvironment('Staging');\napp.UseEnvironment('{Environment}');\n当在IIS/Apache部署用到urlrewrite时需要使用\napp.UseRewrite('q');响应静态文件请求(IIS/Apache/Nginx部署不需要使用)，纯Webapi模式不需使用\napp.UseStaticFiles;有Session时使用,Webapi开发不建议使用\napp.UseSession('MVCXE.Session.Inproc.TInprocSession');自定义Swagger信息(info是一个结构体)\napp.UseSwagger(info);MVC模式需要使用，只写Webapi不需要\napp.UseMvc;",
+      "title": "Startup",
+      "content": "MVCXE框架是基于Webborker开发，一般情况下生成工程后直接关注Controller/Webapi等业务代码即可。这里描述一下MVCXE框架是怎样加载工作的，用户可更全面了解MVCXE框架。",
       "url": "\\docs\\appstartup.html",
-      "children": []
+      "children": [
+        {
+          "title": "Webborker程序加载MVCXE框架条件",
+          "url": "\\docs\\appstartup.html#webborker程序加载mvcxe框架条件",
+          "content": "Webborker程序加载MVCXE框架条件在工程属性中勾选Link with runtime packages，引用server\\include\\ApplicationBuilder.pas。全局方法function launchSettings: TLaunchSetting;功能是加载MVCXE，只要在WebModuleCreate事件触发前调用即可，如：initialization  launchSettings;\n"
+        },
+        {
+          "title": "用Rtti创建Startup类的对象",
+          "url": "\\docs\\appstartup.html#用rtti创建startup类的对象",
+          "content": "用Rtti创建Startup类的对象创建IApplicationBuilder接口的实例appTWebModule1 = class(TWebModule)  procedure WebModule1DefaultHandlerAction(Sender: TObject;\n\tRequest: TWebRequest; Response: TWebResponse; var Handled: Boolean);\n  procedure WebModuleCreate(Sender: TObject);\n  procedure WebModuleDestroy(Sender: TObject);\nprivate\n  app: IWebborkerBuilder;\nend;\nprocedure TWebModule1.WebModuleCreate(Sender: TObject);\nvar\n instanceType: TRttiInstanceType;\nbegin\n instanceType := TRttiContext.Create.FindType\n   ('MVCXE.Builder.Webborker.Startup').AsInstance;\n app := instanceType.GetMethod('Create').Invoke(instanceType.MetaclassType, [])\n   .AsType;\nend;\n"
+        },
+        {
+          "title": "拦截应用请求",
+          "url": "\\docs\\appstartup.html#拦截应用请求",
+          "content": "拦截应用请求调用IApplicationBuilder接口的实现方法Actionprocedure TWebModule1.WebModule1DefaultHandlerAction(Sender: TObject; Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);\nbegin\n Handled := app.Action(Request, Response);\nend;\n"
+        },
+        {
+          "title": "特殊场景配置",
+          "url": "\\docs\\appstartup.html#特殊场景配置",
+          "content": "特殊场景配置当有下列情况，需要在WebModuleCreate中加入相关的处理代码\n用于区分不同的运行环境\n  app.UseEnvironment('Development');\n  app.UseEnvironment('Staging');\n  app.UseEnvironment('{Environment}');\n\n\n\n当在IIS/Apache部署用到querystring传递rewrite路径才需要使用，一般情况不需要使用\n  app.UseRewrite('urlrewrite');\n\n\n\n响应静态文件请求(IIS/Apache/Nginx部署不需要使用)，纯Webapi模式不需使用\n  app.UseStaticFiles;\n\n\n\n有Session时使用,Webapi开发不建议使用\n  app.UseSession('MVCXE.Session.Inproc.TInprocSession');\n\n\n\n自定义Swagger信息(info是一个结构体)\n  app.UseSwagger(info);\n\n\n\nMVC模式需要使用，只写Webapi不需要\n  app.UseMvc;\n\n"
+        }
+      ]
     },
     {
       "title": "配置",
