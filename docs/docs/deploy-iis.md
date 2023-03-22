@@ -33,6 +33,7 @@
 
 ## 设置文件系统权限
 - wwwroot目录需要设置用户IUSR/IIS_IUSRS读取权限
+- isap_webborker.dll需要设置用户IUSR/IIS_IUSRS读取执行权限
 - wwwroot\App_Data\Log和wwwroot\App_Data目录需要设置用户IUSR/IIS_IUSRS读取执行权限
 - 你的程序需要上传文件的目录（如wwwroot\uploads）需要设置用户IUSR/IIS_IUSRS读写（不能执行）权限
 ![perm1](../images/perm1.png)
