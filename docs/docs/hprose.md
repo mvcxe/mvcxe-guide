@@ -8,7 +8,7 @@
 其中微服务开发框架，专注于服务治理、监控、链路追踪。
 
 ## RPC
-微服务组件间的互通一般依托于RPC，`MVCXE`框架当前实出了`Hprose` RPC协议。
+微服务组件间的互通一般依托于RPC，`MVCXE`框架当前实现了`Hprose` RPC协议。
 
 ## 关于Hprose
 Hprose (High Performance Remote Object Service Engine) 是一个MIT开源许可的新型轻量级跨语言跨平台的面向对象的高性能远程动态通讯中间件。它支持众多语言，例如nodeJs, C++, .NET, Java, Delphi, Objective-C, ActionScript, JavaScript, ASP, PHP, Python, Ruby, Perl 等语言，通过 Hprose 可以在这些语言之间实现方便且高效的互通。 Hprose 易学易用，且功能强大，您只需很短时间的学习，就可以用它方便地构建出跨语言跨平台分布式的电信级应用系统。
