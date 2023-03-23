@@ -1523,7 +1523,7 @@ window.ydoc_plugin_search_json = {
         {
           "title": "设置文件系统权限",
           "url": "\\docs\\deploy-iis.html#设置文件系统权限",
-          "content": "设置文件系统权限wwwroot目录需要设置用户IUSR/IIS_IUSRS读取权限\nwwwroot\\App_Data\\Log和wwwroot\\App_Data目录需要设置用户IUSR/IIS_IUSRS读取执行权限\n你的程序需要上传文件的目录（如wwwroot\\uploads）需要设置用户IUSR/IIS_IUSRS读写（不能执行）权限\n\n"
+          "content": "设置文件系统权限wwwroot目录需要设置用户IUSR/IIS_IUSRS读取权限\nisap_webborker.dll需要设置用户IUSR/IIS_IUSRS读取执行权限\nwwwroot\\App_Data\\Log和wwwroot\\App_Data目录需要设置用户IUSR/IIS_IUSRS读取执行权限\n你的程序需要上传文件的目录（如wwwroot\\uploads）需要设置用户IUSR/IIS_IUSRS读写（不能执行）权限\n\n"
         },
         {
           "title": "设置MVCXE程序目录结构",
@@ -1601,6 +1601,65 @@ window.ydoc_plugin_search_json = {
           "title": "第三方Dll(如db client dll)",
           "url": "\\docs\\deploy-apache.html#第三方dll如db-client-dll",
           "content": "第三方Dll(如db client dll)一般情况下放在调用它的bpl文件所在目录即可，但有时有的需要放在bpl的宿主程序所在目录，apache安装目录\\bin中。"
+        }
+      ]
+    },
+    {
+      "title": "独立WebServer部署",
+      "content": "",
+      "url": "\\docs\\deploy-application.html",
+      "children": [
+        {
+          "title": "MVCXE当前提供了三个独立WebServer应用程序",
+          "url": "\\docs\\deploy-application.html#mvcxe当前提供了三个独立webserver应用程序",
+          "content": "MVCXE当前提供了三个独立WebServer应用程序"
+        },
+        {
+          "title": "Webborker.Console",
+          "url": "\\docs\\deploy-application.html#mvcxe当前提供了三个独立webserver应用程序-webborker.console",
+          "content": "Webborker.ConsoleDelphi自带的WEB服务应用程序，基于Webborker架构，非常稳定，推荐用于开发调试，如果要进行独立应用程序部署也是很好的选择。"
+        },
+        {
+          "title": "HttpSys.PnServer",
+          "url": "\\docs\\deploy-application.html#mvcxe当前提供了三个独立webserver应用程序-httpsys.pnserver",
+          "content": "HttpSys.PnServer基于https://github.com/pony5551/PnHttpSysServer开发，只做了很少的修改和MVCXE适配，底层用的HttpSys技术，在Windows平台有很好的性能，如果要进行生产环境部署，已提供该WebServer程序全部源码，请自行审阅测试。"
+        },
+        {
+          "title": "Node.Pas",
+          "url": "\\docs\\deploy-application.html#mvcxe当前提供了三个独立webserver应用程序-node.pas",
+          "content": "Node.Pas基于https://github.com/vovach777/node.pas开发，只做了很少的修改和MVCXE适配，底层用的LibUV库，跨平台，有很强的并发性能，如果要进行生产环境部署，已提供该WebServer程序的全部源码，请自行审阅测试。"
+        },
+        {
+          "title": "Windows服务",
+          "url": "\\docs\\deploy-application.html#windows服务",
+          "content": "Windows服务如果要开机就运行，最好修改为Windows Service服务程序，这样部署管理会更方便。"
+        }
+      ]
+    },
+    {
+      "title": "Docker 环境部署",
+      "content": "",
+      "url": "\\docs\\deploy-docker.html",
+      "children": [
+        {
+          "title": "安装Docker Desktop",
+          "url": "\\docs\\deploy-docker.html#安装docker-desktop",
+          "content": "安装Docker Desktop安装方法请参考官方文档https://docs.docker.com/desktop/，安装后选择switch to windows container，国内使用DockerHub很慢，推荐使用国内的DockerHub镜像源https://juejin.cn/post/7165806699461378085"
+        },
+        {
+          "title": "Windows Server Core Image",
+          "url": "\\docs\\deploy-docker.html#windows-server-core-image",
+          "content": "Windows Server Core Image因为Delphi编译出来的程序X32或X64都要用到kernel32.dll所以只能使用servercorehttps://hub.docker.com/_/microsoft-windows-servercore，体积高达4G+只推荐研究学习使用，等以后MVCXE Linux版本推出，Docker才会有比较好的体验"
+        },
+        {
+          "title": "Dockerfile",
+          "url": "\\docs\\deploy-docker.html#dockerfile",
+          "content": "Dockerfile在工程目录创建Dockerfile，以下内容供参考    FROM mcr.microsoft.com/windows/servercore:20H2-amd64\n    WORKDIR /myapp\n\n    COPY output .\n\n    CMD [\"Webborker.Console.exe\"]\n然后CMD到工程目录，执行docker build -t myapp .，漫长的下载后，就可以在DockerDesktop的UI中看到你的Image了"
+        },
+        {
+          "title": "运行",
+          "url": "\\docs\\deploy-docker.html#运行",
+          "content": "运行    docker run -d -p 8011:8080 myapp浏览http://localhost:8011/Home/Index看看你的程序是否跑起来了。"
         }
       ]
     }

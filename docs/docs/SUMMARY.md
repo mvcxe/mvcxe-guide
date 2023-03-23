@@ -65,3 +65,5 @@
 ### 托管/部署/发布
 * [在 IIS 部署](deploy-iis.md)
 * [在 Apache 部署](deploy-apache.md)
+* [独立WebServer部署](deploy-application.md)
+* [Docker 环境部署](deploy-docker.md)
