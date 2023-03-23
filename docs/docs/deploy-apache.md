@@ -19,19 +19,20 @@
 
 ### 加载mvcxe module
 
+- 加载你的mvcxe dso 2.4
+
+        LoadModule webbroker_module "{mvcxe_output_path}/mod_webbroker.dll"
+        #访问扩展名为.d的文件即调用
+        AddHandler mod_webbroker-handler .d
+        #访问地址/xyz即调用
+        #<Location /xyz>SetHandler mod_webbroker-handler</Location>
+
 - 加载你的mvcxe dso 2.2
 
+        #为了与2.4区分，apache2.2加了版本号_22
         LoadModule webbroker_module "{mvcxe_output_path}/mod_webbroker_22.dll"
         #访问扩展名为.d的文件即调用
         AddHandler mod_webbroker_22-handler .d
-        #访问地址/xyz即调用
-        #<Location /xyz>SetHandler mod_webbroker_22-handler</Location>
-
-- 加载你的mvcxe dso 2.4
-
-        LoadModule webbroker_module "{mvcxe_output_path}/mod_webbroker_24.dll"
-        #访问扩展名为.d的文件即调用
-        AddHandler mod_webbroker_24-handler .d
         #访问地址/xyz即调用
         #<Location /xyz>SetHandler mod_webbroker_22-handler</Location>
 
